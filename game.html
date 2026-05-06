@@ -1,541 +1,65 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>FERIES Casino</title>
+    <title>FERIES Test</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body {
-            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
-            padding: 12px;
-        }
-
-        /* Основной контейнер игры */
-        .game-container {
-            background: rgba(10, 14, 23, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 48px;
-            padding: 16px 12px 20px 12px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            max-width: 500px;
-            width: 100%;
-        }
-
-        /* Шапка */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 0 12px 15px 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #F5E7A3, #D4AF37);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .balance-card {
-            background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(4px);
-            padding: 6px 16px;
-            border-radius: 60px;
-            border: 1px solid rgba(212,175,55,0.5);
-        }
-
-        .balance-label {
-            font-size: 0.7rem;
-            color: #aaa;
-            letter-spacing: 1px;
-        }
-
-        .balance-value {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #F5E7A3;
-            line-height: 1;
-        }
-
-        /* Слот-машина */
-        .slot-machine {
-            background: #0B0E16;
-            border-radius: 32px;
-            padding: 20px 12px;
-            margin: 8px 0;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .reels-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .reel {
-            background: #131A2A;
-            border-radius: 20px;
-            padding: 8px;
-            width: 70px;
-            text-align: center;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .reel-symbol {
-            font-size: 42px;
-            filter: drop-shadow(0 2px 4px black);
-        }
-
-        /* Выигрышная подсветка */
-        .winning-line {
-            background: rgba(212,175,55,0.2);
-            border-radius: 40px;
-            margin: 12px 0;
-            padding: 6px;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .win-active {
-            background: rgba(212,175,55,0.6);
-            box-shadow: 0 0 15px gold;
-        }
-
-        .win-amount {
-            font-size: 1.5rem;
-            font-weight: bold;
+            background: #0a0f1e;
             color: gold;
+            text-align: center;
+            padding: 50px;
+            font-family: sans-serif;
         }
-
-        /* Кнопка SPIN */
-        .spin-btn {
-            background: linear-gradient(145deg, #D4AF37, #B48C2C);
-            border: none;
-            width: 85%;
-            padding: 16px;
-            border-radius: 60px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #0a0f1e;
-            margin: 15px auto;
-            display: block;
-            cursor: pointer;
-            transition: 0.1s linear;
-            box-shadow: 0 6px 0 #6B4E1A;
-            text-transform: uppercase;
-        }
-
-        .spin-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 3px 0 #6B4E1A;
-        }
-
-        /* Тематические рамки (пример для 6 слотов) */
-        .theme-buttons {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding: 10px 4px;
-            margin-top: 8px;
-        }
-
-        .theme-btn {
-            background: #1E2438;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: 0.1s;
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-
-        .theme-active {
+        button {
             background: #D4AF37;
-            color: #0a0f1e;
-            border: 1px solid gold;
+            border: none;
+            padding: 20px 30px;
+            font-size: 24px;
+            margin: 20px;
+            border-radius: 60px;
+            font-weight: bold;
         }
-
-        /* меню снизу */
-        .bottom-menu {
+        .menu {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(212,175,55,0.3);
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
         }
-
         .menu-item {
-            text-align: center;
-            color: #aaa;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 6px 12px;
+            background: #1E2438;
+            padding: 15px 25px;
             border-radius: 40px;
-            transition: 0.1s;
-        }
-
-        .menu-active {
-            background: rgba(212,175,55,0.2);
-            color: #D4AF37;
-        }
-
-        .info-panel {
-            background: rgba(0,0,0,0.6);
-            border-radius: 24px;
-            padding: 14px;
-            margin-top: 12px;
-            text-align: center;
-            color: #ddd;
-            font-size: 0.8rem;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.6rem;
-            color: #555;
-            margin-top: 12px;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<div class="game-container" id="app">
-    <div class="header">
-        <div class="logo"><h1>FERIES</h1></div>
-        <div class="balance-card">
-            <div class="balance-label">БАЛАНС</div>
-            <div class="balance-value" id="balanceDisplay">1000</div>
-        </div>
+    <h1>🔥 FERIES CASINO 🔥</h1>
+    <button id="spinBtn">SPIN</button>
+    <div class="menu">
+        <div class="menu-item" id="profileBtn">Профиль</div>
+        <div class="menu-item" id="ratingBtn">Рейтинг</div>
+        <div class="menu-item" id="walletBtn">Кошелёк</div>
     </div>
+    <p id="log" style="margin-top: 40px; color: #aaa;">Нажмите на кнопку</p>
 
-    <div class="slot-machine">
-        <div class="reels-container" id="reelsContainer">
-            <!-- 3 барабана будут динамически через JS -->
-        </div>
-        <div class="winning-line" id="winLine">
-            <span id="winMessage">🌀 Крути!</span>
-        </div>
-        <button class="spin-btn" id="spinButton">🔮 SPIN</button>
-    </div>
-
-    <div class="theme-buttons" id="themeButtons">
-        <!-- 6 тем -->
-    </div>
-
-    <div class="bottom-menu">
-        <div class="menu-item" data-menu="profile">👤 Профиль</div>
-        <div class="menu-item" data-menu="rating">🏆 Рейтинг</div>
-        <div class="menu-item" data-menu="wallet">💰 Кошелёк</div>
-        <div class="menu-item" data-menu="menu">📋 Меню</div>
-    </div>
-
-    <div id="infoPanel" class="info-panel">
-        🎰 Выберите тему и жмите SPIN
-    </div>
-    <footer>v2.0 🔥 Telegram Mini App</footer>
-</div>
-
-<script>
-    // ------------------- КОНФИГ ------------------
-    // Твой API (Google Apps Script)
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwqfGd_9OUt2iPV9av11cuCCEfn8EmNt_1pwoonnBlco0gKv7cJRbEY5wG01Sa-uxJ7/exec';
-    
-    // ID пользователя (Telegram или временный)
-    let userId = 'user_demo';
-    let currentBalance = 1000;
-    let currentTheme = 'crypto';
-    let isSpinning = false;
-
-    // Доступные темы: название, цвет рамки, символы для барабанов
-    const themes = {
-        crypto: { name: 'Crypto', border: '#F7931A', symbols: ['₿', 'Ξ', 'Ł', '₮', '💎', '🚀'] },
-        jungle: { name: 'Jungle', border: '#2E7D32', symbols: ['🐒', '🐍', '🦜', '🌿', '🍌', '🐆'] },
-        egypt: { name: 'Egypt', border: '#C9A03D', symbols: ['🐫', '👑', '𓂀', '🦂', '🌞', '🔺'] },
-        space: { name: 'Space', border: '#3A4F8A', symbols: ['🪐', '🚀', '🌙', '⭐', '👽', '🌌'] },
-        fruit: { name: 'Fruit', border: '#E65100', symbols: ['🍒', '🍊', '🍋', '🍉', '🍇', '🍓'] },
-        horror: { name: 'Horror', border: '#5D2E2E', symbols: ['🧛', '🕷️', '🪦', '👻', '🔪', '🕯️'] }
-    };
-
-    // Текущие символы на барабанах (3 позиции)
-    let currentSymbols = ['₿', 'Ξ', 'Ł'];
-
-    // Список тем для отображения кнопок
-    const themeList = Object.keys(themes);
-
-    // ------------------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ------------------
-    function getRandomSymbol(symbolsArray) {
-        return symbolsArray[Math.floor(Math.random() * symbolsArray.length)];
-    }
-
-    // Генерация случайной комбинации (3 символа)
-    function spinReels() {
-        const themeData = themes[currentTheme];
-        const newSymbols = [];
-        for(let i=0; i<3; i++) {
-            newSymbols.push(getRandomSymbol(themeData.symbols));
-        }
-        currentSymbols = newSymbols;
-        return currentSymbols;
-    }
-
-    // Подсчёт выигрыша (простая логика: три одинаковых = x5 ставки)
-    function calculateWin(symbols, bet = 10) {
-        if(symbols[0] === symbols[1] && symbols[1] === symbols[2]) {
-            // jackpot
-            return bet * 5;
-        }
-        if(symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) {
-            return bet * 1.2;
-        }
-        return 0;
-    }
-
-    // Обновление UI: отрисовка барабанов
-    function renderReels() {
-        const container = document.getElementById('reelsContainer');
-        if(!container) return;
-        container.innerHTML = '';
-        for(let i=0; i<currentSymbols.length; i++) {
-            const reelDiv = document.createElement('div');
-            reelDiv.className = 'reel';
-            reelDiv.innerHTML = `<div class="reel-symbol">${currentSymbols[i]}</div>`;
-            container.appendChild(reelDiv);
-        }
-    }
-
-    // Обновить баланс на экране
-    function updateBalanceUI() {
-        const balDiv = document.getElementById('balanceDisplay');
-        if(balDiv) balDiv.innerText = Math.floor(currentBalance);
-    }
-
-    // Показать сообщение в линии выигрыша
-    function setWinMessage(text, isWin=false) {
-        const winDiv = document.getElementById('winLine');
-        const msgSpan = document.getElementById('winMessage');
-        if(msgSpan) msgSpan.innerHTML = text;
-        if(winDiv) {
-            if(isWin) winDiv.classList.add('win-active');
-            else winDiv.classList.remove('win-active');
-        }
-    }
-
-    // Изменить тему (визуально рамка)
-    function applyTheme(themeKey) {
-        const container = document.querySelector('.game-container');
-        if(container) {
-            container.style.borderColor = themes[themeKey].border;
-        }
-        // обновляем активную кнопку темы
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            if(btn.dataset.theme === themeKey) btn.classList.add('theme-active');
-            else btn.classList.remove('theme-active');
-        });
-        // также меняем символы на барабанах на новые из темы (но не перезаписываем сразу)
-        const themeData = themes[themeKey];
-        if(themeData) {
-            // для красоты меняем первый символ
-            currentSymbols = currentSymbols.map(() => getRandomSymbol(themeData.symbols));
-            renderReels();
-        }
-    }
-
-    // Обращение к API (баланс с сервера)
-    async function fetchBalanceFromServer() {
-        try {
-            const url = `${API_URL}?action=getBalance&userId=${userId}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if(data && typeof data.balance === 'number') {
-                currentBalance = data.balance;
-                updateBalanceUI();
-            }
-        } catch(e) {
-            console.warn("Не удалось загрузить баланс, локально", e);
-        }
-    }
-
-    async function pushBalanceToServer(newBalance) {
-        try {
-            const formData = new FormData();
-            formData.append('action', 'setBalance');
-            formData.append('userId', userId);
-            formData.append('balance', newBalance);
-            await fetch(API_URL, { method: 'POST', body: formData });
-        } catch(e) { console.warn(e); }
-    }
-
-    // Основная функция SPIN
-    async function spin() {
-        if(isSpinning) {
-            setWinMessage("🌀 Уже крутится...");
-            return;
-        }
-        const bet = 10;
-        if(currentBalance < bet) {
-            setWinMessage("❌ Не хватает средств!");
-            return;
-        }
-
-        isSpinning = true;
-        const spinBtn = document.getElementById('spinButton');
-        spinBtn.disabled = true;
-
-        // списываем ставку
-        currentBalance -= bet;
-        updateBalanceUI();
-        setWinMessage("🎰 Вращение...");
-
-        // анимация: быстрая смена символов
-        let spinsLeft = 12;
-        const interval = setInterval(() => {
-            const randTheme = themes[currentTheme];
-            if(randTheme) {
-                const fakeSymbols = [
-                    getRandomSymbol(randTheme.symbols),
-                    getRandomSymbol(randTheme.symbols),
-                    getRandomSymbol(randTheme.symbols)
-                ];
-                for(let i=0; i<fakeSymbols.length; i++) {
-                    const reels = document.querySelectorAll('.reel-symbol');
-                    if(reels[i]) reels[i].innerText = fakeSymbols[i];
-                }
-            }
-            spinsLeft--;
-            if(spinsLeft <= 0) {
-                clearInterval(interval);
-                // финальный результат
-                const finalSymbols = spinReels();
-                renderReels();
-                const winAmount = calculateWin(finalSymbols, bet);
-                if(winAmount > 0) {
-                    currentBalance += winAmount;
-                    updateBalanceUI();
-                    setWinMessage(`✨ ВЫИГРЫШ: ${winAmount} ✨`, true);
-                    // вибрация если поддерживается
-                    if(navigator.vibrate) navigator.vibrate(200);
-                } else {
-                    setWinMessage("😭 Повезёт в следующий раз");
-                }
-                // отправить баланс на сервер
-                await pushBalanceToServer(currentBalance);
-                spinBtn.disabled = false;
-                isSpinning = false;
-            }
-        }, 70);
-    }
-
-    // Отображение информационных панелей (Профиль, Рейтинг, Кошелёк, Меню)
-    function showPanel(panelName) {
-        const panelDiv = document.getElementById('infoPanel');
-        if(!panelDiv) return;
-        switch(panelName) {
-            case 'profile':
-                panelDiv.innerHTML = `👤 <strong>Профиль</strong><br>ID: ${userId}<br>Баланс: ${currentBalance}<br>Любимая тема: ${themes[currentTheme].name}`;
-                break;
-            case 'rating':
-                panelDiv.innerHTML = `🏆 <strong>Рейтинг</strong><br>1. FERIES_MASTER — 24500<br>2. YOU — ${currentBalance}<br>Сыграй больше, чтобы подняться!`;
-                break;
-            case 'wallet':
-                panelDiv.innerHTML = `💰 <strong>Кошелёк</strong><br>Текущий баланс: ${currentBalance}<br>Ставка: 10 ед.`;
-                break;
-            case 'menu':
-                panelDiv.innerHTML = `📋 <strong>Меню</strong><br>• Выбрать тему<br>• Настройки звука (скоро)<br>• Поделиться результатом`;
-                break;
-            default: panelDiv.innerHTML = `🎰 Выберите тему и жмите SPIN`;
-        }
-        // Активное меню подсветить
-        document.querySelectorAll('.menu-item').forEach(item => {
-            if(item.dataset.menu === panelName) item.classList.add('menu-active');
-            else item.classList.remove('menu-active');
-        });
-    }
-
-    // Создание кнопок тем
-    function buildThemeButtons() {
-        const container = document.getElementById('themeButtons');
-        if(!container) return;
-        container.innerHTML = '';
-        themeList.forEach(tKey => {
-            const btn = document.createElement('div');
-            btn.className = 'theme-btn';
-            if(tKey === currentTheme) btn.classList.add('theme-active');
-            btn.innerText = themes[tKey].name;
-            btn.dataset.theme = tKey;
-            btn.addEventListener('click', () => {
-                currentTheme = tKey;
-                applyTheme(currentTheme);
-                showPanel('menu'); // после смены темы показываем меню или оставляем инфо
-                setWinMessage(`🎨 Тема: ${themes[tKey].name}`);
-            });
-            container.appendChild(btn);
-        });
-    }
-
-    // Инициализация
-    async function init() {
-        // Определяем пользователя Telegram, если есть
-        if(window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.expand();    // развернуть мини-апп
-            if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                userId = String(tg.initDataUnsafe.user.id);
-            }
-            // Обработчики кнопок назад не трогаем — они не поддерживаются, игнорируем
-        }
-        await fetchBalanceFromServer();
-        updateBalanceUI();
-
-        // начальная тема
-        currentTheme = 'crypto';
-        buildThemeButtons();
-        applyTheme(currentTheme);
-        // инициализируем первые символы
-        const initThemeData = themes[currentTheme];
-        currentSymbols = [initThemeData.symbols[0], initThemeData.symbols[1], initThemeData.symbols[2]];
-        renderReels();
-        
-        // Кнопка спин
-        const spinBtn = document.getElementById('spinButton');
-        if(spinBtn) spinBtn.addEventListener('click', spin);
-        
-        // нижнее меню
-        document.querySelectorAll('.menu-item').forEach(el => {
-            el.addEventListener('click', () => {
-                const menuName = el.dataset.menu;
-                showPanel(menuName);
-            });
-        });
-        showPanel('menu');
-    }
-
-    init();
-</script>
+    <script>
+        // Простейшие обработчики
+        document.getElementById('spinBtn').onclick = function() {
+            document.getElementById('log').innerHTML = '✅ SPIN нажата! Баланс: 1000';
+        };
+        document.getElementById('profileBtn').onclick = function() {
+            document.getElementById('log').innerHTML = '👤 Профиль: Игрок FERIES';
+        };
+        document.getElementById('ratingBtn').onclick = function() {
+            document.getElementById('log').innerHTML = '🏆 Рейтинг: Вы на 1 месте';
+        };
+        document.getElementById('walletBtn').onclick = function() {
+            document.getElementById('log').innerHTML = '💰 Кошелёк: 1000 монет';
+        };
+    </script>
 </body>
 </html>
