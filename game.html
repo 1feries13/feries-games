@@ -1,1 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <!-- Запрещаем кэширование -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>FERIES Casino</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; }
+    body {
+      background: radial-gradient(circle at top, #1a1a2e 0%, #0a0a1a 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:#fff;
+      display:flex; flex-direction:column; height:100vh;
+      justify-content: flex-end; align-items: center;
+    }
+    .app-header {
+      background: rgba(0,0,0,0.3); backdrop-filter:blur(10px);
+      padding:14px; text-align:center; font-size:24px; font-weight:bold;
+      color:#C4A747; letter-spacing:4px; border-bottom:1px solid rgba(196,167,71,0.3);
+      width:100%; max-width:420px;
+      border-radius:20px 20px 0 0;
+      margin-top: auto;
+    }
+    .back-btn {
+      background:none; border:none; color:#C4A747; font-size:18px; cursor:pointer;
+      position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index:11;
+      display:none;
+    }
+    .content {
+      flex:1; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start;
+      width:100%; max-width:420px;
+      padding:0 0 10px 0;
+      margin-top: 10px;
+    }
+    .page { display:none; width:100%; padding:0 0 15px 0; }
+    .page.active { display:block; }
 
+    /* ЛОББИ */
+    .lobby-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; padding:15px; padding-bottom:25px; }
+    .slot-card {
+      background: rgba(20,20,40,0.8); backdrop-filter:blur(10px); border-radius:18px;
+      border:1px solid rgba(196,167,71,0.3); padding:18px 8px; text-align:center;
+      cursor:pointer; transition:all 0.3s;
+    }
+    .slot-card:active { transform:scale(0.95); background:rgba(196,167,71,0.2); }
+    .slot-icon { font-size:36px; display:block; margin-bottom:8px; }
+    .slot-name { font-weight:bold; color:#C4A747; font-size:13px; }
+    .slot-desc { font-size:9px; color:#aaa; margin-top:4px; }
+
+    /* КОРПУС АВТОМАТА */
+    .machine-container {
+      background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+      border:3px solid #C4A747;
+      border-radius:25px;
+      padding:15px 15px 10px;
+      box-shadow:0 0 30px rgba(196,167,71,0.4), inset 0 0 10px rgba(0,0,0,0.5);
+      display:flex; flex-direction:column; align-items:center;
+      width:100%;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .theme-crypto .machine-container { border-color: #FFD700; box-shadow:0 0 35px rgba(255,215,0,0.5); }
+    .theme-jungle .machine-container { border-color: #2E8B57; box-shadow:0 0 35px rgba(46,139,87,0.5); }
+    .theme-team   .machine-container { border-color: #4169E1; box-shadow:0 0 35px rgba(65,105,225,0.5); }
+    .theme-space  .machine-container { border-color: #8A2BE2; box-shadow:0 0 35px rgba(138,43,226,0.5); }
+    .theme-fruit  .machine-container { border-color: #FF6347; box-shadow:0 0 35px rgba(255,99,71,0.5); }
+    .theme-retro  .machine-container { border-color: #FF8C00; box-shadow:0 0 35px rgba(255,140,0,0.5); }
+
+    /* ТАБЛИЦА ВЫПЛАТ */
+    .paytable {
+      width:100%; background: rgba(0,0,0,0.4); border-radius:15px;
+      padding:10px 8px; display:flex; justify-content:space-around;
+      font-size:15px; color:#ccc; margin-bottom:12px;
+      border:1px solid rgba(196,167,71,0.2);
+    }
+    .paytable-item { text-align:center; }
+    .paytable-item span { color:#C4A747; font-weight:bold; font-size:19px; }
+
+    /* ЭКРАН БАРАБАНОВ */
+    .reels-screen {
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #050510 100%);
+      border:3px solid #C4A747; border-radius:20px;
+      padding:10px 8px; margin:10px 0;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 30px rgba(196,167,71,0.5);
+      display:flex; flex-direction:column; align-items:center;
+      width:100%;
+    }
+    .reels-container {
+      display:flex; gap:10px; justify-content:center; perspective: 1000px;
+    }
+    .reel {
+      width:60px; height:130px;
+      background: #0f0f1a;
+      border:2px solid #C4A747; border-radius:10px;
+      overflow: hidden; position: relative;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 0 10px rgba(196,167,71,0.3);
+      transform: rotateX(3deg);
+    }
+    .reel-strip {
+      position: absolute; width: 100%; top: 0; left: 0;
+      transition: transform 0.1s linear;
+    }
+    .reel-symbol {
+      width: 100%; height: 43px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; border-bottom: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.3s ease; opacity: 0.55;
+    }
+    .reel-symbol.active {
+      opacity: 1 !important; transform: scale(1.2);
+      color: #FFD700; text-shadow: 0 0 20px gold;
+      background: rgba(255,215,0,0.25); border-radius: 6px;
+      font-size: 38px; z-index: 2;
+      box-shadow: 0 0 12px gold, inset 0 0 8px gold;
+    }
+
+    .reel.spinning .reel-strip {
+      animation: scrollDown 0.12s linear infinite;
+    }
+    @keyframes scrollDown {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(43px); }
+    }
+
+    /* НИЖНИЙ БЛОК */
+    .control-panel {
+      width:100%; display:flex; justify-content:space-between;
+      align-items:center; margin-top:6px; gap:10px; flex-wrap: wrap;
+    }
+    .balance { background:rgba(0,0,0,0.5); padding:8px 18px; border-radius:20px; font-size:18px; }
+    .bet-panel { display:flex; align-items:center; gap:8px; }
+    .bet-btn {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(196,167,71,0.4); color:#C4A747;
+      padding:6px 14px; border-radius:15px; cursor:pointer; font-size:20px; font-weight:bold;
+    }
+    .bet-value { background:rgba(0,0,0,0.5); padding:8px 20px; border-radius:20px; font-size:18px; min-width:60px; text-align:center; }
+
+    .spin-btn {
+      background: linear-gradient(135deg, #C4A747, #b39035); color:#000;
+      padding:16px 40px; border:none; border-radius:30px; font-weight:bold;
+      font-size:21px; cursor:pointer; letter-spacing:2px;
+      box-shadow:0 8px 20px rgba(196,167,71,0.5); transition:all 0.3s;
+      margin-top:10px; width:100%;
+    }
+    .spin-btn:disabled { opacity:0.5; pointer-events:none; }
+
+    .win-popup {
+      font-size:22px; color:#FFD700; font-weight:bold; margin:5px 0; opacity:0; transition:opacity 0.4s;
+    }
+    .message { font-size:14px; color:#C4A747; margin-top:5px; text-align:center; display:none; }
+
+    /* ПРОФИЛЬ, РЕЙТИНГ */
+    .profile-card, .leaderboard {
+      background: rgba(20,20,40,0.85); backdrop-filter:blur(15px);
+      border-radius:30px; padding:25px; border:1px solid rgba(196,167,71,0.3);
+      margin: 10px 15px;
+    }
+    .profile-avatar {
+      width:70px; height:70px; background:#C4A747; border-radius:50%;
+      margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:35px;
+    }
+    .profile-stats { text-align:left; margin-top:15px; }
+    .stat-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.1); }
+    .leader-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1); }
+    .gold { color:#FFD700; } .silver { color:#C0C0C0; } .bronze { color:#CD7F32; }
+
+    .nav-bar {
+      display:flex; background:rgba(0,0,0,0.5); backdrop-filter:blur(15px);
+      border-top:1px solid rgba(196,167,71,0.3); z-index:10;
+      max-width:420px; width:100%; border-radius:0 0 20px 20px;
+    }
+    .nav-item {
+      flex:1; text-align:center; padding:12px 0; font-size:12px; color:#888; cursor:pointer;
+    }
+    .nav-item.active { color:#C4A747; }
+    .nav-icon { font-size:20px; display:block; margin-bottom:3px; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <button class="back-btn" id="backToLobby">← Назад</button>
+    <span id="headerTitle">FERIES</span>
+  </div>
+  <div class="content">
+    <!-- Лобби -->
+    <div id="lobby" class="page active">
+      <h3 style="text-align:center; color:#C4A747; margin-bottom:15px;">Выберите слот</h3>
+      <div class="lobby-grid" id="lobbyGrid"></div>
+    </div>
+
+    <!-- Слот-машина -->
+    <div id="slotPage" class="page">
+      <div class="machine-container">
+        <div class="paytable" id="paytable">
+          <div class="paytable-item">🔥3 <span id="pay3">20</span></div>
+          <div class="paytable-item">⭐4 <span id="pay4">100</span></div>
+          <div class="paytable-item">💎5 <span id="pay5">500</span></div>
+        </div>
+
+        <div class="reels-screen">
+          <div class="win-popup" id="winPopup"></div>
+          <div class="reels-container" id="reelsContainer"></div>
+        </div>
+
+        <div class="control-panel">
+          <span class="balance" id="balanceDisplay">1000</span>
+          <div class="bet-panel">
+            <button class="bet-btn" id="betDown">−</button>
+            <span class="bet-value" id="betValue">10</span>
+            <button class="bet-btn" id="betUp">+</button>
+          </div>
+        </div>
+        <button class="spin-btn" id="spinButton">🎰 SPIN!</button>
+        <div class="message" id="message"></div>
+      </div>
+    </div>
+
+    <!-- Профиль -->
+    <div id="profilePage" class="page">
+      <div class="profile-card">
+        <div class="profile-avatar">👤</div>
+        <h3 id="profileName">Игрок</h3>
+        <div class="profile-stats">
+          <div class="stat-row"><span>Баланс</span> <strong id="profileBalance">0</strong></div>
+          <div class="stat-row"><span>Сыграно игр</span> <strong id="profileGames">0</strong></div>
+          <div class="stat-row"><span>Выигрышей</span> <strong id="profileWins">0</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Рейтинг -->
+    <div id="leaderboardPage" class="page">
+      <div class="leaderboard">
+        <h2 style="color:#C4A747; text-align:center; margin-bottom:15px;">🏆 Top Players</h2>
+        <div id="leaderList">Загрузка...</div>
+      </div>
+    </div>
+
+    <!-- Кошелёк -->
+    <div id="walletPage" class="page">
+      <h2 style="color:#C4A747;">💰 Кошелёк</h2>
+      <p style="margin-top:20px; color:#aaa;">Скоро здесь будет вывод средств и ежедневные бонусы.</p>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item active" data-page="lobby"><span class="nav-icon">🏠</span>Меню</div>
+    <div class="nav-item" data-page="profile"><span class="nav-icon">👤</span>Профиль</div>
+    <div class="nav-item" data-page="leaderboard"><span class="nav-icon">🏆</span>Рейтинг</div>
+    <div class="nav-item" data-page="wallet"><span class="nav-icon">💰</span>Кошелёк</div>
+  </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // Принудительно перезагружаем страницу при открытии, чтобы сбросить кэш Telegram
+    if (window.Telegram && window.Telegram.WebApp) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (!urlParams.has('loaded')) {
+        urlParams.set('loaded', '1');
+        window.location.search = urlParams.toString();
+      }
+    }
+
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    tg.MainButton?.hide();
+    tg.BackButton?.hide();
+    if (tg.requestFullscreen) tg.requestFullscreen();
+
+    let telegramId = 'default_user';
+    let profileName = 'Игрок';
+    if (tg.initDataUnsafe?.user) {
+      telegramId = tg.initDataUnsafe.user.id.toString();
+      profileName = tg.initDataUnsafe.user.first_name || 'Игрок';
+    }
+
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwqfGd_9OUt2iPV9av11cuCCEfn8EmNt_1pwoonnBlco0gKv7cJRbEY5wG01Sa-uxJ7/exec';
+    let balance = 1000, currentBet = 10, currentTheme = 'crypto';
+    const MULTIPLIERS = { 3: 2, 4: 10, 5: 50 };
+
+    const themes = {
+      crypto: {icon:'🪙',name:'Crypto',desc:'Монеты, ракеты', symbols: ['🪙','🚀','📈','💎','🌕','💰'], cssClass:'theme-crypto'},
+      jungle: {icon:'🐍',name:'Jungle',desc:'Дикие джунгли', symbols: ['🐍','🌿','🐒','🍃','🦜','🐸'], cssClass:'theme-jungle'},
+      team:   {icon:'🏆',name:'Team',desc:'Герои команды', symbols: ['👨‍💼','👩‍💼','🧑‍💻','👨‍🔧','👩‍🚀','🧑‍🎨'], cssClass:'theme-team'},
+      space:  {icon:'🛸',name:'Space',desc:'Космос', symbols: ['🛸','🌍','⭐','🪐','☄️','👩‍🚀'], cssClass:'theme-space'},
+      fruit:  {icon:'🍒',name:'Fruit',desc:'Фрукты', symbols: ['🍒','🍋','🍊','🍇','🍉','🍓'], cssClass:'theme-fruit'},
+      retro:  {icon:'👾',name:'Retro',desc:'Ретро игры', symbols: ['👾','🕹️','📀','🎮','📺','💾'], cssClass:'theme-retro'}
+    };
+
+    // ЛОББИ
+    const lobbyGrid = document.getElementById('lobbyGrid');
+    Object.entries(themes).forEach(([key, t]) => {
+      const card = document.createElement('div');
+      card.className = 'slot-card';
+      card.innerHTML = `<span class="slot-icon">${t.icon}</span><div class="slot-name">${t.name}</div><div class="slot-desc">${t.desc}</div>`;
+      card.addEventListener('click', () => openSlot(key));
+      lobbyGrid.appendChild(card);
+    });
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const navItem = document.querySelector(`.nav-item[data-page="${pageId.replace('Page','')}"]`);
+      if (navItem) navItem.classList.add('active');
+      else if (pageId === 'lobby') document.querySelector('.nav-item[data-page="lobby"]').classList.add('active');
+    }
+
+    function openSlot(theme) {
+      currentTheme = theme;
+      showPage('slotPage');
+      document.getElementById('backToLobby').style.display = 'inline';
+      document.getElementById('headerTitle').textContent = themes[theme].name;
+      document.querySelector('.machine-container').parentElement.className = themes[theme].cssClass;
+      buildReels();
+      loadBalance();
+      updatePaytable();
+    }
+
+    function goToLobby() {
+      showPage('lobby');
+      document.getElementById('backToLobby').style.display = 'none';
+      document.getElementById('headerTitle').textContent = 'FERIES';
+    }
+
+    document.getElementById('backToLobby').addEventListener('click', goToLobby);
+
+    // НАВИГАЦИЯ
+    document.querySelectorAll('.nav-item').forEach(nav => {
+      nav.addEventListener('click', () => {
+        const page = nav.dataset.page;
+        if (page === 'lobby') goToLobby();
+        else if (page === 'profile') { showPage('profilePage'); loadProfile(); }
+        else if (page === 'leaderboard') { showPage('leaderboardPage'); loadLeaderboard(); }
+        else if (page === 'wallet') showPage('walletPage');
+      });
+    });
+
+    // API
+    async function apiCall(action, params={}) {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action, ...params, telegramId, profileName }) });
+      return await res.json();
+    }
+
+    async function loadBalance() {
+      const data = await apiCall('getBalance');
+      if (data.success) { balance = data.balance; document.getElementById('balanceDisplay').textContent = balance; }
+    }
+
+    async function loadProfile() {
+      const data = await apiCall('getBalance');
+      if (data.success) {
+        document.getElementById('profileBalance').textContent = data.balance;
+        document.getElementById('profileGames').textContent = data.gamesPlayed;
+        document.getElementById('profileWins').textContent = '—';
+        document.getElementById('profileName').textContent = data.name || profileName;
+      }
+    }
+
+    async function loadLeaderboard() {
+      const data = await apiCall('leaderboard');
+      let html = '';
+      if (data.success && data.players.length > 0) {
+        data.players.forEach((p, i) => {
+          let colorClass = i===0 ? 'gold' : (i===1 ? 'silver' : (i===2 ? 'bronze' : ''));
+          html += `<div class="leader-row"><span class="${colorClass}">${i+1}. ${p.name || 'Игрок'}</span> <span>${p.balance}</span></div>`;
+        });
+      } else html = '<p>Нет данных</p>';
+      document.getElementById('leaderList').innerHTML = html;
+    }
+
+    function updatePaytable() {
+      document.getElementById('pay3').textContent = currentBet * MULTIPLIERS[3];
+      document.getElementById('pay4').textContent = currentBet * MULTIPLIERS[4];
+      document.getElementById('pay5').textContent = currentBet * MULTIPLIERS[5];
+    }
+
+    document.getElementById('betDown').addEventListener('click', ()=>{
+      if (currentBet > 10) { currentBet -= 10; document.getElementById('betValue').textContent = currentBet; updatePaytable(); }
+    });
+    document.getElementById('betUp').addEventListener('click', ()=>{
+      if (currentBet < 100) { currentBet += 10; document.getElementById('betValue').textContent = currentBet; updatePaytable(); }
+    });
+
+    // БАРАБАНЫ
+    const REELS_COUNT = 5;
+    let reelData = [], globalSpinInterval, stopTimers = [], spinResult;
+    const MAX_SPIN_DURATION = 4000;
+
+    function buildReels() {
+      const container = document.getElementById('reelsContainer');
+      container.innerHTML = '';
+      reelData = [];
+      const symbols = themes[currentTheme].symbols;
+      for (let i = 0; i < REELS_COUNT; i++) {
+        const reelDiv = document.createElement('div'); reelDiv.className = 'reel'; reelDiv.id = 'r'+i;
+        const strip = document.createElement('div'); strip.className = 'reel-strip';
+        for (let j = 0; j < 9; j++) {
+          const symDiv = document.createElement('div'); symDiv.className = 'reel-symbol';
+          symDiv.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          if (j === 4) symDiv.classList.add('active');
+          strip.appendChild(symDiv);
+        }
+        reelDiv.appendChild(strip);
+        container.appendChild(reelDiv);
+        reelData.push({ reelDiv, strip, symbols, stopped: false });
+      }
+    }
+
+    function startSpinAnimation() {
+      reelData.forEach(({ reelDiv }) => {
+        reelDiv.classList.add('spinning');
+        reelDiv.querySelectorAll('.reel-symbol').forEach(s => s.classList.remove('active'));
+      });
+      globalSpinInterval = setInterval(() => {
+        reelData.forEach(({ strip, symbols, stopped }) => {
+          if (stopped) return;
+          strip.querySelectorAll('.reel-symbol').forEach(d => d.textContent = symbols[Math.floor(Math.random() * symbols.length)]);
+        });
+      }, 80);
+    }
+
+    function stopReel(index, finalSymbol) {
+      const reel = reelData[index];
+      reel.stopped = true;
+      reel.reelDiv.classList.remove('spinning');
+      const strip = reel.strip;
+      strip.style.transition = 'transform 0.2s ease-out'; strip.style.transform = 'translateY(0)';
+      strip.querySelectorAll('.reel-symbol').forEach((d, i) => {
+        d.classList.remove('active');
+        if (i === 4) { d.textContent = finalSymbol; d.classList.add('active'); }
+      });
+    }
+
+    function forceStopAll() {
+      clearInterval(globalSpinInterval);
+      stopTimers.forEach(t => clearTimeout(t));
+      reelData.forEach((reel, i) => {
+        if (!reel.stopped) stopReel(i, '❓');
+      });
+      document.getElementById('spinButton').disabled = false;
+    }
+
+    async function performSpin() {
+      if (balance < currentBet) {
+        document.getElementById('message').textContent = 'Недостаточно монет';
+        document.getElementById('message').style.display = 'block';
+        return;
+      }
+      document.getElementById('message').style.display = 'none';
+      document.getElementById('spinButton').disabled = true;
+      stopTimers.forEach(t => clearTimeout(t)); clearInterval(globalSpinInterval);
+      reelData.forEach(r => r.stopped = false);
+      startSpinAnimation();
+      
+      const forceStopTimer = setTimeout(forceStopAll, MAX_SPIN_DURATION);
+      try {
+        const nonce = Date.now()+Math.random().toString(36).substring(2);
+        const data = await apiCall('spin', { bet: currentBet, theme: currentTheme, nonce });
+        clearTimeout(forceStopTimer);
+        spinResult = data;
+        [400,800,1200,1600,2000].forEach((delay, i) => {
+          stopTimers.push(setTimeout(() => {
+            stopReel(i, data.success ? data.symbols[i] : '❓');
+            if (i === REELS_COUNT-1) { clearInterval(globalSpinInterval); finishSpin(data); }
+          }, delay));
+        });
+      } catch(e) {
+        forceStopAll();
+      }
+    }
+
+    function finishSpin(data) {
+      document.getElementById('spinButton').disabled = false;
+      if (data.success) {
+        balance = data.balance; document.getElementById('balanceDisplay').textContent = balance;
+        if (data.win > 0) {
+          const popup = document.getElementById('winPopup'); popup.textContent = `+${data.win}`; popup.style.opacity = '1';
+          setTimeout(()=> popup.style.opacity = '0', 4000);
+        }
+      }
+    }
+
+    document.getElementById('spinButton').addEventListener('click', performSpin);
+    buildReels(); loadBalance(); updatePaytable();
+  </script>
+</body>
+</html>
