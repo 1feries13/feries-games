@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>FERIES CASINO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: radial-gradient(circle at 30% 10%, #0a0f1e, #02050c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            padding: 16px;
+        }
+        .game {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(10, 14, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 20px 16px 24px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(212,175,55,0.5);
+            transition: border-color 0.2s;
+        }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+            padding: 0 8px;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f9e6b3, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .balance {
+            background: rgba(0,0,0,0.6);
+            border-radius: 60px;
+            padding: 4px 18px;
+            text-align: center;
+        }
+        .balance span {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffdf80;
+        }
+        .reels {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .reel {
+            background: #0f1420cc;
+            border-radius: 32px;
+            padding: 20px 0;
+            width: 100px;
+            text-align: center;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 8px 15px black;
+        }
+        .symbol {
+            font-size: 64px;
+            filter: drop-shadow(0 2px 4px black);
+        }
+        .win-area {
+            background: rgba(212,175,55,0.15);
+            border-radius: 60px;
+            padding: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 12px 0;
+            transition: 0.1s;
+        }
+        .win-active {
+            background: rgba(212,175,55,0.7);
+            color: #0a0f1e;
+            box-shadow: 0 0 12px gold;
+        }
+        .bet-panel {
+            background: #0b101ccc;
+            border-radius: 60px;
+            padding: 8px 16px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bet-control {
+            display: flex;
+            gap: 20px;
+            background: #1a212f;
+            padding: 4px 16px;
+            border-radius: 60px;
+        }
+        .bet-control button {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffd966;
+            cursor: pointer;
+            width: 40px;
+        }
+        .spin-btn {
+            background: linear-gradient(145deg, #f3d776, #c49b2c);
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 80px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0c0f18;
+            margin: 16px 0;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #6b4e1a;
+            transition: 0.05s linear;
+        }
+        .spin-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #6b4e1a;
+        }
+        .themes {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 8px 4px;
+            margin-top: 8px;
+        }
+        .theme-chip {
+            background: #20273d;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #ddd;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid #4a526b;
+        }
+        .theme-active {
+            background: #d4af37;
+            color: #0a0f1e;
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(212,175,55,0.3);
+        }
+        .menu-item {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.3);
+            color: #ccc;
+        }
+        .info-panel {
+            background: rgba(0,0,0,0.6);
+            border-radius: 32px;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: center;
+            color: #ddd;
+            font-size: 0.85rem;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.6rem;
+            color: #5a6380;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="game" id="gameContainer">
+    <div class="top">
+        <div class="logo">FERIES</div>
+        <div class="balance"><span id="balanceVal">1000</span></div>
+    </div>
+
+    <!-- Игровая область (всегда видна) -->
+    <div class="reels">
+        <div class="reel"><div class="symbol" id="reel0">🍒</div></div>
+        <div class="reel"><div class="symbol" id="reel1">🍒</div></div>
+        <div class="reel"><div class="symbol" id="reel2">🍒</div></div>
+    </div>
+    <div class="win-area" id="winArea"><span id="winMsg">🎰 SPIN</span></div>
+    <div class="bet-panel">
+        <span>💰 СТАВКА</span>
+        <div class="bet-control">
+            <button id="betMinus">–</button>
+            <span class="bet-value" id="betValue">10</span>
+            <button id="betPlus">+</button>
+        </div>
+    </div>
+    <button class="spin-btn" id="spinBtn">🔮 SPIN</button>
+    <div class="themes" id="themeList"></div>
+
+    <!-- Меню и информационная панель (под игрой) -->
+    <div class="menu">
+        <div class="menu-item" data-panel="profile">👤 Профиль</div>
+        <div class="menu-item" data-panel="rating">🏆 Рейтинг</div>
+        <div class="menu-item" data-panel="wallet">💰 Кошелёк</div>
+    </div>
+    <div id="infoPanel" class="info-panel">✨ Выбери тему и крути!</div>
+    <footer>v1.0 · баланс сохраняется</footer>
+</div>
+
+<script>
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    let balance = 1000;
+    let currentBet = 10;
+    let currentTheme = 'egypt';
+    let currentSymbols = ['🐫','👑','𓂀'];
+    let spinning = false;
+    
+    // Темы (твои любимые)
+    const themes = {
+        egypt: { name: '🔺 Egypt', border: '#C9A03D', symbols: ['🐫','👑','𓂀','🦂','🌞','🔺'] },
+        space: { name: '🪐 Space', border: '#3A4F8A', symbols: ['🪐','🚀','🌙','⭐','👽','🌌'] },
+        crypto: { name: '₿ Crypto', border: '#F7931A', symbols: ['₿','Ξ','Ł','₮','💎','🚀'] },
+        jungle: { name: '🌿 Jungle', border: '#2E7D32', symbols: ['🐒','🐍','🦜','🌿','🍌','🐆'] },
+        fruit: { name: '🍎 Fruit', border: '#E65100', symbols: ['🍒','🍊','🍋','🍉','🍇','🍓'] },
+        horror: { name: '🧛 Horror', border: '#5D2E2E', symbols: ['🧛','🕷️','🪦','👻','🔪','🕯️'] }
+    };
+    
+    // Статистика (локальная)
+    let stats = {
+        games: 0,
+        maxWin: 0,
+        totalWin: 0
+    };
+    let history = []; // история транзакций
+    
+    // DOM элементы
+    const balanceSpan = document.getElementById('balanceVal');
+    const betSpan = document.getElementById('betValue');
+    const winMsgSpan = document.getElementById('winMsg');
+    const winAreaDiv = document.getElementById('winArea');
+    const spinButton = document.getElementById('spinBtn');
+    const reels = [
+        document.getElementById('reel0'),
+        document.getElementById('reel1'),
+        document.getElementById('reel2')
+    ];
+    const gameContainer = document.getElementById('gameContainer');
+    const infoPanel = document.getElementById('infoPanel');
+    
+    // Загрузка сохранённых данных
+    function loadGameData() {
+        const savedBalance = localStorage.getItem('feries_balance');
+        if (savedBalance !== null && !isNaN(parseInt(savedBalance))) balance = parseInt(savedBalance);
+        const savedStats = localStorage.getItem('feries_stats');
+        if (savedStats) {
+            try {
+                const s = JSON.parse(savedStats);
+                stats.games = s.games || 0;
+                stats.maxWin = s.maxWin || 0;
+                stats.totalWin = s.totalWin || 0;
+            } catch(e) {}
+        }
+        const savedHistory = localStorage.getItem('feries_history');
+        if (savedHistory) {
+            try {
+                history = JSON.parse(savedHistory);
+            } catch(e) { history = []; }
+        }
+        updateBalanceUI();
+    }
+    
+    function saveGameData() {
+        localStorage.setItem('feries_balance', balance);
+        localStorage.setItem('feries_stats', JSON.stringify(stats));
+        localStorage.setItem('feries_history', JSON.stringify(history));
+    }
+    
+    function updateBalanceUI() {
+        balanceSpan.innerText = balance;
+    }
+    
+    function addHistory(text, amount) {
+        history.unshift({
+            date: new Date().toLocaleString(),
+            text: text,
+            amount: amount
+        });
+        if (history.length > 20) history.pop();
+        saveGameData();
+    }
+    
+    // Логика выигрыша
+    function getRandomSymbol(symbolsArray) {
+        return symbolsArray[Math.floor(Math.random() * symbolsArray.length)];
+    }
+    
+    function spinReels() {
+        const syms = themes[currentTheme].symbols;
+        const newSymbols = [];
+        for (let i = 0; i < 3; i++) {
+            newSymbols.push(getRandomSymbol(syms));
+            reels[i].innerText = newSymbols[i];
+        }
+        currentSymbols = newSymbols;
+        return currentSymbols;
+    }
+    
+    function calculateWin(symbols, bet) {
+        if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) {
+            return bet * 5;
+        }
+        if (symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) {
+            return Math.floor(bet * 1.2);
+        }
+        return 0;
+    }
+    
+    function setWinMessage(text, isWin = false) {
+        winMsgSpan.innerText = text;
+        if (isWin) {
+            winAreaDiv.classList.add('win-active');
+        } else {
+            winAreaDiv.classList.remove('win-active');
+        }
+    }
+    
+    async function spin() {
+        if (spinning) return;
+        if (balance < currentBet) {
+            setWinMessage("❌ Не хватает монет!");
+            return;
+        }
+        spinning = true;
+        spinButton.disabled = true;
+        
+        // Списываем ставку
+        balance -= currentBet;
+        updateBalanceUI();
+        addHistory(`Ставка ${currentBet}`, -currentBet);
+        setWinMessage("🌀 Крутим...");
+        
+        const themeData = themes[currentTheme];
+        let anim = 12;
+        const interval = setInterval(() => {
+            for (let i = 0; i < 3; i++) {
+                reels[i].innerText = getRandomSymbol(themeData.symbols);
+            }
+            anim--;
+            if (anim === 0) {
+                clearInterval(interval);
+                const finalSymbols = spinReels();
+                const win = calculateWin(finalSymbols, currentBet);
+                if (win > 0) {
+                    balance += win;
+                    updateBalanceUI();
+                    setWinMessage(`✨ ВЫИГРЫШ: ${win} ✨`, true);
+                    addHistory(`Выигрыш +${win}`, win);
+                    if (win > stats.maxWin) stats.maxWin = win;
+                    stats.totalWin += win;
+                    if (navigator.vibrate) navigator.vibrate(200);
+                } else {
+                    setWinMessage("😢 Проигрыш");
+                }
+                stats.games++;
+                saveGameData();
+                spinning = false;
+                spinButton.disabled = false;
+            }
+        }, 60);
+    }
+    
+    function changeBet(delta) {
+        let newBet = currentBet + delta;
+        if (newBet >= 5 && newBet <= 500) {
+            currentBet = newBet;
+            betSpan.innerText = currentBet;
+        }
+    }
+    
+    function applyTheme(themeKey) {
+        currentTheme = themeKey;
+        gameContainer.style.borderColor = themes[themeKey].border;
+        document.querySelectorAll('.theme-chip').forEach(chip => {
+            if (chip.dataset.theme === themeKey) {
+                chip.classList.add('theme-active');
+            } else {
+                chip.classList.remove('theme-active');
+            }
+        });
+        // Обновляем символы на барабанах
+        const newSymbols = [];
+        const syms = themes[themeKey].symbols;
+        for (let i = 0; i < 3; i++) {
+            newSymbols.push(getRandomSymbol(syms));
+            reels[i].innerText = newSymbols[i];
+        }
+        currentSymbols = newSymbols;
+        setWinMessage(`🎨 Тема: ${themes[themeKey].name}`);
+    }
+    
+    function buildThemeButtons() {
+        const container = document.getElementById('themeList');
+        container.innerHTML = '';
+        // Порядок: сначала твои любимые
+        const themeOrder = ['egypt', 'space', 'crypto', 'jungle', 'fruit', 'horror'];
+        for (let key of themeOrder) {
+            const theme = themes[key];
+            const chip = document.createElement('div');
+            chip.className = 'theme-chip';
+            if (key === currentTheme) chip.classList.add('theme-active');
+            chip.innerText = theme.name;
+            chip.dataset.theme = key;
+            chip.addEventListener('click', () => applyTheme(key));
+            container.appendChild(chip);
+        }
+    }
+    
+    // Панели (Профиль, Рейтинг, Кошелёк)
+    function showProfile() {
+        infoPanel.innerHTML = `
+            👤 <strong>Профиль</strong><br>
+            🆔 ID: ${window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'local'}<br>
+            ⭐ Игр: ${stats.games}<br>
+            🏆 Макс. выигрыш: ${stats.maxWin}<br>
+            📈 Общий выигрыш: ${stats.totalWin}
+        `;
+    }
+    
+    function showRating() {
+        // Демо-рейтинг (потом заменим на таблицу)
+        infoPanel.innerHTML = `
+            🏆 <strong>Мировой рейтинг</strong><br>
+            1. FERIES_LEGEND — 15000<br>
+            2. CRYPTO_KING — 12400<br>
+            3. SPACE_LORD — 9800<br>
+            <span style="font-size:0.7rem;">Твой баланс: ${balance}</span>
+        `;
+    }
+    
+    function showWallet() {
+        if (history.length === 0) {
+            infoPanel.innerHTML = `💰 <strong>Кошелёк</strong><br>Баланс: ${balance}<br>История пуста`;
+        } else {
+            let historyHtml = history.slice(0, 5).map(h => `<div>${h.date.slice(0,16)} — ${h.text}</div>`).join('');
+            infoPanel.innerHTML = `💰 <strong>Кошелёк</strong><br>Баланс: ${balance}<br><br>📜 Последние операции:<br>${historyHtml}`;
+        }
+    }
+    
+    // Инициализация
+    function init() {
+        loadGameData();
+        buildThemeButtons();
+        applyTheme('egypt');
+        
+        document.getElementById('betMinus').addEventListener('click', () => changeBet(-5));
+        document.getElementById('betPlus').addEventListener('click', () => changeBet(5));
+        spinButton.addEventListener('click', spin);
+        
+        // Обработчики меню
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const panel = item.dataset.panel;
+                if (panel === 'profile') showProfile();
+                else if (panel === 'rating') showRating();
+                else if (panel === 'wallet') showWallet();
+            });
+        });
+        
+        // Расширение в Telegram
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
+        }
+    }
+    
+    init();
+</script>
+</body>
+</html>
