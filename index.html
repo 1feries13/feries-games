@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FERIES CASINO</title>
+    <title>FERIES CASINO — полноэкранное премиум</title>
+    <!-- Подключаем новейший SDK Telegram (обязательно) -->
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <style>
         * {
             margin: 0;
@@ -14,12 +16,12 @@
 
         body {
             background: #03050a;
-            min-height: 100vh;
             font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
+            height: 100%;
         }
 
-        /* Фон с золотыми частицами */
+        /* Анимированный фон (золотые частицы) */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -30,32 +32,17 @@
             pointer-events: none;
             overflow: hidden;
         }
-
         .particle {
             position: absolute;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0));
+            background: radial-gradient(circle, rgba(212,175,55,0.4), rgba(212,175,55,0));
             border-radius: 50%;
             animation: float 12s infinite ease-in-out;
         }
-
         @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 0.6;
-            }
-
-            90% {
-                opacity: 0.3;
-            }
-
-            100% {
-                transform: translateY(-20vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
         /* Главный контейнер — занимает весь экран */
@@ -66,30 +53,27 @@
             right: 0;
             bottom: 0;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(2px);
             z-index: 1;
             display: flex;
             flex-direction: column;
         }
 
-        /* Шапка с бургер-меню и логотипом */
+        /* Шапка */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0,0,0,0.3);
         }
-
         .burger {
             width: 32px;
             height: 24px;
             cursor: pointer;
-            position: relative;
             z-index: 200;
         }
-
         .burger span {
             display: block;
             width: 100%;
@@ -97,14 +81,11 @@
             background: #d4af37;
             margin: 5px 0;
             border-radius: 3px;
-            transition: 0.2s;
         }
-
         .logo {
             text-align: center;
             cursor: pointer;
         }
-
         .logo h1 {
             font-size: 1.8rem;
             background: linear-gradient(135deg, #f9e6b3, #d4af37);
@@ -112,7 +93,6 @@
             -webkit-background-clip: text;
             color: transparent;
         }
-
         .logo p {
             font-size: 0.6rem;
             color: #d4af37;
@@ -130,36 +110,27 @@
             z-index: 1000;
             transition: left 0.3s ease;
             padding: 80px 20px 20px;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.5);
         }
-
-        .side-menu.open {
-            left: 0;
-        }
-
+        .side-menu.open { left: 0; }
         .side-menu .menu-item {
             padding: 14px 0;
             font-size: 1.2rem;
             color: #ffdf80;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            border-bottom: 1px solid rgba(212,175,55,0.3);
             cursor: pointer;
-            transition: 0.1s;
         }
-
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 999;
             display: none;
         }
-
-        .overlay.active {
-            display: block;
-        }
+        .overlay.active { display: block; }
 
         /* Экраны */
         .screen {
@@ -168,37 +139,24 @@
             flex: 1;
             animation: fadeIn 0.3s ease;
         }
-
-        .screen.active {
-            display: block;
-        }
-
+        .screen.active { display: block; }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Приветственный экран */
         .welcome-card {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             border-radius: 48px;
             padding: 40px 24px;
             text-align: center;
             margin-top: 30px;
         }
-
         .welcome-card h2 {
             font-size: 2rem;
             color: #ffdf80;
         }
-
         .btn-primary {
             background: linear-gradient(145deg, #d4af37, #b48b2c);
             border: none;
@@ -210,96 +168,76 @@
             cursor: pointer;
         }
 
-        /* Меню выбора режимов */
-        .modes-grid,
-        .games-grid {
+        /* Меню выбора режимов и игр */
+        .modes-grid, .games-grid {
             display: flex;
             flex-direction: column;
             gap: 16px;
             margin-top: 20px;
         }
-
-        .mode-card,
-        .game-card {
-            background: rgba(20, 25, 40, 0.8);
+        .mode-card, .game-card {
+            background: rgba(20,25,40,0.8);
             border-radius: 56px;
             padding: 20px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(212,175,55,0.3);
         }
-
-        .mode-card:active,
-        .game-card:active {
-            transform: scale(0.98);
-        }
-
-        .mode-card .title,
-        .game-card .title {
+        .mode-card:active, .game-card:active { transform: scale(0.98); }
+        .mode-card .title, .game-card .title {
             font-size: 1.3rem;
             color: #ffdf80;
             font-weight: bold;
         }
 
-        /* Игровой экран — стилизация барабанов */
+        /* Игровой слот */
         .slot-machine {
             background: linear-gradient(145deg, #1a1f2e, #0e121c);
             border-radius: 48px;
             padding: 24px 16px;
-            box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.3), 0 20px 30px black;
+            box-shadow: inset 0 0 0 1px rgba(212,175,55,0.3), 0 20px 30px black;
             margin: 10px 0;
         }
-
         .reels-container {
             display: flex;
             justify-content: center;
             gap: 16px;
             margin-bottom: 24px;
         }
-
         .reel {
             background: #0b0f18;
             border-radius: 28px;
             padding: 20px 0;
             width: 100px;
             text-align: center;
-            box-shadow: inset 0 0 0 2px rgba(212, 175, 55, 0.4), 0 8px 20px black;
+            box-shadow: inset 0 0 0 2px rgba(212,175,55,0.4), 0 8px 20px black;
             position: relative;
             overflow: hidden;
         }
-
         .reel-symbol {
             font-size: 68px;
             filter: drop-shadow(0 4px 8px black);
             transition: all 0.05s linear;
         }
-
-        /* Свечение для разных тем */
-        .game-theme-crypto .reel-symbol {
-            text-shadow: 0 0 8px #f7931a;
-        }
-
-        .game-theme-egypt .reel-symbol {
-            text-shadow: 0 0 8px #c9a03d;
-        }
+        /* Свечение для тем */
+        .game-theme-crypto .reel-symbol { text-shadow: 0 0 8px #f7931a; }
+        .game-theme-egypt .reel-symbol { text-shadow: 0 0 8px #c9a03d; }
 
         .win-area {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(212,175,55,0.1);
             border-radius: 60px;
             padding: 12px;
             text-align: center;
             font-size: 1.2rem;
             margin: 16px 0;
         }
-
         .win-active {
-            background: rgba(212, 175, 55, 0.7);
+            background: rgba(212,175,55,0.7);
             color: black;
             box-shadow: 0 0 15px gold;
         }
-
         .bet-panel {
             display: flex;
             justify-content: space-between;
@@ -308,7 +246,6 @@
             padding: 8px 20px;
             margin: 12px 0;
         }
-
         .bet-control {
             display: flex;
             gap: 20px;
@@ -316,7 +253,6 @@
             padding: 4px 20px;
             border-radius: 60px;
         }
-
         .bet-control button {
             background: none;
             border: none;
@@ -325,7 +261,6 @@
             cursor: pointer;
             width: 40px;
         }
-
         .bet-value {
             font-size: 1.4rem;
             font-weight: bold;
@@ -333,7 +268,6 @@
             min-width: 50px;
             text-align: center;
         }
-
         .spin-btn {
             background: linear-gradient(145deg, #f3d776, #c49b2c);
             border: none;
@@ -347,12 +281,7 @@
             box-shadow: 0 8px 0 #6b4e1a;
             transition: 0.05s linear;
         }
-
-        .spin-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 4px 0 #6b4e1a;
-        }
-
+        .spin-btn:active { transform: translateY(3px); box-shadow: 0 4px 0 #6b4e1a; }
         .game-balance {
             text-align: center;
             font-size: 1.6rem;
@@ -360,7 +289,6 @@
             color: #ffd966;
             margin-bottom: 16px;
         }
-
         .back-btn {
             background: none;
             border: 1px solid #d4af37;
@@ -371,547 +299,434 @@
             margin-top: 20px;
             width: 100%;
         }
-
         .info-card {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.6);
             border-radius: 48px;
             padding: 28px;
             backdrop-filter: blur(8px);
         }
-
         .stat-row {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .wallet-balance {
             font-size: 2rem;
             text-align: center;
             color: #ffd966;
             margin: 20px 0;
         }
-
         footer {
             text-align: center;
             font-size: 0.6rem;
             color: #5a6380;
             padding: 20px;
         }
-
         @media (max-width: 500px) {
-            .reel {
-                width: 85px;
-            }
-
-            .reel-symbol {
-                font-size: 56px;
-            }
+            .reel { width: 85px; }
+            .reel-symbol { font-size: 56px; }
         }
     </style>
 </head>
 <body>
-    <div class="animated-bg" id="animatedBg"></div>
-    <div class="app">
-        <div class="top-bar">
-            <div class="burger" id="burgerBtn">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="logo" id="resetBalanceBtn">
-                <h1>FERIES</h1>
-                <p>CASINO • LUXURY GAMING</p>
-            </div>
-            <div style="width: 32px;"></div>
-        </div>
-
-        <div class="side-menu" id="sideMenu">
-            <div class="menu-item" data-nav="profile">👤 Профиль</div>
-            <div class="menu-item" data-nav="rating">🏆 Рейтинг</div>
-            <div class="menu-item" data-nav="wallet">💰 Кошелек</div>
-            <div class="menu-item" data-nav="modes">🎮 Меню игр</div>
-        </div>
-        <div class="overlay" id="overlay"></div>
-
-        <!-- ЭКРАН ПРИВЕТСТВИЯ -->
-        <div id="welcomeScreen" class="screen active">
-            <div class="welcome-card">
-                <h2>Добро пожаловать!</h2>
-                <p>Пусть удача улыбнётся вам в FERIES CASINO</p>
-                <button class="btn-primary" id="toModesBtn">Выбрать режим</button>
-            </div>
-            <footer>Ваши данные защищены</footer>
-        </div>
-
-        <!-- ЭКРАН ВЫБОРА РЕЖИМА ИГРЫ -->
-        <div id="modesScreen" class="screen">
-            <div class="modes-grid">
-                <div class="mode-card" data-mode="classic">
-                    <span class="title">🎰 CLASSIC SLOT</span>
-                    <span class="badge">3 линии • Активен</span>
-                </div>
-                <div class="mode-card" data-mode="5lines">
-                    <span class="title">🎰 5 LINES</span>
-                    <span class="badge">Скоро</span>
-                </div>
-                <div class="mode-card" data-mode="3x3">
-                    <span class="title">🎰 3x3 GRID</span>
-                    <span class="badge">Скоро</span>
-                </div>
-            </div>
-            <footer>Выберите режим игры</footer>
-        </div>
-
-        <!-- ЭКРАН ВЫБОРА ТЕМЫ ИГРЫ -->
-        <div id="gamesScreen" class="screen">
-            <div class="games-grid" id="gamesGrid"></div>
-            <footer>Выберите игру</footer>
-        </div>
-
-        <!-- ИГРОВОЙ ЭКРАН -->
-        <div id="gameScreen" class="screen">
-            <div class="slot-machine">
-                <div class="game-balance" id="gameBalance">1000</div>
-                <div class="reels-container">
-                    <div class="reel">
-                        <div class="reel-symbol" id="r0">🍒</div>
-                    </div>
-                    <div class="reel">
-                        <div class="reel-symbol" id="r1">🍒</div>
-                    </div>
-                    <div class="reel">
-                        <div class="reel-symbol" id="r2">🍒</div>
-                    </div>
-                </div>
-                <div class="win-area" id="winArea">
-                    <span id="winMsg">🎰 SPIN</span>
-                </div>
-                <div class="bet-panel">
-                    <span>💰 СТАВКА</span>
-                    <div class="bet-control">
-                        <button id="betDec">–</button>
-                        <span class="bet-value" id="betVal">25</span>
-                        <button id="betInc">+</button>
-                    </div>
-                </div>
-                <button class="spin-btn" id="spinBtn">🔮 SPIN</button>
-            </div>
-            <button class="back-btn" id="backToGamesBtn">← В меню игр</button>
-        </div>
-
-        <!-- ПРОФИЛЬ, РЕЙТИНГ, КОШЕЛЕК -->
-        <div id="profileScreen" class="screen">
-            <div class="info-card">
-                <div class="stat-row"><span>⭐ Игр сыграно:</span><span id="statGames">0</span></div>
-                <div class="stat-row"><span>🏆 Макс. выигрыш:</span><span id="statMax">0</span></div>
-                <div class="stat-row"><span>📈 Общий выигрыш:</span><span id="statTotal">0</span></div>
-                <div class="stat-row"><span>🆔 ID:</span><span id="userIdDisplay">—</span></div>
-            </div>
-            <button class="back-btn" id="backToMenuFromProfile">← Назад</button>
-        </div>
-        <div id="ratingScreen" class="screen">
-            <div class="info-card">
-                <div id="ratingList">Загрузка...</div>
-            </div>
-            <button class="back-btn" id="backToMenuFromRating">← Назад</button>
-        </div>
-        <div id="walletScreen" class="screen">
-            <div class="info-card">
-                <div class="wallet-balance" id="walletBalance">1000</div>
-                <button class="btn-primary" id="depositBtn" style="background:#2a3448; box-shadow:none;">💎 Пополнить (крипта)</button>
-                <div class="security-text" style="margin-top:16px;">🔒 Ваши данные защищены</div>
-            </div>
-            <button class="back-btn" id="backToMenuFromWallet">← Назад</button>
-        </div>
+<div class="animated-bg" id="animatedBg"></div>
+<div class="app">
+    <div class="top-bar">
+        <div class="burger" id="burgerBtn"><span></span><span></span><span></span></div>
+        <div class="logo" id="resetBalanceBtn"><h1>FERIES</h1><p>CASINO • LUXURY GAMING</p></div>
+        <div style="width: 32px;"></div>
     </div>
 
-    <script>
-        // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
-        let userId = 'local';
-        let balance = 1000;
-        let currentBet = 25;
-        let currentGameTheme = 'egypt';
-        let spinning = false;
-        let stats = { games: 0, maxWin: 0, totalWin: 0 };
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-item" data-nav="profile">👤 Профиль</div>
+        <div class="menu-item" data-nav="rating">🏆 Рейтинг</div>
+        <div class="menu-item" data-nav="wallet">💰 Кошелек</div>
+        <div class="menu-item" data-nav="modes">🎮 Меню игр</div>
+    </div>
+    <div class="overlay" id="overlay"></div>
 
-        // КОНФИГУРАЦИЯ ИГР
-        const gamesConfig = {
-            egypt: {
-                name: '🔺 EGYPT GOLD',
-                symbols: ['🐫', '👑', '𓂀', '🦂', '🌞', '🔺'],
-                neonClass: 'game-theme-egypt'
-            },
-            space: {
-                name: '🪐 SPACE ODYSSEY',
-                symbols: ['🪐', '🚀', '🌙', '⭐', '👽', '🌌'],
-                neonClass: ''
-            },
-            crypto: {
-                name: '₿ CRYPTO MINER',
-                symbols: ['₿', 'Ξ', 'Ł', '₮', '💎', '🚀'],
-                neonClass: 'game-theme-crypto'
-            },
-            jungle: {
-                name: '🌿 JUNGLE TREASURE',
-                symbols: ['🐒', '🐍', '🦜', '🌿', '🍌', '🐆'],
-                neonClass: ''
-            },
-            fruit: {
-                name: '🍎 FRUIT BLAST',
-                symbols: ['🍒', '🍊', '🍋', '🍉', '🍇', '🍓'],
-                neonClass: ''
-            }
-        };
+    <!-- Приветствие -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="welcome-card">
+            <h2>Добро пожаловать!</h2>
+            <p>Пусть удача улыбнётся вам в FERIES CASINO</p>
+            <button class="btn-primary" id="toModesBtn">Выбрать режим</button>
+        </div>
+        <footer>Ваши данные защищены</footer>
+    </div>
 
-        // DOM-элементы
-        const screens = {
-            welcome: document.getElementById('welcomeScreen'),
-            modes: document.getElementById('modesScreen'),
-            games: document.getElementById('gamesScreen'),
-            game: document.getElementById('gameScreen'),
-            profile: document.getElementById('profileScreen'),
-            rating: document.getElementById('ratingScreen'),
-            wallet: document.getElementById('walletScreen')
-        };
-        const gameBalanceSpan = document.getElementById('gameBalance');
-        const walletBalanceSpan = document.getElementById('walletBalance');
-        const betSpan = document.getElementById('betVal');
-        const winMsgSpan = document.getElementById('winMsg');
-        const winArea = document.getElementById('winArea');
-        const spinButton = document.getElementById('spinBtn');
-        const reels = [document.getElementById('r0'), document.getElementById('r1'), document.getElementById('r2')];
-        const appDiv = document.querySelector('.app');
+    <!-- Выбор режима -->
+    <div id="modesScreen" class="screen">
+        <div class="modes-grid">
+            <div class="mode-card" data-mode="classic"><span class="title">🎰 CLASSIC SLOT</span><span class="badge">3 линии • Активен</span></div>
+            <div class="mode-card" data-mode="5lines"><span class="title">🎰 5 LINES</span><span class="badge">Скоро</span></div>
+            <div class="mode-card" data-mode="3x3"><span class="title">🎰 3x3 GRID</span><span class="badge">Скоро</span></div>
+        </div>
+        <footer>Выберите режим игры</footer>
+    </div>
 
-        // ========== ФУНКЦИИ РАБОТЫ С ДАННЫМИ ==========
-        function saveGameData() {
-            localStorage.setItem('feries_balance', balance);
-            localStorage.setItem('feries_stats', JSON.stringify(stats));
+    <!-- Выбор игры (темы) -->
+    <div id="gamesScreen" class="screen">
+        <div class="games-grid" id="gamesGrid"></div>
+        <footer>Выберите игру</footer>
+    </div>
+
+    <!-- Игровой экран -->
+    <div id="gameScreen" class="screen">
+        <div class="slot-machine">
+            <div class="game-balance" id="gameBalance">1000</div>
+            <div class="reels-container">
+                <div class="reel"><div class="reel-symbol" id="r0">🍒</div></div>
+                <div class="reel"><div class="reel-symbol" id="r1">🍒</div></div>
+                <div class="reel"><div class="reel-symbol" id="r2">🍒</div></div>
+            </div>
+            <div class="win-area" id="winArea"><span id="winMsg">🎰 SPIN</span></div>
+            <div class="bet-panel"><span>💰 СТАВКА</span><div class="bet-control"><button id="betDec">–</button><span class="bet-value" id="betVal">25</span><button id="betInc">+</button></div></div>
+            <button class="spin-btn" id="spinBtn">🔮 SPIN</button>
+        </div>
+        <button class="back-btn" id="backToGamesBtn">← В меню игр</button>
+    </div>
+
+    <!-- Профиль -->
+    <div id="profileScreen" class="screen">
+        <div class="info-card">
+            <div class="stat-row"><span>⭐ Игр сыграно:</span><span id="statGames">0</span></div>
+            <div class="stat-row"><span>🏆 Макс. выигрыш:</span><span id="statMax">0</span></div>
+            <div class="stat-row"><span>📈 Общий выигрыш:</span><span id="statTotal">0</span></div>
+            <div class="stat-row"><span>🆔 ID:</span><span id="userIdDisplay">—</span></div>
+        </div>
+        <button class="back-btn" id="backToMenuFromProfile">← Назад</button>
+    </div>
+
+    <!-- Рейтинг -->
+    <div id="ratingScreen" class="screen">
+        <div class="info-card"><div id="ratingList">Загрузка...</div></div>
+        <button class="back-btn" id="backToMenuFromRating">← Назад</button>
+    </div>
+
+    <!-- Кошелек -->
+    <div id="walletScreen" class="screen">
+        <div class="info-card">
+            <div class="wallet-balance" id="walletBalance">1000</div>
+            <button class="btn-primary" id="depositBtn" style="background:#2a3448; box-shadow:none;">💎 Пополнить (крипта)</button>
+            <div class="security-text" style="margin-top:16px;">🔒 Ваши данные защищены</div>
+        </div>
+        <button class="back-btn" id="backToMenuFromWallet">← Назад</button>
+    </div>
+</div>
+
+<script>
+    // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
+    let userId = 'local';
+    let balance = 1000;
+    let currentBet = 25;
+    let currentGameTheme = 'egypt';
+    let spinning = false;
+    let stats = { games: 0, maxWin: 0, totalWin: 0 };
+
+    // Конфигурация игр (тематики)
+    const gamesConfig = {
+        egypt: { name: '🔺 EGYPT GOLD', symbols: ['🐫','👑','𓂀','🦂','🌞','🔺'], neonClass: 'game-theme-egypt' },
+        space: { name: '🪐 SPACE ODYSSEY', symbols: ['🪐','🚀','🌙','⭐','👽','🌌'], neonClass: '' },
+        crypto: { name: '₿ CRYPTO MINER', symbols: ['₿','Ξ','Ł','₮','💎','🚀'], neonClass: 'game-theme-crypto' },
+        jungle: { name: '🌿 JUNGLE TREASURE', symbols: ['🐒','🐍','🦜','🌿','🍌','🐆'], neonClass: '' },
+        fruit: { name: '🍎 FRUIT BLAST', symbols: ['🍒','🍊','🍋','🍉','🍇','🍓'], neonClass: '' }
+    };
+
+    // DOM элементы
+    const screens = {
+        welcome: document.getElementById('welcomeScreen'),
+        modes: document.getElementById('modesScreen'),
+        games: document.getElementById('gamesScreen'),
+        game: document.getElementById('gameScreen'),
+        profile: document.getElementById('profileScreen'),
+        rating: document.getElementById('ratingScreen'),
+        wallet: document.getElementById('walletScreen')
+    };
+    const gameBalanceSpan = document.getElementById('gameBalance');
+    const walletBalanceSpan = document.getElementById('walletBalance');
+    const betSpan = document.getElementById('betVal');
+    const winMsgSpan = document.getElementById('winMsg');
+    const winArea = document.getElementById('winArea');
+    const spinButton = document.getElementById('spinBtn');
+    const reels = [document.getElementById('r0'), document.getElementById('r1'), document.getElementById('r2')];
+    const appDiv = document.querySelector('.app');
+
+    // ========== ФУНКЦИИ РАБОТЫ С ДАННЫМИ ==========
+    function saveGameData() {
+        localStorage.setItem('feries_balance', balance);
+        localStorage.setItem('feries_stats', JSON.stringify(stats));
+    }
+    function loadGameData() {
+        const savedBalance = localStorage.getItem('feries_balance');
+        if (savedBalance !== null && !isNaN(parseInt(savedBalance))) balance = parseInt(savedBalance);
+        const savedStats = localStorage.getItem('feries_stats');
+        if (savedStats) try { stats = JSON.parse(savedStats); } catch(e) { stats = { games: 0, maxWin: 0, totalWin: 0 }; }
+        updateBalanceUI();
+        updateProfileUI();
+        updateWalletUI();
+    }
+    function updateBalanceUI() {
+        if (gameBalanceSpan) gameBalanceSpan.innerText = balance;
+        if (walletBalanceSpan) walletBalanceSpan.innerText = balance;
+    }
+    function updateProfileUI() {
+        document.getElementById('statGames').innerText = stats.games;
+        document.getElementById('statMax').innerText = stats.maxWin;
+        document.getElementById('statTotal').innerText = stats.totalWin;
+        document.getElementById('userIdDisplay').innerText = userId;
+    }
+    function updateRatingUI() {
+        const container = document.getElementById('ratingList');
+        if (!container) return;
+        const demo = [
+            { name: '🐫 Pharaoh', score: 15400 },
+            { name: '🚀 Astronaut', score: 12900 },
+            { name: '₿ Satoshi', score: 11200 },
+            { name: userId === 'local' ? 'FERIES_Player' : userId.slice(0,8), score: balance }
+        ];
+        demo.sort((a,b)=>b.score - a.score);
+        container.innerHTML = demo.map(p => `<div class="stat-row"><span>${p.name}</span><span>💰 ${p.score}</span></div>`).join('');
+    }
+    function updateWalletUI() { if (walletBalanceSpan) walletBalanceSpan.innerText = balance; }
+    function resetBalance() {
+        balance = 1000;
+        updateBalanceUI();
+        saveGameData();
+        updateProfileUI();
+        updateRatingUI();
+        setWinMessage("💰 Баланс восстановлен до 1000", false);
+    }
+
+    // ========== ИГРОВАЯ ЛОГИКА ==========
+    function getRandomSymbol(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function setSymbols(s0,s1,s2) {
+        reels[0].innerText = s0;
+        reels[1].innerText = s1;
+        reels[2].innerText = s2;
+    }
+    function calcWin(symbols, bet) {
+        if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) return bet * 5;
+        if (symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) return Math.floor(bet * 1.2);
+        return 0;
+    }
+    function setWinMessage(text, isWin=false) {
+        winMsgSpan.innerText = text;
+        if (isWin) winArea.classList.add('win-active');
+        else winArea.classList.remove('win-active');
+    }
+
+    // Функция спина с поочередной остановкой барабанов
+    async function spin() {
+        if (spinning) return;
+        if (balance < currentBet) {
+            setWinMessage("❌ Не хватает монет!");
+            return;
         }
+        spinning = true;
+        spinButton.disabled = true;
+        balance -= currentBet;
+        updateBalanceUI();
+        setWinMessage("🌀 Крутим...");
 
-        function loadGameData() {
-            const savedBalance = localStorage.getItem('feries_balance');
-            if (savedBalance !== null && !isNaN(parseInt(savedBalance))) balance = parseInt(savedBalance);
-            const savedStats = localStorage.getItem('feries_stats');
-            if (savedStats) try { stats = JSON.parse(savedStats); } catch (e) { stats = { games: 0, maxWin: 0, totalWin: 0 }; }
-            updateBalanceUI();
-            updateProfileUI();
-            updateWalletUI();
-        }
+        const game = gamesConfig[currentGameTheme];
+        const symbolsArray = game.symbols;
+        // Запускаем быстрый прогон символов на всех барабанах
+        let interval = setInterval(() => {
+            for (let i=0; i<3; i++) reels[i].innerText = getRandomSymbol(symbolsArray);
+        }, 60);
 
-        function updateBalanceUI() {
-            if (gameBalanceSpan) gameBalanceSpan.innerText = balance;
-            if (walletBalanceSpan) walletBalanceSpan.innerText = balance;
-        }
-
-        function updateProfileUI() {
-            document.getElementById('statGames').innerText = stats.games;
-            document.getElementById('statMax').innerText = stats.maxWin;
-            document.getElementById('statTotal').innerText = stats.totalWin;
-            document.getElementById('userIdDisplay').innerText = userId;
-        }
-
-        // Демо-рейтинг
-        function updateRatingUI() {
-            const container = document.getElementById('ratingList');
-            if (!container) return;
-            const demo = [{
-                    name: '🐫 Pharaoh',
-                    score: 15400
-                },
-                {
-                    name: '🚀 Astronaut',
-                    score: 12900
-                },
-                {
-                    name: '₿ Satoshi',
-                    score: 11200
-                },
-                {
-                    name: userId === 'local' ? 'FERIES_Player' : userId.slice(0, 8),
-                    score: balance
-                }
-            ];
-            demo.sort((a, b) => b.score - a.score);
-            container.innerHTML = demo.map(p => `<div class="stat-row"><span>${p.name}</span><span>💰 ${p.score}</span></div>`).join('');
-        }
-
-        function updateWalletUI() {
-            if (walletBalanceSpan) walletBalanceSpan.innerText = balance;
-        }
-
-        // Скрытый сброс баланса
-        function resetBalance() {
-            balance = 1000;
-            updateBalanceUI();
-            saveGameData();
-            updateProfileUI();
-            updateRatingUI();
-            setWinMessage("💰 Баланс восстановлен до 1000", false);
-        }
-
-        // ========== ИГРОВАЯ ЛОГИКА ==========
-        function getRandomSymbol(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
-        }
-
-        function setSymbols(s0, s1, s2) {
-            reels[0].innerText = s0;
-            reels[1].innerText = s1;
-            reels[2].innerText = s2;
-        }
-
-        // Функция подсчета выигрыша
-        function calcWin(symbols, bet) {
-            if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) return bet * 5;
-            if (symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) return Math.floor(bet * 1.2);
-            return 0;
-        }
-
-        function setWinMessage(text, isWin = false) {
-            winMsgSpan.innerText = text;
-            if (isWin) winArea.classList.add('win-active');
-            else winArea.classList.remove('win-active');
-        }
-
-        // ГЛАВНАЯ ФУНКЦИЯ СПИНА С ПООЧЕРЕДНОЙ ОСТАНОВКОЙ
-        async function spin() {
-            if (spinning) return;
-            if (balance < currentBet) {
-                setWinMessage("❌ Не хватает монет!");
-                return;
-            }
-            spinning = true;
-            spinButton.disabled = true;
-
-            // Списание ставки
-            balance -= currentBet;
-            updateBalanceUI();
-            setWinMessage("🌀 Крутим...");
-
-            const game = gamesConfig[currentGameTheme];
-            const symbolsArray = game.symbols;
-
-            // Запуск анимации всех барабанов
-            let interval = setInterval(() => {
-                for (let i = 0; i < 3; i++) {
-                    reels[i].innerText = getRandomSymbol(symbolsArray);
-                }
-            }, 60);
-
-            // Поочередная остановка барабанов
-            const stopTimes = [700, 1000, 1300];
-            const finalSymbols = new Array(3);
-
-            for (let i = 0; i < 3; i++) {
-                setTimeout((index) => {
-                    const finalSym = getRandomSymbol(symbolsArray);
-                    reels[index].innerText = finalSym;
-                    finalSymbols[index] = finalSym;
-
-                    if (index === 2) {
-                        clearInterval(interval);
-
-                        // Финальный расчет
-                        function finish() {
-                            const win = calcWin(finalSymbols, currentBet);
-                            if (win > 0) {
-                                balance += win;
-                                updateBalanceUI();
-                                setWinMessage(`✨ ВЫИГРЫШ: ${win} ✨`, true);
-                                if (win > stats.maxWin) stats.maxWin = win;
-                                stats.totalWin += win;
-                                if (navigator.vibrate) navigator.vibrate(200);
-                            } else {
-                                setWinMessage("😢 Проигрыш");
-                            }
-                            stats.games++;
-                            updateProfileUI();
-                            saveGameData();
-                            updateRatingUI();
-                            spinning = false;
-                            spinButton.disabled = false;
-                        }
-
-                        // Эффект "подъёба" (последний барабан может перепрыгнуть)
-                        if (Math.random() < 0.2) {
-                            setTimeout(() => {
-                                const fakeSym = getRandomSymbol(symbolsArray);
-                                reels[2].innerText = fakeSym;
-                                finalSymbols[2] = fakeSym;
-                                finish();
-                            }, 120);
+        const stopTimes = [700, 1000, 1300]; // задержки для левого, центрального, правого
+        const finalSymbols = new Array(3);
+        for (let i=0; i<3; i++) {
+            setTimeout((idx) => {
+                const finalSym = getRandomSymbol(symbolsArray);
+                reels[idx].innerText = finalSym;
+                finalSymbols[idx] = finalSym;
+                if (idx === 2) { // последний барабан
+                    clearInterval(interval);
+                    // Эффект "подъёба" — 20% шанс, что последний барабан перепрыгнет
+                    const finish = () => {
+                        const win = calcWin(finalSymbols, currentBet);
+                        if (win > 0) {
+                            balance += win;
+                            updateBalanceUI();
+                            setWinMessage(`✨ ВЫИГРЫШ: ${win} ✨`, true);
+                            if (win > stats.maxWin) stats.maxWin = win;
+                            stats.totalWin += win;
+                            if (navigator.vibrate) navigator.vibrate(200);
                         } else {
-                            finish();
+                            setWinMessage("😢 Проигрыш");
                         }
+                        stats.games++;
+                        updateProfileUI();
+                        saveGameData();
+                        updateRatingUI();
+                        spinning = false;
+                        spinButton.disabled = false;
+                    };
+                    if (Math.random() < 0.2) {
+                        setTimeout(() => {
+                            const fakeSym = getRandomSymbol(symbolsArray);
+                            reels[2].innerText = fakeSym;
+                            finalSymbols[2] = fakeSym;
+                            finish();
+                        }, 120);
+                    } else {
+                        finish();
                     }
-                }, stopTimes[i], i);
-            }
-        }
-
-        function changeBet(delta) {
-            let newBet = currentBet + delta;
-            if (newBet >= 5 && newBet <= 500) {
-                currentBet = newBet;
-                betSpan.innerText = currentBet;
-            }
-        }
-
-        function applyGameTheme(themeKey) {
-            currentGameTheme = themeKey;
-            const game = gamesConfig[themeKey];
-            appDiv.classList.remove('game-theme-crypto', 'game-theme-egypt');
-            if (game.neonClass) appDiv.classList.add(game.neonClass);
-            const syms = game.symbols;
-            setSymbols(getRandomSymbol(syms), getRandomSymbol(syms), getRandomSymbol(syms));
-            setWinMessage(`🎮 ${game.name}`);
-        }
-
-        // ========== ПОСТРОЕНИЕ МЕНЮ ==========
-        function buildGamesMenu() {
-            const grid = document.getElementById('gamesGrid');
-            grid.innerHTML = '';
-            for (const [key, game] of Object.entries(gamesConfig)) {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.innerHTML = `<span class="title">${game.name}</span><span class="icon">${game.symbols[0]}</span>`;
-                card.onclick = () => {
-                    applyGameTheme(key);
-                    showScreen('game');
-                };
-                grid.appendChild(card);
-            }
-        }
-
-        // ========== НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ ==========
-        function showScreen(name) {
-            Object.values(screens).forEach(s => s.classList.remove('active'));
-            screens[name].classList.add('active');
-            if (name === 'game') {
-                updateBalanceUI();
-                applyGameTheme(currentGameTheme);
-            }
-            if (name === 'profile') updateProfileUI();
-            if (name === 'rating') updateRatingUI();
-            if (name === 'wallet') updateWalletUI();
-        }
-
-        // Обработчики событий
-        document.getElementById('toModesBtn').onclick = () => showScreen('modes');
-        document.getElementById('backToGamesBtn').onclick = () => showScreen('games');
-        document.getElementById('backToMenuFromProfile').onclick = () => showScreen('modes');
-        document.getElementById('backToMenuFromRating').onclick = () => showScreen('modes');
-        document.getElementById('backToMenuFromWallet').onclick = () => showScreen('modes');
-
-        // Выбор режима
-        document.querySelectorAll('.mode-card').forEach(card => {
-            card.onclick = () => {
-                if (card.dataset.mode === 'classic') {
-                    buildGamesMenu();
-                    showScreen('games');
-                } else {
-                    alert('Этот режим в разработке. Играйте в CLASSIC SLOT!');
                 }
-            };
-        });
-
-        // Кнопки управления
-        document.getElementById('betDec').onclick = () => changeBet(-5);
-        document.getElementById('betInc').onclick = () => changeBet(5);
-        spinButton.onclick = spin;
-        document.getElementById('depositBtn').onclick = () => alert('Пополнение через криптовалюту скоро. Баланс: ' + balance);
-
-        // Бургер-меню
-        const burger = document.getElementById('burgerBtn');
-        const sideMenu = document.getElementById('sideMenu');
-        const overlay = document.getElementById('overlay');
-
-        function closeMenu() {
-            sideMenu.classList.remove('open');
-            overlay.classList.remove('active');
+            }, stopTimes[i], i);
         }
+    }
 
-        burger.onclick = () => {
-            sideMenu.classList.toggle('open');
-            overlay.classList.toggle('active');
+    function changeBet(delta) {
+        let newBet = currentBet + delta;
+        if (newBet >= 5 && newBet <= 500) {
+            currentBet = newBet;
+            betSpan.innerText = currentBet;
+        }
+    }
+
+    function applyGameTheme(themeKey) {
+        currentGameTheme = themeKey;
+        const game = gamesConfig[themeKey];
+        appDiv.classList.remove('game-theme-crypto', 'game-theme-egypt');
+        if (game.neonClass) appDiv.classList.add(game.neonClass);
+        const syms = game.symbols;
+        setSymbols(getRandomSymbol(syms), getRandomSymbol(syms), getRandomSymbol(syms));
+        setWinMessage(`🎮 ${game.name}`);
+    }
+
+    // ========== ПОСТРОЕНИЕ МЕНЮ ==========
+    function buildGamesMenu() {
+        const grid = document.getElementById('gamesGrid');
+        grid.innerHTML = '';
+        for (const [key, game] of Object.entries(gamesConfig)) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.innerHTML = `<span class="title">${game.name}</span><span class="icon">${game.symbols[0]}</span>`;
+            card.onclick = () => { applyGameTheme(key); showScreen('game'); };
+            grid.appendChild(card);
+        }
+    }
+
+    // ========== НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ ==========
+    function showScreen(name) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        screens[name].classList.add('active');
+        if (name === 'game') { updateBalanceUI(); applyGameTheme(currentGameTheme); }
+        if (name === 'profile') updateProfileUI();
+        if (name === 'rating') updateRatingUI();
+        if (name === 'wallet') updateWalletUI();
+    }
+
+    // Обработчики переходов
+    document.getElementById('toModesBtn').onclick = () => showScreen('modes');
+    document.getElementById('backToGamesBtn').onclick = () => showScreen('games');
+    document.getElementById('backToMenuFromProfile').onclick = () => showScreen('modes');
+    document.getElementById('backToMenuFromRating').onclick = () => showScreen('modes');
+    document.getElementById('backToMenuFromWallet').onclick = () => showScreen('modes');
+    document.querySelectorAll('.mode-card').forEach(card => {
+        card.onclick = () => {
+            if (card.dataset.mode === 'classic') { buildGamesMenu(); showScreen('games'); }
+            else alert('Этот режим в разработке. Играйте в CLASSIC SLOT!');
         };
-        overlay.onclick = closeMenu;
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.onclick = () => {
-                const nav = item.dataset.nav;
-                if (nav === 'modes') showScreen('modes');
-                if (nav === 'profile') showScreen('profile');
-                if (nav === 'rating') showScreen('rating');
-                if (nav === 'wallet') showScreen('wallet');
-                closeMenu();
-            };
-        });
+    });
 
-        // Сброс баланса (двойной клик по логотипу)
-        let clickTimer = null;
-        document.querySelector('.logo').addEventListener('click', () => {
-            if (clickTimer) {
-                clearTimeout(clickTimer);
-                clickTimer = null;
-                resetBalance();
-            } else {
-                clickTimer = setTimeout(() => {
-                    clickTimer = null;
-                }, 300);
-            }
-        });
+    // Кнопки управления
+    document.getElementById('betDec').onclick = () => changeBet(-5);
+    document.getElementById('betInc').onclick = () => changeBet(5);
+    spinButton.onclick = spin;
+    document.getElementById('depositBtn').onclick = () => alert('Пополнение через криптовалюту скоро. Баланс: ' + balance);
 
-        // Анимированный фон с частицами
-        function createParticles() {
-            const bg = document.getElementById('animatedBg');
-            for (let i = 0; i < 50; i++) {
-                const size = Math.random() * 6 + 2;
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = 10 + Math.random() * 10 + 's';
-                bg.appendChild(particle);
-            }
+    // Бургер-меню
+    const burger = document.getElementById('burgerBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    function closeMenu() { sideMenu.classList.remove('open'); overlay.classList.remove('active'); }
+    burger.onclick = () => { sideMenu.classList.toggle('open'); overlay.classList.toggle('active'); };
+    overlay.onclick = closeMenu;
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.onclick = () => {
+            const nav = item.dataset.nav;
+            if (nav === 'modes') showScreen('modes');
+            if (nav === 'profile') showScreen('profile');
+            if (nav === 'rating') showScreen('rating');
+            if (nav === 'wallet') showScreen('wallet');
+            closeMenu();
+        };
+    });
+
+    // Сброс баланса (двойной клик по логотипу)
+    let clickTimer = null;
+    document.querySelector('.logo').addEventListener('click', () => {
+        if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; resetBalance(); }
+        else { clickTimer = setTimeout(() => { clickTimer = null; }, 300); }
+    });
+
+    // Анимированный фон с частицами
+    function createParticles() {
+        const bg = document.getElementById('animatedBg');
+        for (let i=0; i<50; i++) {
+            const size = Math.random() * 6 + 2;
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = 10 + Math.random() * 10 + 's';
+            bg.appendChild(particle);
         }
-        createParticles();
+    }
+    createParticles();
 
-        // Принудительный полноэкранный режим
-        function forceFullscreen() {
-            console.log("forceFullscreen triggered");
-            if (window.Telegram && window.Telegram.WebApp) {
-                // Последовательно вызываем ready и expand
-                window.Telegram.WebApp.ready();
+    // ========== НОВАЯ ФУНКЦИЯ ПРИНУДИТЕЛЬНОГО РАСШИРЕНИЯ (через requestFullscreen) ==========
+    async function initializeTelegramFullscreen() {
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            // Пытаемся использовать современный метод requestFullscreen
+            if (window.Telegram.WebApp.requestFullscreen) {
+                try {
+                    await window.Telegram.WebApp.requestFullscreen();
+                    console.log("Fullscreen requested successfully");
+                } catch(e) {
+                    console.warn("Fullscreen failed, fallback to expand:", e);
+                    window.Telegram.WebApp.expand();
+                }
+            } else {
                 window.Telegram.WebApp.expand();
-                console.log("Telegram WebApp expand() called");
-            } else {
-                console.warn("Telegram WebApp not available");
             }
+            // Получаем ID пользователя
+            if (window.Telegram.WebApp.initDataUnsafe?.user) {
+                userId = String(window.Telegram.WebApp.initDataUnsafe.user.id);
+            } else {
+                userId = 'local';
+            }
+            // Дополнительно растягиваем через expand на всякий случай
+            setTimeout(() => {
+                if (window.Telegram.WebApp.expand) window.Telegram.WebApp.expand();
+            }, 200);
+        } else {
+            userId = 'browser_' + Math.floor(Math.random()*10000);
+            console.warn("Not in Telegram, using random ID");
         }
+    }
 
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        window.onload = () => {
-            // Проверяем окружение Telegram
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-                userId = window.Telegram.WebApp.initDataUnsafe?.user?.id || 'local';
-                if (userId === 'local') {
-                    console.warn("Telegram user ID not found, using 'local'");
-                } else {
-                    userId = String(userId);
-                }
-                forceFullscreen(); // Пытаемся сразу развернуть
-            } else {
-                userId = 'browser_' + Math.floor(Math.random() * 10000);
-                console.warn("Running outside Telegram, using random ID");
-            }
-            loadGameData();
-            buildGamesMenu();
-            applyGameTheme('egypt');
-            showScreen('welcome');
-            forceFullscreen(); // Повторный вызов для верности
-        };
-    </script>
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    window.onload = async () => {
+        await initializeTelegramFullscreen();
+        loadGameData();
+        buildGamesMenu();
+        applyGameTheme('egypt');
+        showScreen('welcome');
+        // Повторная попытка развернуть через секунду
+        setTimeout(() => {
+            if (window.Telegram?.WebApp?.expand) window.Telegram.WebApp.expand();
+        }, 1000);
+    };
+</script>
 </body>
 </html>
