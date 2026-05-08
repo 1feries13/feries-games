@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FERIES CASINO — премиум</title>
+    <title>FERIES CASINO — премиум слоты</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* Анимированный фон (золотые частицы) */
+        /* Анимированный фон с золотыми частицами */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -43,12 +43,15 @@
             100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Главный контейнер — занимает весь экран */
+        /* Главный контейнер — принудительное растяжение на весь экран */
         .app {
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
             z-index: 1;
-            width: 100%;
-            min-height: 100vh;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(2px);
             display: flex;
@@ -81,6 +84,7 @@
         }
         .logo {
             text-align: center;
+            cursor: pointer;
         }
         .logo h1 {
             font-size: 1.8rem;
@@ -94,7 +98,7 @@
             color: #d4af37;
         }
 
-        /* Боковое меню (выезжающее) */
+        /* Боковое меню */
         .side-menu {
             position: fixed;
             top: 0;
@@ -175,7 +179,28 @@
             cursor: pointer;
         }
 
-        /* Меню игр */
+        /* Меню выбора режимов (Classic, 5 линий, 3x3) */
+        .modes-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .mode-card {
+            background: rgba(20,25,40,0.8);
+            border-radius: 56px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        .mode-card:active { transform: scale(0.98); }
+        .mode-card .title { font-size: 1.3rem; color: #ffdf80; font-weight: bold; }
+        .mode-card .badge { font-size: 0.8rem; color: #aaa; }
+
+        /* Меню выбора тематик (5 игр) */
         .games-grid {
             display: flex;
             flex-direction: column;
@@ -195,7 +220,7 @@
         .game-card:active { transform: scale(0.98); }
         .game-card .title { font-size: 1.3rem; color: #ffdf80; font-weight: bold; }
 
-        /* Игровой экран — стилизация барабанов как на скрине */
+        /* Игровой экран — премиум стиль */
         .slot-machine {
             background: linear-gradient(145deg, #1a1f2e, #0e121c);
             border-radius: 48px;
@@ -219,7 +244,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* Эффект блеска на барабане */
         .reel::after {
             content: '';
             position: absolute;
@@ -313,6 +337,7 @@
             color: #d4af37;
             cursor: pointer;
             margin-top: 20px;
+            width: 100%;
         }
         .info-card {
             background: rgba(0,0,0,0.6);
@@ -351,7 +376,7 @@
         <div class="burger" id="burgerBtn">
             <span></span><span></span><span></span>
         </div>
-        <div class="logo">
+        <div class="logo" id="resetBalanceBtn">
             <h1>FERIES</h1>
             <p>CASINO • LUXURY GAMING</p>
         </div>
@@ -367,21 +392,42 @@
     </div>
     <div class="overlay" id="overlay"></div>
 
-    <!-- ЭКРАНЫ -->
+    <!-- ЭКРАН 1: ПРИВЕТСТВИЕ -->
     <div id="welcomeScreen" class="screen active">
         <div class="welcome-card">
             <h2>Добро пожаловать!</h2>
             <p>Пусть удача улыбнётся вам в FERIES CASINO</p>
-            <button class="btn-primary" id="toMenuBtn">Перейти в меню игр</button>
+            <button class="btn-primary" id="toModesBtn">Выбрать режим</button>
         </div>
         <footer>Ваши данные защищены</footer>
     </div>
 
-    <div id="menuScreen" class="screen">
+    <!-- ЭКРАН 2: ВЫБОР РЕЖИМА ИГРЫ (Classic, 5 линий, 3x3) -->
+    <div id="modesScreen" class="screen">
+        <div class="modes-grid">
+            <div class="mode-card" data-mode="classic">
+                <span class="title">🎰 CLASSIC SLOT</span>
+                <span class="badge">3 линии • Активен</span>
+            </div>
+            <div class="mode-card" data-mode="5lines">
+                <span class="title">🎰 5 LINES</span>
+                <span class="badge">Скоро</span>
+            </div>
+            <div class="mode-card" data-mode="3x3">
+                <span class="title">🎰 3x3 GRID</span>
+                <span class="badge">Скоро</span>
+            </div>
+        </div>
+        <footer>Выберите режим игры</footer>
+    </div>
+
+    <!-- ЭКРАН 3: ВЫБОР ТЕМАТИКИ (5 игр) -->
+    <div id="gamesScreen" class="screen">
         <div class="games-grid" id="gamesGrid"></div>
         <footer>Выберите игру</footer>
     </div>
 
+    <!-- ЭКРАН 4: ИГРОВОЙ СЛОТ -->
     <div id="gameScreen" class="screen">
         <div class="slot-machine">
             <div class="game-balance" id="gameBalance">1000</div>
@@ -401,9 +447,10 @@
             </div>
             <button class="spin-btn" id="spinBtn">🔮 SPIN</button>
         </div>
-        <button class="back-btn" id="backToMenuFromGame">← В меню игр</button>
+        <button class="back-btn" id="backToGamesBtn">← В меню игр</button>
     </div>
 
+    <!-- ЭКРАН: ПРОФИЛЬ -->
     <div id="profileScreen" class="screen">
         <div class="info-card">
             <div class="stat-row"><span>⭐ Игр сыграно:</span><span id="statGames">0</span></div>
@@ -414,6 +461,7 @@
         <button class="back-btn" id="backToMenuFromProfile">← Назад</button>
     </div>
 
+    <!-- ЭКРАН: РЕЙТИНГ -->
     <div id="ratingScreen" class="screen">
         <div class="info-card">
             <div id="ratingList">Загрузка...</div>
@@ -421,6 +469,7 @@
         <button class="back-btn" id="backToMenuFromRating">← Назад</button>
     </div>
 
+    <!-- ЭКРАН: КОШЕЛЕК -->
     <div id="walletScreen" class="screen">
         <div class="info-card">
             <div class="wallet-balance" id="walletBalance">1000</div>
@@ -432,7 +481,7 @@
 </div>
 
 <script>
-    // ========== ГЛОБАЛЬНЫЕ ==========
+    // ========== ГЛОБАЛЬНЫЕ ПАРАМЕТРЫ ==========
     let userId = 'local';
     let balance = 1000;
     let currentBet = 25;
@@ -440,7 +489,9 @@
     let currentSymbols = ['🐫','👑','𓂀'];
     let spinning = false;
     let stats = { games: 0, maxWin: 0, totalWin: 0 };
+    let currentMode = 'classic'; // 'classic', '5lines', '3x3'
 
+    // Конфигурация игр (тематики)
     const gamesConfig = {
         egypt: { name: '🔺 EGYPT GOLD', border: '#C9A03D', symbols: ['🐫','👑','𓂀','🦂','🌞','🔺'], neonClass: 'game-theme-egypt' },
         space: { name: '🪐 SPACE ODYSSEY', border: '#3A4F8A', symbols: ['🪐','🚀','🌙','⭐','👽','🌌'], neonClass: '' },
@@ -449,10 +500,11 @@
         fruit: { name: '🍎 FRUIT BLAST', border: '#E65100', symbols: ['🍒','🍊','🍋','🍉','🍇','🍓'], neonClass: '' }
     };
 
-    // DOM
+    // DOM элементы
     const screens = {
         welcome: document.getElementById('welcomeScreen'),
-        menu: document.getElementById('menuScreen'),
+        modes: document.getElementById('modesScreen'),
+        games: document.getElementById('gamesScreen'),
         game: document.getElementById('gameScreen'),
         profile: document.getElementById('profileScreen'),
         rating: document.getElementById('ratingScreen'),
@@ -467,7 +519,7 @@
     const reels = [document.getElementById('r0'), document.getElementById('r1'), document.getElementById('r2')];
     const appDiv = document.querySelector('.app');
 
-    // Функции хранения
+    // ========== ФУНКЦИИ СОХРАНЕНИЯ ==========
     function saveGameData() {
         localStorage.setItem('feries_balance', balance);
         localStorage.setItem('feries_stats', JSON.stringify(stats));
@@ -491,10 +543,10 @@
         document.getElementById('statTotal').innerText = stats.totalWin || 0;
         document.getElementById('userIdDisplay').innerText = userId;
     }
-    function updateWalletUI() { if (walletBalanceSpan) walletBalanceSpan.innerText = balance; }
     function updateRatingUI() {
         const container = document.getElementById('ratingList');
         if (!container) return;
+        // Демо-рейтинг (позже заменим на данные из таблицы)
         const demo = [
             { name: '🐫 Pharaoh', score: 15400 },
             { name: '🚀 Astronaut', score: 12900 },
@@ -504,6 +556,7 @@
         demo.sort((a,b)=>b.score - a.score);
         container.innerHTML = demo.map(p => `<div class="stat-row"><span>${p.name}</span><span>💰 ${p.score}</span></div>`).join('');
     }
+    function updateWalletUI() { if (walletBalanceSpan) walletBalanceSpan.innerText = balance; }
     function resetBalance() {
         balance = 1000;
         updateBalanceUI();
@@ -513,7 +566,7 @@
         setWinMessage("💰 Баланс восстановлен до 1000", false);
     }
 
-    // Игровая логика
+    // ========== ИГРОВАЯ ЛОГИКА (ПООЧЕРЕДНАЯ ОСТАНОВКА) ==========
     function getRandomSymbol(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
     function setSymbols(s0,s1,s2) {
         reels[0].innerText = s0;
@@ -522,9 +575,10 @@
         currentSymbols = [s0,s1,s2];
     }
     function calcWin(symbols, bet) {
-        if (symbols[0]===symbols[1] && symbols[1]===symbols[2]) return bet * 5;
-        if (symbols[0]===symbols[1] || symbols[1]===symbols[2] || symbols[0]===symbols[2]) return Math.floor(bet * 1.2);
-        return 0;
+        // Только два или три одинаковых символа дают выигрыш
+        if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) return bet * 5;  // Джекпот
+        if (symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) return Math.floor(bet * 1.2); // Малый выигрыш
+        return 0; // Три разных — проигрыш
     }
     function setWinMessage(text, isWin=false) {
         winMsgSpan.innerText = text;
@@ -532,6 +586,7 @@
         else winArea.classList.remove('win-active');
     }
 
+    // ГЛАВНАЯ ФУНКЦИЯ СПИНА С ПООЧЕРЕДНОЙ ОСТАНОВКОЙ
     async function spin() {
         if (spinning) return;
         if (balance < currentBet) {
@@ -546,51 +601,57 @@
 
         const game = gamesConfig[currentGameTheme];
         const symbolsArray = game.symbols;
+        // Запускаем быструю смену символов на всех барабанах
         let interval = setInterval(() => {
             for (let i=0; i<3; i++) reels[i].innerText = getRandomSymbol(symbolsArray);
-        }, 40);
+        }, 60);
 
-        setTimeout(() => {
-            const final0 = getRandomSymbol(symbolsArray);
-            reels[0].innerText = final0;
+        // Поочередная остановка барабанов с задержкой 300 мс между ними
+        const stopTimes = [700, 1000, 1300]; // моменты остановки каждого барабана (мс)
+        const finalSymbols = new Array(3);
+        
+        for (let i = 0; i < 3; i++) {
             setTimeout(() => {
-                const final1 = getRandomSymbol(symbolsArray);
-                reels[1].innerText = final1;
-                setTimeout(() => {
+                const finalSym = getRandomSymbol(symbolsArray);
+                reels[i].innerText = finalSym;
+                finalSymbols[i] = finalSym;
+                // Если последний барабан остановился
+                if (i === 2) {
                     clearInterval(interval);
-                    let final2 = getRandomSymbol(symbolsArray);
-                    // подъёб с вероятностью 20%
+                    // Добавляем эффект "подъёба" (20% шанс, что последний барабан перепрыгнет)
                     if (Math.random() < 0.2) {
-                        reels[2].innerText = final2;
                         setTimeout(() => {
-                            const fake = getRandomSymbol(symbolsArray);
-                            reels[2].innerText = fake;
-                            finish(final0, final1, fake);
-                        }, 100);
+                            const fakeSym = getRandomSymbol(symbolsArray);
+                            reels[2].innerText = fakeSym;
+                            finalSymbols[2] = fakeSym;
+                            finish(finalSymbols);
+                        }, 80);
                     } else {
-                        reels[2].innerText = final2;
-                        finish(final0, final1, final2);
+                        finish(finalSymbols);
                     }
-                    function finish(s0,s1,s2) {
-                        const win = calcWin([s0,s1,s2], currentBet);
-                        if (win > 0) {
-                            balance += win;
-                            updateBalanceUI();
-                            setWinMessage(`✨ ВЫИГРЫШ: ${win} ✨`, true);
-                            if (win > stats.maxWin) stats.maxWin = win;
-                            stats.totalWin += win;
-                            if (navigator.vibrate) navigator.vibrate(200);
-                        } else setWinMessage("😢 Проигрыш");
-                        stats.games++;
-                        updateProfileUI();
-                        saveGameData();
-                        updateRatingUI();
-                        spinning = false;
-                        spinButton.disabled = false;
-                    }
-                }, 350);
-            }, 350);
-        }, 700);
+                }
+            }, stopTimes[i]);
+        }
+
+        function finish(finalSymbols) {
+            const win = calcWin(finalSymbols, currentBet);
+            if (win > 0) {
+                balance += win;
+                updateBalanceUI();
+                setWinMessage(`✨ ВЫИГРЫШ: ${win} ✨`, true);
+                if (win > stats.maxWin) stats.maxWin = win;
+                stats.totalWin += win;
+                if (navigator.vibrate) navigator.vibrate(200);
+            } else {
+                setWinMessage("😢 Проигрыш");
+            }
+            stats.games++;
+            updateProfileUI();
+            saveGameData();
+            updateRatingUI();
+            spinning = false;
+            spinButton.disabled = false;
+        }
     }
 
     function changeBet(delta) {
@@ -611,6 +672,7 @@
         setWinMessage(`🎮 ${game.name}`);
     }
 
+    // ========== ПОСТРОЕНИЕ МЕНЮ ==========
     function buildGamesMenu() {
         const grid = document.getElementById('gamesGrid');
         grid.innerHTML = '';
@@ -623,7 +685,7 @@
         }
     }
 
-    // Навигация
+    // ========== НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ ==========
     function showScreen(name) {
         Object.values(screens).forEach(s => s.classList.remove('active'));
         screens[name].classList.add('active');
@@ -635,6 +697,33 @@
         if (name === 'rating') updateRatingUI();
         if (name === 'wallet') updateWalletUI();
     }
+
+    // Обработчики переходов
+    document.getElementById('toModesBtn').onclick = () => showScreen('modes');
+    document.getElementById('backToGamesBtn').onclick = () => showScreen('games');
+    document.getElementById('backToMenuFromProfile').onclick = () => showScreen('modes');
+    document.getElementById('backToMenuFromRating').onclick = () => showScreen('modes');
+    document.getElementById('backToMenuFromWallet').onclick = () => showScreen('modes');
+
+    // Выбор режима
+    document.querySelectorAll('.mode-card').forEach(card => {
+        card.onclick = () => {
+            const mode = card.dataset.mode;
+            if (mode === 'classic') {
+                currentMode = 'classic';
+                buildGamesMenu();   // строим меню игр
+                showScreen('games');
+            } else {
+                alert('Этот режим в разработке. Играйте в CLASSIC SLOT!');
+            }
+        };
+    });
+
+    // Кнопки ставки и спин
+    document.getElementById('betDec').onclick = () => changeBet(-5);
+    document.getElementById('betInc').onclick = () => changeBet(5);
+    spinButton.onclick = spin;
+    document.getElementById('depositBtn').onclick = () => alert('Пополнение через криптовалюту скоро. Баланс: ' + balance);
 
     // Меню-бургер
     const burger = document.getElementById('burgerBtn');
@@ -652,7 +741,7 @@
     document.querySelectorAll('.menu-item').forEach(item => {
         item.onclick = () => {
             const nav = item.dataset.nav;
-            if (nav === 'menu') showScreen('menu');
+            if (nav === 'menu') showScreen('modes');
             if (nav === 'profile') showScreen('profile');
             if (nav === 'rating') showScreen('rating');
             if (nav === 'wallet') showScreen('wallet');
@@ -660,18 +749,7 @@
         };
     });
 
-    // Кнопки навигации
-    document.getElementById('toMenuBtn').onclick = () => showScreen('menu');
-    document.getElementById('backToMenuFromGame').onclick = () => showScreen('menu');
-    document.getElementById('backToMenuFromProfile').onclick = () => showScreen('menu');
-    document.getElementById('backToMenuFromRating').onclick = () => showScreen('menu');
-    document.getElementById('backToMenuFromWallet').onclick = () => showScreen('menu');
-    document.getElementById('betDec').onclick = () => changeBet(-5);
-    document.getElementById('betInc').onclick = () => changeBet(5);
-    spinButton.onclick = spin;
-    document.getElementById('depositBtn').onclick = () => alert('Пополнение через криптовалюту скоро. Баланс: ' + balance);
-
-    // Скрытый сброс (двойной клик по логотипу)
+    // Скрытый сброс баланса (двойной клик по логотипу)
     let clickTimer = null;
     document.querySelector('.logo').addEventListener('click', () => {
         if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; resetBalance(); }
@@ -681,7 +759,7 @@
     // Анимированный фон
     function createParticles() {
         const bg = document.getElementById('animatedBg');
-        for (let i=0; i<40; i++) {
+        for (let i=0; i<50; i++) {
             const size = Math.random() * 6 + 2;
             const particle = document.createElement('div');
             particle.className = 'particle';
@@ -695,7 +773,16 @@
     }
     createParticles();
 
-    // Инициализация
+    // Форсируем полноэкранный режим Telegram
+    function forceFullscreen() {
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.expand();
+            setTimeout(forceFullscreen, 500);
+        }
+    }
+    forceFullscreen();
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
     window.onload = () => {
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.expand();
