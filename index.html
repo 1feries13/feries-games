@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FERIES – Космические слоты</title>
+    <title>FERIES COSMIC SLOT — финал</title>
     <style>
         * {
             margin: 0;
@@ -51,7 +51,7 @@
             z-index: 0;
         }
 
-        /* Основное приложение – без скролла, весь экран */
+        /* Приложение фиксированной высоты */
         .app {
             position: fixed;
             top: 0;
@@ -82,6 +82,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            cursor: pointer;
         }
         .logo p {
             font-size: 0.5rem;
@@ -121,7 +122,7 @@
             backdrop-filter: blur(2px);
         }
 
-        /* Игровой экран: квадратный контейнер для барабанов */
+        /* Игровой экран */
         .game-screen {
             flex: 1;
             display: flex;
@@ -145,11 +146,10 @@
             gap: 20px;
             position: relative;
         }
-        /* Каждый барабан – вертикальная карусель */
+        /* Каждый барабан */
         .reel {
             width: 100px;
             height: 240px;
-            background: #f5f5fa;
             background: linear-gradient(145deg, #f0f0f8, #e0e4ec);
             border-radius: 28px;
             overflow: hidden;
@@ -172,10 +172,7 @@
             background: rgba(255,255,255,0.9);
             border-bottom: 1px solid rgba(212,175,55,0.2);
         }
-        .reel-symbol:last-child {
-            border-bottom: none;
-        }
-        /* Золотая линия выигрыша (центральная строка) */
+        /* Золотая линия выигрыша */
         .win-line {
             position: absolute;
             top: 50%;
@@ -194,8 +191,6 @@
             box-shadow: 0 0 20px gold, 0 0 8px orange;
             background: linear-gradient(90deg, transparent, #ffd700, #fff0b5, #ffd700, transparent);
         }
-
-        /* Сообщение о выигрыше */
         .win-message {
             background: rgba(212,175,55,0.15);
             border-radius: 40px;
@@ -211,8 +206,6 @@
             color: #0a0f1e;
             box-shadow: 0 0 12px gold;
         }
-
-        /* Панель ставок */
         .bet-panel {
             background: rgba(0,0,0,0.4);
             border-radius: 60px;
@@ -261,8 +254,6 @@
             transform: translateY(3px);
             box-shadow: 0 3px 0 #6b4e1a;
         }
-
-        /* Нижняя навигация */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -293,8 +284,6 @@
             color: #5a6380;
             padding: 6px;
         }
-
-        /* Модальные окна (профиль, рейтинг, кошелёк) */
         .modal {
             position: fixed;
             top: 0;
@@ -341,11 +330,9 @@
             width: 100%;
             margin-top: 20px;
         }
-
         @media (max-width: 550px) {
             .reel { width: 85px; height: 210px; }
             .reel-symbol { height: 70px; font-size: 46px; }
-            .paytable span { font-size: 0.7rem; padding: 2px 8px; }
         }
     </style>
 </head>
@@ -357,22 +344,17 @@
         <div class="logo"><h1>FERIES</h1><p>COSMIC SLOT</p></div>
         <div class="balance-box"><span id="balanceValue">1000</span></div>
     </div>
-
     <div class="paytable" id="paytable">
         <span>🌟 x50</span> <span>🚀 x5</span> <span>👽 x4</span> <span>🪐 x3</span> <span>🌙 x2</span> <span>⭐ x1.5</span>
     </div>
-
     <div class="game-screen">
         <div class="slot-frame">
             <div class="reels-container" id="reelsContainer">
-                <!-- сюда будут вставлены барабаны -->
                 <div class="win-line" id="winLine"></div>
             </div>
         </div>
     </div>
-
     <div class="win-message" id="winMsg">🌀 Крути барабаны!</div>
-
     <div class="bet-panel">
         <span>💰 СТАВКА</span>
         <div class="bet-control">
@@ -382,7 +364,6 @@
         </div>
     </div>
     <button class="spin-btn" id="spinBtn">🔮 SPIN</button>
-
     <div class="bottom-nav">
         <div class="nav-btn" data-modal="profile">👤 Профиль</div>
         <div class="nav-btn" data-modal="rating">🏆 Рейтинг</div>
@@ -390,32 +371,12 @@
     </div>
     <footer>Ваши данные под защитой галактики</footer>
 </div>
-
-<!-- Модальные окна -->
-<div id="profileModal" class="modal">
-    <div class="modal-content">
-        <h3>👤 Профиль</h3>
-        <div id="profileInfo"></div>
-        <button class="close-modal">Закрыть</button>
-    </div>
-</div>
-<div id="ratingModal" class="modal">
-    <div class="modal-content">
-        <h3>🏆 Рейтинг</h3>
-        <div id="ratingInfo"></div>
-        <button class="close-modal">Закрыть</button>
-    </div>
-</div>
-<div id="walletModal" class="modal">
-    <div class="modal-content">
-        <h3>💰 Кошелёк</h3>
-        <div id="walletInfo"></div>
-        <button class="close-modal">Закрыть</button>
-    </div>
-</div>
+<div id="profileModal" class="modal"><div class="modal-content"><h3>👤 Профиль</h3><div id="profileInfo"></div><button class="close-modal">Закрыть</button></div></div>
+<div id="ratingModal" class="modal"><div class="modal-content"><h3>🏆 Рейтинг</h3><div id="ratingInfo"></div><button class="close-modal">Закрыть</button></div></div>
+<div id="walletModal" class="modal"><div class="modal-content"><h3>💰 Кошелёк</h3><div id="walletInfo"></div><button class="close-modal">Закрыть</button></div></div>
 
 <script>
-    // --------------------------------- ГЛОБАЛЬНЫЕ ДАННЫЕ ---------------------------------
+    // ========== ДАННЫЕ ==========
     let balance = 1000;
     let currentBet = 25;
     let spinning = false;
@@ -424,38 +385,38 @@
 
     const symbols = ['🪐', '🚀', '🌙', '⭐', '👽', '🌠'];
     const multipliers = { '🌠': 50, '🚀': 5, '👽': 4, '🪐': 3, '🌙': 2, '⭐': 1.5 };
-    const winLineElement = document.getElementById('winLine');
-
-    // DOM элементы
+    
+    // DOM
     const balanceSpan = document.getElementById('balanceValue');
     const winMsgSpan = document.getElementById('winMsg');
     const spinButton = document.getElementById('spinBtn');
     const betAmountSpan = document.getElementById('betAmount');
     const reelsContainer = document.getElementById('reelsContainer');
+    const winLine = document.getElementById('winLine');
 
-    // Структура барабанов (по 3 символа, отображаемых в каждое окно)
-    let reelElements = [];      // DOM-элементы .reel
-    let reelStrips = [];       // внутренние .reel-strip
-    let currentPositions = [0, 0, 0]; // текущий translateY в px
-    let animIntervals = [null, null, null];
-    let finalSymbols = ['🪐', '🪐', '🪐']; // итоговые центральные символы
+    // Структура барабанов
+    let reelStrips = [];      // DOM .reel-strip
+    let currentPositions = [0,0,0];
+    let animIntervals = [null,null,null];
+    const SYMBOL_HEIGHT = 80;  // px
+    const VISIBLE_SYMBOLS = 3;
+    const EXTRA_SYMBOLS = 20;   // чтобы всегда было много символов
 
-    // --------------------------------- СОЗДАНИЕ БАРАБАНОВ ---------------------------------
+    // ========== ПОСТРОЕНИЕ БАРАБАНОВ ==========
     function createReels() {
         reelsContainer.innerHTML = '';
-        reelElements = [];
         reelStrips = [];
-        // Убираем старую линию, если есть
+        // удаляем старую линию, если есть (оставим только одну)
         const oldLine = document.querySelector('.win-line');
-        if (oldLine) oldLine.remove();
+        if (oldLine && oldLine !== winLine) oldLine.remove();
         
         for (let r = 0; r < 3; r++) {
             const reelDiv = document.createElement('div');
             reelDiv.className = 'reel';
             const stripDiv = document.createElement('div');
             stripDiv.className = 'reel-strip';
-            // Заполняем полоску 12-ю случайными символами (для плавной прокрутки)
-            for (let i = 0; i < 12; i++) {
+            // Заполняем ленту 20 символами (повторяем, чтобы не было пустот)
+            for (let i = 0; i < EXTRA_SYMBOLS; i++) {
                 const sym = symbols[Math.floor(Math.random() * symbols.length)];
                 const symDiv = document.createElement('div');
                 symDiv.className = 'reel-symbol';
@@ -464,103 +425,75 @@
             }
             reelDiv.appendChild(stripDiv);
             reelsContainer.appendChild(reelDiv);
-            reelElements.push(reelDiv);
             reelStrips.push(stripDiv);
-            currentPositions[r] = 0;
-            stripDiv.style.transform = 'translateY(0px)';
+            // Начальная позиция: рандомный сдвиг, чтобы в окне были разные символы
+            const randomOffset = -(Math.floor(Math.random() * (EXTRA_SYMBOLS - VISIBLE_SYMBOLS)) * SYMBOL_HEIGHT);
+            currentPositions[r] = randomOffset;
+            stripDiv.style.transform = `translateY(${randomOffset}px)`;
+            stripDiv.style.transition = 'none';
         }
-        // Добавляем золотую линию поверх
-        const newLine = document.createElement('div');
-        newLine.className = 'win-line';
-        reelsContainer.appendChild(newLine);
-        winLineElement.parentNode?.replaceChild(newLine, winLineElement);
-        // обновляем ссылку
-        // (мы её переопределим)
-        window.winLine = newLine;
-    }
-    // обновим ссылку после создания
-    let activeWinLine = null;
-
-    function initReels() {
-        createReels();
-        activeWinLine = document.querySelector('.win-line');
+        // Убедимся, что золотая линия есть и она сверху
+        if (!winLine.parentNode) reelsContainer.appendChild(winLine);
     }
 
-    // ------------------------------------------------------------------
-    // АНИМАЦИЯ ВРАЩЕНИЯ (быстрая смена translateY)
-    function startSpin() {
+    // ========== АНИМАЦИЯ ВРАЩЕНИЯ ==========
+    function startSpinAnimation() {
         for (let r = 0; r < 3; r++) {
             if (animIntervals[r]) clearInterval(animIntervals[r]);
-            const strip = reelStrips[r];
-            const symbolHeight = 80; // px
-            // Общее количество символов в полоске (12)
-            const maxOffset = -(12 - 3) * symbolHeight; // чтобы не показывать пустоту
+            const maxOffset = -(EXTRA_SYMBOLS - VISIBLE_SYMBOLS) * SYMBOL_HEIGHT;
             animIntervals[r] = setInterval(() => {
-                // двигаем вниз на 10px за тик
-                currentPositions[r] += 12;
+                // двигаем вниз на 8px за тик (быстро)
+                currentPositions[r] += 8;
                 if (currentPositions[r] > 0) currentPositions[r] = maxOffset;
-                strip.style.transform = `translateY(${currentPositions[r]}px)`;
-            }, 30);
+                reelStrips[r].style.transform = `translateY(${currentPositions[r]}px)`;
+                reelStrips[r].style.transition = 'none';
+            }, 20); // 20 мс — очень быстро
         }
     }
 
-    // --------------------------------------------------------------
-    // Остановка одного барабана на заданной позиции (центральный символ)
-    async function stopReel(reelIdx, targetCenterSymbol, withJump = false) {
+    // ========== ОСТАНОВКА ОДНОГО БАРАБАНА ==========
+    function stopReel(reelIdx, targetCenterSymbol, withJump = false) {
         return new Promise((resolve) => {
             if (animIntervals[reelIdx]) clearInterval(animIntervals[reelIdx]);
             const strip = reelStrips[reelIdx];
-            const symbolHeight = 80;
-            const children = Array.from(strip.children); // массив DOM символов
-            // Находим индекс символа, который должен быть в центре (второй видимый)
-            let targetIndex = -1;
-            for (let i = 0; i < children.length; i++) {
-                if (children[i].innerText === targetCenterSymbol) {
-                    targetIndex = i;
-                    break;
-                }
-            }
-            if (targetIndex === -1) targetIndex = 5; // fallback
-            // Желаемое смещение: чтобы этот элемент оказался в центре (второй сверху)
-            // Высота одного символа 80px, индекс 0 – самый верхний, нам нужен индекс targetIndex-1? 
-            // В окне видно 3 символа: позиции (currentOffset/80) -> 0,1,2 по видимости.
-            // Чтобы символ targetIndex оказался на позиции 1 (центр), нужно смещение = -(targetIndex-1)*80
-            const targetOffset = -(targetIndex - 1) * symbolHeight;
-            // Добавляем плавность
+            const children = Array.from(strip.children);
+            // Находим индекс символа, который должен оказаться в центре (второй видимый)
+            let targetIndex = children.findIndex(ch => ch.innerText === targetCenterSymbol);
+            if (targetIndex === -1) targetIndex = Math.floor(children.length / 2); // fallback
+            // Смещение, чтобы этот символ был на позиции 1 (центр)
+            const targetOffset = -(targetIndex - 1) * SYMBOL_HEIGHT;
+            // Плавная остановка
             strip.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
             strip.style.transform = `translateY(${targetOffset}px)`;
             currentPositions[reelIdx] = targetOffset;
             
             if (withJump) {
-                // Эффект «торможения с перескоком»: через 0.1 с дергаем вниз, потом обратно
+                // Эффект «торможения с перескоком»: дергаем вниз, потом обратно
                 setTimeout(() => {
                     strip.style.transition = 'transform 0.07s linear';
                     strip.style.transform = `translateY(${targetOffset + 12}px)`;
                     setTimeout(() => {
                         strip.style.transition = 'transform 0.15s ease-out';
                         strip.style.transform = `translateY(${targetOffset}px)`;
-                        setTimeout(() => resolve(), 180);
+                        setTimeout(resolve, 180);
                     }, 70);
                 }, 120);
             } else {
-                setTimeout(() => resolve(), 260);
+                setTimeout(resolve, 260);
             }
         });
     }
 
-    // --------------------------------- ПООЧЕРЕДНАЯ ОСТАНОВКА ---------------------------------
-    async function stopAllReelsSequentially(finalSymbolsArray) {
-        // первый барабан
-        await stopReel(0, finalSymbolsArray[0], false);
-        // второй через 350 мс
-        await new Promise(r => setTimeout(r, 380));
-        await stopReel(1, finalSymbolsArray[1], false);
-        // третий через 350 мс + эффект "торможения"
+    // ========== ПООЧЕРЕДНАЯ ОСТАНОВКА ==========
+    async function stopAllReels(finalSymbols) {
+        await stopReel(0, finalSymbols[0], false);
         await new Promise(r => setTimeout(r, 400));
-        await stopReel(2, finalSymbolsArray[2], true);
+        await stopReel(1, finalSymbols[1], false);
+        await new Promise(r => setTimeout(r, 400));
+        await stopReel(2, finalSymbols[2], true);
     }
 
-    // --------------------------------- ВЫИГРЫШ ---------------------------------
+    // ========== ВЫИГРЫШ ==========
     function calculateWin(centerSymbols, bet) {
         const counts = {};
         for (let s of centerSymbols) counts[s] = (counts[s] || 0) + 1;
@@ -571,66 +504,50 @@
             }
         }
         for (let [sym, cnt] of Object.entries(counts)) {
-            if (cnt === 2) {
-                return { win: Math.floor(bet * 1.2), bonus: false };
-            }
+            if (cnt === 2) return { win: Math.floor(bet * 1.2), bonus: false };
         }
         return { win: 0, bonus: false };
     }
 
-    // --------------------------------- ОСНОВНОЙ СПИН ---------------------------------
+    // ========== ОСНОВНОЙ СПИН ==========
     async function spin() {
         if (spinning) return;
         if (balance < currentBet) {
             winMsgSpan.innerText = '❌ Не хватает монет!';
             winMsgSpan.classList.add('active');
-            setTimeout(() => {
-                if (!spinning) winMsgSpan.innerText = '🌀 Крути барабаны!';
-                winMsgSpan.classList.remove('active');
-            }, 1200);
+            setTimeout(() => winMsgSpan.classList.remove('active'), 1200);
             return;
         }
         spinning = true;
         spinButton.disabled = true;
-        if (activeWinLine) activeWinLine.classList.remove('active');
+        winLine.classList.remove('active');
         
-        // списываем ставку
         balance -= currentBet;
         updateBalanceUI();
         winMsgSpan.innerText = '🌀 Крутим...';
         winMsgSpan.classList.remove('active');
         
-        // Запускаем анимацию всех барабанов
-        startSpin();
+        startSpinAnimation();
         
-        // Генерируем честные финальные символы для центральной линии
+        // Генерируем финальные символы для центральной линии
         const finalCenter = [];
-        for (let i = 0; i < 3; i++) {
-            finalCenter.push(symbols[Math.floor(Math.random() * symbols.length)]);
-        }
+        for (let i = 0; i < 3; i++) finalCenter.push(symbols[Math.floor(Math.random() * symbols.length)]);
         
-        // Ждём 0.7 секунды, чтобы барабаны покрутились
-        await new Promise(r => setTimeout(r, 750));
+        await new Promise(r => setTimeout(r, 800)); // крутим 0.8 сек
         
-        // Останавливаем по очереди
-        await stopAllReelsSequentially(finalCenter);
+        await stopAllReels(finalCenter);
         
-        // После остановки всех – вычисляем выигрыш
         const { win, bonus } = calculateWin(finalCenter, currentBet);
         if (win > 0) {
             balance += win;
             updateBalanceUI();
             winMsgSpan.innerText = `✨ ВЫИГРЫШ: ${win} ✨`;
             winMsgSpan.classList.add('active');
-            if (activeWinLine) activeWinLine.classList.add('active');
+            winLine.classList.add('active');
             if (win > stats.maxWin) stats.maxWin = win;
             stats.totalWin += win;
             if (navigator.vibrate) navigator.vibrate(200);
-            if (bonus) {
-                setTimeout(() => {
-                    alert('🌟 БОНУСНАЯ ИГРА! 🌟\nСкоро здесь будет мини-игра с большим кушем.');
-                }, 300);
-            }
+            if (bonus) setTimeout(() => alert('🌟 БОНУС! Скоро будет мини-игра.'), 300);
         } else {
             winMsgSpan.innerText = '😢 Проигрыш';
             winMsgSpan.classList.remove('active');
@@ -647,75 +564,48 @@
             if (!spinning) {
                 winMsgSpan.innerText = '🌀 Крути барабаны!';
                 winMsgSpan.classList.remove('active');
-                if (activeWinLine) activeWinLine.classList.remove('active');
+                winLine.classList.remove('active');
             }
         }, 2000);
     }
 
-    // --------------------------------- ПРОЧИЕ ФУНКЦИИ ---------------------------------
-    function updateBalanceUI() {
-        balanceSpan.innerText = balance;
-    }
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    function updateBalanceUI() { balanceSpan.innerText = balance; }
     function saveToLocal() {
         localStorage.setItem('feries_balance', balance);
         localStorage.setItem('feries_stats', JSON.stringify(stats));
     }
     function loadFromLocal() {
-        const savedBalance = localStorage.getItem('feries_balance');
-        if (savedBalance && !isNaN(parseInt(savedBalance))) balance = parseInt(savedBalance);
-        const savedStats = localStorage.getItem('feries_stats');
-        if (savedStats) try { stats = JSON.parse(savedStats); } catch(e) {}
+        const b = localStorage.getItem('feries_balance');
+        if (b && !isNaN(parseInt(b))) balance = parseInt(b);
+        const s = localStorage.getItem('feries_stats');
+        if (s) try { stats = JSON.parse(s); } catch(e) {}
         updateBalanceUI();
         updateProfileUI();
         updateRatingUI();
         updateWalletUI();
     }
     function updateProfileUI() {
-        const html = `
+        document.getElementById('profileInfo').innerHTML = `
             <div class="stat-row"><span>⭐ Игр сыграно:</span><span>${stats.games}</span></div>
             <div class="stat-row"><span>🏆 Макс. выигрыш:</span><span>${stats.maxWin}</span></div>
             <div class="stat-row"><span>📈 Общий выигрыш:</span><span>${stats.totalWin}</span></div>
             <div class="stat-row"><span>🆔 ID:</span><span>${userId}</span></div>
         `;
-        document.getElementById('profileInfo').innerHTML = html;
     }
     function updateRatingUI() {
-        const topPlayers = [
+        const top = [
             { name: '🐫 Pharaoh', score: 15400 },
             { name: '🚀 Astronaut', score: 12900 },
             { name: '₿ Satoshi', score: 11200 },
             { name: userId.slice(0,10), score: balance }
         ];
-        topPlayers.sort((a,b) => b.score - a.score);
-        const html = topPlayers.map(p => `<div class="stat-row"><span>${p.name}</span><span>💰 ${p.score}</span></div>`).join('');
-        document.getElementById('ratingInfo').innerHTML = html;
+        top.sort((a,b)=>b.score - a.score);
+        document.getElementById('ratingInfo').innerHTML = top.map(p => `<div class="stat-row"><span>${p.name}</span><span>💰 ${p.score}</span></div>`).join('');
     }
     function updateWalletUI() {
         document.getElementById('walletInfo').innerHTML = `<div class="stat-row"><span>💰 Баланс</span><span>${balance}</span></div>`;
     }
-    function resetBalance() {
-        balance = 1000;
-        updateBalanceUI();
-        saveToLocal();
-        updateProfileUI();
-        updateRatingUI();
-        winMsgSpan.innerText = '💰 Баланс восстановлен до 1000';
-        winMsgSpan.classList.add('active');
-        setTimeout(() => {
-            if (!spinning) winMsgSpan.innerText = '🌀 Крути барабаны!';
-            winMsgSpan.classList.remove('active');
-        }, 1500);
-    }
-
-    // Модальные окна
-    function showModal(id) {
-        document.getElementById(id).classList.add('active');
-    }
-    function hideModals() {
-        document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-    }
-    
-    // Изменение ставки
     function changeBet(delta) {
         let newBet = currentBet + delta;
         if (newBet >= 5 && newBet <= 500) {
@@ -723,50 +613,29 @@
             betAmountSpan.innerText = currentBet;
         }
     }
-
-    // --------------------------------------------------------------
-    // ИНИЦИАЛИЗАЦИЯ
-    function init() {
-        initReels();
-        loadFromLocal();
-        // События
-        document.getElementById('betDec').addEventListener('click', () => changeBet(-5));
-        document.getElementById('betInc').addEventListener('click', () => changeBet(5));
-        spinButton.addEventListener('click', spin);
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modalId = btn.dataset.modal + 'Modal';
-                showModal(modalId);
-            });
-        });
-        document.querySelectorAll('.close-modal').forEach(btn => {
-            btn.addEventListener('click', hideModals);
-        });
-        // Сброс баланса двойным кликом по логотипу
-        let logoClickTimer = null;
-        const logo = document.querySelector('.logo');
-        logo.addEventListener('click', () => {
-            if (logoClickTimer) {
-                clearTimeout(logoClickTimer);
-                logoClickTimer = null;
-                resetBalance();
-            } else {
-                logoClickTimer = setTimeout(() => { logoClickTimer = null; }, 300);
-            }
-        });
-        updateProfileUI();
-        updateRatingUI();
-        updateWalletUI();
-        // полноэкранный режим (работает в WebView)
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-            setTimeout(() => window.Telegram.WebApp.expand(), 200);
-        }
-    }
+    function showModal(id) { document.getElementById(id).classList.add('active'); }
+    function hideModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
     
-    // Звёзды
-    (function generateStars() {
+    // Сброс баланса по двойному клику на логотип
+    let logoClickTimer = null;
+    document.querySelector('.logo').addEventListener('click', () => {
+        if (logoClickTimer) {
+            clearTimeout(logoClickTimer);
+            logoClickTimer = null;
+            balance = 1000;
+            updateBalanceUI();
+            saveToLocal();
+            updateProfileUI();
+            updateRatingUI();
+            winMsgSpan.innerText = '💰 Баланс восстановлен';
+            setTimeout(() => { if (!spinning) winMsgSpan.innerText = '🌀 Крути барабаны!'; }, 1500);
+        } else {
+            logoClickTimer = setTimeout(() => { logoClickTimer = null; }, 300);
+        }
+    });
+
+    // ========== ЗВЁЗДЫ ==========
+    function generateStars() {
         const container = document.getElementById('starsContainer');
         for (let i = 0; i < 200; i++) {
             const star = document.createElement('div');
@@ -780,8 +649,36 @@
             star.style.animationDuration = Math.random() * 4 + 2 + 's';
             container.appendChild(star);
         }
-    })();
-    
+    }
+    generateStars();
+
+    // ========== ПОЛНОЭКРАННЫЙ РЕЖИМ TELEGRAM ==========
+    function forceFullscreen() {
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            setTimeout(() => window.Telegram.WebApp.expand(), 200);
+            setTimeout(() => window.Telegram.WebApp.expand(), 600);
+        }
+    }
+    forceFullscreen();
+    setInterval(forceFullscreen, 1000);
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    function init() {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
+            userId = String(window.Telegram.WebApp.initDataUnsafe.user.id);
+        }
+        createReels();
+        loadFromLocal();
+        document.getElementById('betDec').addEventListener('click', () => changeBet(-5));
+        document.getElementById('betInc').addEventListener('click', () => changeBet(5));
+        spinButton.addEventListener('click', spin);
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => showModal(btn.dataset.modal + 'Modal'));
+        });
+        document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', hideModals));
+    }
     init();
 </script>
 </body>
