@@ -2,709 +2,601 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="app-version" content="3.0.0">
 <title>Cosmic Slots</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+ 
+<script>
+// Cache buster — runs before anything renders
+(function(){
+  var V='3.0.0', k='cs_ver';
+  var stored = sessionStorage.getItem(k);
+  if(stored && stored !== V){
+    sessionStorage.setItem(k, V);
+    window.location.reload(true);
+    return;
+  }
+  sessionStorage.setItem(k, V);
+})();
+</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+ 
 <style>
-:root {
-  --gold: #ffd700;
-  --gold2: #ffaa00;
-  --purple: #7c3aed;
-  --purple2: #a855f7;
-  --dark: #07071a;
-  --panel: #0d0d22;
-  --screen-bg: #030312;
-  --green: #00ff9f;
-  --cyan: #00e5ff;
-  --red: #ff3a5c;
-  --nav-h: 64px;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bot: env(safe-area-inset-bottom, 0px);
+:root{
+  --gold:#ffd700; --gold2:#ffaa00; --gold3:#ff8c00;
+  --aeon:#c8a96e;  --aeon2:#e8c87e; --aeon3:#8a6030;
+  --purple:#7c3aed; --purple2:#a855f7;
+  --dark:#07071a; --screen-bg:#020210;
+  --green:#00ff9f; --cyan:#00e5ff; --red:#ff3a5c;
+  --chrome:#8090b8; --chrome2:#c0cce0;
+  --nav-h:62px;
+  --sat:env(safe-area-inset-top,0px);
+  --sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);
+  --sar:env(safe-area-inset-right,0px);
 }
- 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
- 
-html { height: 100%; }
- 
-body {
-  width: 100%; height: 100%;
-  min-height: 100dvh;
-  background: var(--dark);
-  font-family: 'Rajdhani', sans-serif;
-  color: #fff;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
- 
-/* ── STARS ── */
-#stars-canvas {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 0;
-}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;}
  
 /* ── APP SHELL ── */
-#app {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column;
-  width: 100%; height: 100dvh;
-  padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bot);
+#app{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  display:flex;flex-direction:column;overflow:hidden;
+  padding-top:var(--sat);padding-bottom:var(--sab);
+  padding-left:var(--sal);padding-right:var(--sar);
+  background:var(--dark);
+  font-family:'Rajdhani',sans-serif;color:#fff;z-index:1;
 }
+#stars-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
  
 /* ── TOP BAR ── */
-#topbar {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  background: rgba(7,7,26,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 0.5px solid rgba(120,80,220,0.25);
-  flex-shrink: 0;
-  min-height: 50px;
+#topbar{
+  flex-shrink:0;display:flex;align-items:center;
+  justify-content:space-between;padding:7px 14px;min-height:46px;
+  background:rgba(7,7,26,0.92);backdrop-filter:blur(16px);
+  border-bottom:0.5px solid rgba(120,80,220,0.2);z-index:10;
 }
- 
-.topbar-logo {
-  font-family: 'Orbitron', monospace;
-  font-size: 14px; font-weight: 900;
-  color: var(--gold);
-  text-shadow: 0 0 8px var(--gold2);
-  letter-spacing: 2px;
+.tb-logo{
+  font-family:'Orbitron',monospace;font-size:13px;font-weight:900;
+  color:var(--gold);text-shadow:0 0 8px var(--gold2);letter-spacing:2px;
 }
- 
-.topbar-balance {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(255,215,0,0.08);
-  border: 0.5px solid rgba(255,215,0,0.3);
-  border-radius: 20px;
-  padding: 4px 12px;
+.tb-balance{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(200,169,110,0.1);
+  border:0.5px solid rgba(200,169,110,0.35);
+  border-radius:20px;padding:4px 11px;cursor:pointer;
 }
-.topbar-balance .icon { font-size: 14px; }
-.topbar-balance .val {
-  font-family: 'Orbitron', monospace;
-  font-size: 13px; font-weight: 700;
-  color: var(--gold);
+.tb-balance .coin-icon{width:18px;height:18px;}
+.tb-balance .val{
+  font-family:'Orbitron',monospace;font-size:12px;font-weight:700;
+  color:var(--aeon2);
 }
- 
-.topbar-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(135deg, #5030b0, #9040e0);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 700; color: #fff;
-  border: 1.5px solid rgba(168,85,247,0.5);
-  cursor: pointer;
+.tb-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#4020a0,#8030d0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;
+  border:1.5px solid rgba(168,85,247,0.5);cursor:pointer;
 }
  
 /* ── PAGES ── */
-#pages {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
+#pages{flex:1;min-height:0;position:relative;overflow:hidden;}
+.page{
+  position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  opacity:0;pointer-events:none;transition:opacity 0.22s ease;
+  padding-bottom:10px;
 }
- 
-.page {
-  position: absolute; inset: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
-  padding-bottom: 8px;
-}
-.page.active { opacity: 1; pointer-events: all; }
+.page.active{opacity:1;pointer-events:all;}
  
 /* ── BOTTOM NAV ── */
-#nav {
-  display: flex;
-  background: rgba(7,7,26,0.95);
-  backdrop-filter: blur(16px);
-  border-top: 0.5px solid rgba(120,80,220,0.3);
-  flex-shrink: 0;
-  height: var(--nav-h);
+#nav{
+  flex-shrink:0;display:flex;height:var(--nav-h);
+  background:rgba(7,7,26,0.97);backdrop-filter:blur(18px);
+  border-top:0.5px solid rgba(120,80,220,0.25);z-index:10;
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  background:none;border:none;cursor:pointer;padding:6px 4px;position:relative;
+}
+.nav-btn .ni{font-size:19px;opacity:0.38;transition:all 0.2s;}
+.nav-btn .nl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#404090;font-family:'Orbitron',monospace;transition:all 0.2s;}
+.nav-btn.active .ni{opacity:1;transform:scale(1.15);}
+.nav-btn.active .nl{color:var(--aeon2);}
+.nav-btn.active::after{content:'';position:absolute;top:0;left:18%;right:18%;height:2px;background:var(--aeon2);border-radius:0 0 3px 3px;box-shadow:0 0 8px var(--aeon);}
+ 
+/* ══════════════════════════════════════
+   AEON COIN SVG  (inline, used everywhere)
+══════════════════════════════════════ */
+.aeon-coin-svg{display:inline-block;vertical-align:middle;}
+ 
+/* ══════════════════════════════════════
+   PAGE: SLOT
+══════════════════════════════════════ */
+#page-slot{
+  display:flex;flex-direction:column;
+  align-items:center;padding:8px 0 20px;gap:0;
 }
  
-.nav-btn {
-  flex: 1;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 3px;
-  background: none; border: none;
-  cursor: pointer;
-  padding: 8px 4px;
-  transition: all 0.2s;
-  position: relative;
-}
-.nav-btn .nav-icon { font-size: 20px; opacity: 0.45; transition: all 0.2s; }
-.nav-btn .nav-label {
-  font-size: 9px; letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #5050a0;
-  font-family: 'Orbitron', monospace;
-  transition: all 0.2s;
-}
-.nav-btn.active .nav-icon { opacity: 1; transform: scale(1.15); }
-.nav-btn.active .nav-label { color: var(--gold); }
-.nav-btn.active::after {
-  content: '';
-  position: absolute; top: 0; left: 20%; right: 20%;
-  height: 2px;
-  background: var(--gold);
-  border-radius: 0 0 3px 3px;
-  box-shadow: 0 0 8px var(--gold);
+/* ────────────────────────────────
+   FULL MACHINE  — 3-layer illusion
+──────────────────────────────── */
+.machine-wrap{
+  width:min(340px,96vw);
+  perspective:900px;
+  display:flex;flex-direction:column;align-items:center;
+  filter:drop-shadow(0 30px 70px rgba(80,30,200,0.5));
 }
  
-/* ══════════════════════════════
-   PAGE: SLOT MACHINE
-══════════════════════════════ */
-#page-slot {
-  display: flex; flex-direction: column;
-  align-items: center;
-  padding: 10px 0 16px;
-  gap: 0;
+/* ── TOP MARQUEE ── */
+.machine-top{
+  width:100%;
+  background:linear-gradient(180deg,#14143c,#0d0d26);
+  border:2px solid #1e1e54;
+  border-bottom:none;
+  border-radius:18px 18px 0 0;
+  padding:9px 14px 8px;
+  position:relative;
+  box-shadow:inset 0 2px 8px rgba(255,255,255,0.04), 0 -4px 20px rgba(100,40,220,0.25);
 }
+.mq-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(13px,4vw,17px);font-weight:900;text-align:center;
+  color:var(--gold);text-shadow:0 0 12px var(--gold),0 0 30px var(--gold2);
+  letter-spacing:3px;
+}
+.mq-sub{font-size:8px;text-align:center;color:#484890;letter-spacing:4px;margin-top:1px;}
+.bulbs-row{display:flex;justify-content:center;gap:7px;margin-top:6px;}
+.bulb{width:7px;height:7px;border-radius:50%;animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.18}}
  
-/* machine frame */
-.machine-frame {
-  width: min(340px, 96vw);
-  background: linear-gradient(180deg, #0e0e2e, #09091e);
-  border-radius: 20px;
-  border: 2px solid #1e1e50;
-  overflow: hidden;
-  box-shadow:
-    0 0 40px rgba(100,40,220,0.35),
-    0 20px 60px rgba(0,0,0,0.7),
-    inset 0 1px rgba(255,255,255,0.05);
-  position: relative;
+/* ── SCREEN SECTION ── */
+.machine-screen-section{
+  width:100%;
+  background:linear-gradient(180deg,#0c0c28,#080820);
+  border-left:2px solid #1e1e54;
+  border-right:2px solid #1e1e54;
+  padding:10px 10px 12px;
+  position:relative;
 }
+/* chrome rails */
+.machine-screen-section::before,.machine-screen-section::after{
+  content:'';position:absolute;top:0;bottom:0;width:5px;
+  background:linear-gradient(180deg,var(--chrome2),var(--chrome),var(--chrome2));
+  opacity:0.22;
+}
+.machine-screen-section::before{left:0;}
+.machine-screen-section::after{right:0;}
  
-/* top marquee */
-.marquee {
-  background: linear-gradient(180deg, #13133a, #0d0d26);
-  padding: 10px 14px 8px;
-  border-bottom: 1.5px solid #1e1e50;
-  position: relative;
+/* CRT bezel */
+.crt-bezel{
+  background:#06061e;border:2.5px solid #161650;
+  border-radius:10px;padding:5px;
+  box-shadow:inset 0 0 22px rgba(0,0,0,0.85),0 0 0 1px rgba(255,255,255,0.02);
+  position:relative;
 }
- 
-.marquee-title {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(14px, 4vw, 18px);
-  font-weight: 900; text-align: center;
-  color: var(--gold);
-  text-shadow: 0 0 12px var(--gold), 0 0 30px var(--gold2);
-  letter-spacing: 3px;
+.crt-bezel::after{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.14) 2px,rgba(0,0,0,0.14) 4px);
+  pointer-events:none;z-index:10;
 }
-.marquee-sub {
-  font-size: 9px; text-align: center;
-  color: #5050a0; letter-spacing: 4px; margin-top: 1px;
+.crt-bezel::before{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  background:radial-gradient(ellipse 92% 92% at 50% 50%,transparent 52%,rgba(0,0,30,0.6) 100%);
+  pointer-events:none;z-index:11;
 }
-.bulbs-row {
-  display: flex; justify-content: center; gap: 7px; margin-top: 7px;
-}
-.bulb {
-  width: 7px; height: 7px; border-radius: 50%;
-  animation: bulbBlink 1.2s ease-in-out infinite;
-}
-@keyframes bulbBlink { 0%,100%{opacity:1} 50%{opacity:.2} }
- 
-/* chrome side strips inside body */
-.machine-body {
-  padding: 10px 10px 12px;
-  position: relative;
-}
-.machine-body::before, .machine-body::after {
-  content: '';
-  position: absolute; top: 0; bottom: 0; width: 4px;
-  background: linear-gradient(180deg,#c0c8e0,#3040a0,#c0c8e0);
-  opacity: 0.25;
-}
-.machine-body::before { left: 0; }
-.machine-body::after  { right: 0; }
- 
-/* SCREEN BEZEL */
-.screen-bezel {
-  background: #08082a;
-  border: 2.5px solid #1a1a45;
-  border-radius: 10px;
-  padding: 5px;
-  position: relative;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
-}
-.screen-bezel::after {
-  content: '';
-  position: absolute; inset: 0; border-radius: 8px;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
-  pointer-events: none; z-index: 10;
-}
-.screen-bezel::before {
-  content: '';
-  position: absolute; inset: 0; border-radius: 8px;
-  background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(0,0,30,0.55) 100%);
-  pointer-events: none; z-index: 11;
-}
- 
-.screen { background: var(--screen-bg); border-radius: 6px; padding: 8px 6px; position: relative; }
-.screen-glow {
-  position: absolute; inset: 0; border-radius: 6px;
-  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(60,20,140,0.1), transparent 70%);
-  pointer-events: none; z-index: 0;
-}
+.crt-screen{background:var(--screen-bg);border-radius:6px;padding:8px 6px;position:relative;}
+.crt-glow{position:absolute;inset:0;border-radius:6px;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(50,15,130,0.1),transparent 70%);pointer-events:none;z-index:0;}
  
 /* info row */
-.info-row {
-  display: flex; gap: 4px; margin-bottom: 7px; position: relative; z-index: 2;
-}
-.info-box {
-  flex: 1; background: rgba(255,255,255,0.025);
-  border: 0.5px solid rgba(80,60,180,0.3);
-  border-radius: 5px; padding: 3px 4px; text-align: center;
-}
-.info-lbl { font-size: 7px; color: #3a3a80; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Orbitron', monospace; }
-.info-val {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(11px, 3vw, 14px); font-weight: 700;
-  color: var(--gold); text-shadow: 0 0 8px var(--gold2); line-height: 1.2;
-}
-.info-val.g { color: var(--green); text-shadow: 0 0 8px #00aa66; }
-.info-val.p { color: var(--purple2); text-shadow: 0 0 8px #7c3aed; }
+.info-row{display:flex;gap:4px;margin-bottom:6px;position:relative;z-index:2;}
+.info-box{flex:1;background:rgba(255,255,255,0.025);border:0.5px solid rgba(80,60,180,0.28);border-radius:5px;padding:3px 4px;text-align:center;}
+.info-lbl{font-size:6.5px;color:#363680;letter-spacing:1.5px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.info-val{font-family:'Orbitron',monospace;font-size:clamp(11px,3vw,13px);font-weight:700;color:var(--aeon2);text-shadow:0 0 8px var(--aeon);line-height:1.2;}
+.info-val.g{color:var(--green);text-shadow:0 0 8px #00aa66;}
+.info-val.p{color:var(--purple2);text-shadow:0 0 8px var(--purple);}
  
 /* reels */
-.reels-area {
-  position: relative; display: flex; gap: 5px;
-  background: #01010e; border: 1px solid #0f0f30;
-  border-radius: 7px; padding: 6px 5px; z-index: 2;
-}
-.win-line-bar {
-  position: absolute; left: 5px; right: 5px; top: 50%;
-  transform: translateY(-50%);
-  height: 44px;
-  border-top: 1px solid rgba(255,215,0,0.15);
-  border-bottom: 1px solid rgba(255,215,0,0.15);
-  pointer-events: none; z-index: 5;
-  transition: border-color 0.3s;
-}
-.win-line-bar.active {
-  border-color: var(--gold);
-  box-shadow: 0 0 10px var(--gold);
-}
- 
-.reel-window {
-  flex: 1; height: 132px; overflow: hidden;
-  border-radius: 5px; background: #00000f;
-  border: 0.5px solid #0e0e2a; position: relative;
-}
-.reel-window::before, .reel-window::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 36px;
-  z-index: 4; pointer-events: none;
-}
-.reel-window::before { top: 0; background: linear-gradient(to bottom, #00000f, transparent); }
-.reel-window::after  { bottom: 0; background: linear-gradient(to top,   #00000f, transparent); }
- 
-.reel-strip { display: flex; flex-direction: column; align-items: center; }
-.reel-cell {
-  width: 100%; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: clamp(22px, 6vw, 28px); line-height: 1;
-  filter: drop-shadow(0 0 5px rgba(255,255,255,0.35));
-}
+.reels-area{position:relative;display:flex;gap:5px;background:#01010c;border:1px solid #0d0d2c;border-radius:7px;padding:6px 5px;z-index:2;}
+.win-line-bar{position:absolute;left:5px;right:5px;top:50%;transform:translateY(-50%);height:44px;border-top:1px solid rgba(200,169,110,0.12);border-bottom:1px solid rgba(200,169,110,0.12);pointer-events:none;z-index:5;transition:all 0.3s;}
+.win-line-bar.on{border-color:var(--aeon2);box-shadow:0 0 12px var(--aeon);}
+.reel-window{flex:1;height:132px;overflow:hidden;border-radius:5px;background:#00000d;border:0.5px solid #0c0c28;position:relative;}
+.reel-window::before,.reel-window::after{content:'';position:absolute;left:0;right:0;height:36px;z-index:4;pointer-events:none;}
+.reel-window::before{top:0;background:linear-gradient(to bottom,#00000d,transparent);}
+.reel-window::after{bottom:0;background:linear-gradient(to top,#00000d,transparent);}
+.reel-strip{display:flex;flex-direction:column;align-items:center;}
+.reel-cell{width:100%;height:44px;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,6vw,27px);line-height:1;filter:drop-shadow(0 0 5px rgba(255,255,255,0.28));}
  
 /* paytable */
-.paytable {
-  display: flex; flex-wrap: wrap; gap: 3px;
-  margin-top: 7px; justify-content: center; position: relative; z-index: 2;
-}
-.pay-row {
-  font-size: 9px; color: #4a4a90;
-  background: rgba(255,255,255,0.02);
-  border: 0.5px solid #12123a; border-radius: 4px;
-  padding: 2px 5px;
-  font-family: 'Orbitron', monospace;
-}
-.pay-row b { color: var(--gold); }
+.paytable{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px;justify-content:center;position:relative;z-index:2;}
+.pay-row{font-size:8.5px;color:#484890;background:rgba(255,255,255,0.02);border:0.5px solid #111138;border-radius:4px;padding:2px 5px;font-family:'Orbitron',monospace;}
+.pay-row b{color:var(--aeon2);}
  
-/* bottom controls */
-.machine-bottom {
-  padding: 10px 10px 10px;
-  border-top: 1.5px solid #1a1a40;
-  background: #08081e;
-  display: flex; flex-direction: column; gap: 8px;
+/* ── 3D DIVIDER ── */
+.machine-divider{
+  width:100%;height:22px;
+  position:relative;
+  background:linear-gradient(180deg,#1a1a44,#0e0e2e);
+  border-left:2px solid #1e1e54;
+  border-right:2px solid #1e1e54;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;
 }
- 
-.controls-row {
-  display: flex; align-items: center; gap: 8px;
+/* horizontal decorative lines */
+.machine-divider::before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,transparent 0%,rgba(200,169,110,0.18) 20%,rgba(200,169,110,0.35) 50%,rgba(200,169,110,0.18) 80%,transparent 100%);
 }
-.btn-round {
-  width: 38px; height: 38px; border-radius: 50%;
-  border: 1.5px solid #2a2a5a;
-  background: linear-gradient(145deg, #181840, #0e0e28);
-  color: #9090d0; font-size: 20px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-  font-family: 'Orbitron', monospace;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.04);
+.div-rivet{
+  width:8px;height:8px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,var(--chrome2),var(--chrome));
+  box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 -1px 1px rgba(0,0,0,0.3);
+  flex-shrink:0;z-index:2;
 }
-.btn-round:active { transform: scale(0.92); }
- 
-.bet-center { flex: 1; text-align: center; }
-.bet-lbl { font-size: 8px; color: #3a3a80; letter-spacing: 2px; text-transform: uppercase; font-family: 'Orbitron', monospace; }
-.bet-val { font-family: 'Orbitron', monospace; font-size: 20px; font-weight: 700; color: #c0a0ff; text-shadow: 0 0 10px #7040c0; }
- 
-.btn-max {
-  font-size: 9px; font-family: 'Orbitron', monospace;
-  letter-spacing: 1px; border-radius: 8px;
-  width: auto; padding: 0 10px;
+.div-badge{
+  font-family:'Orbitron',monospace;font-size:7px;letter-spacing:3px;
+  color:rgba(200,169,110,0.55);text-transform:uppercase;z-index:2;
+  text-shadow:0 0 6px var(--aeon);
 }
  
-.spin-btn {
-  width: 100%; height: 48px; border-radius: 24px;
-  border: 2px solid var(--gold2);
-  background: linear-gradient(145deg, #5020b0, #8030e0, #5020b0);
-  color: var(--gold);
-  font-family: 'Orbitron', monospace;
-  font-size: 14px; font-weight: 900; letter-spacing: 3px;
-  cursor: pointer; position: relative; overflow: hidden;
-  transition: all 0.2s;
-  box-shadow: 0 0 20px rgba(140,40,255,0.4), inset 0 1px rgba(255,255,255,0.12);
-  text-shadow: 0 0 10px var(--gold);
+/* ── 3D BOTTOM PANEL ── */
+.machine-bottom-3d{
+  width:100%;
+  position:relative;
+  /* the 3D effect: slight perspective tilt */
+  transform:perspective(600px) rotateX(2deg);
+  transform-origin:top center;
 }
-.spin-btn:active { transform: scale(0.97); }
-.spin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
  
-.result-msg {
-  text-align: center;
-  font-family: 'Orbitron', monospace;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 2px; color: #3a3a80;
-  min-height: 16px; text-transform: uppercase;
-  transition: all 0.3s;
+/* back shadow — creates illusion of depth behind machine */
+.machine-bottom-3d::before{
+  content:'';
+  position:absolute;
+  top:8px;left:10px;right:10px;bottom:-12px;
+  background:linear-gradient(180deg,#050518,#030310);
+  border-radius:0 0 22px 22px;
+  z-index:0;
+  box-shadow:0 8px 30px rgba(0,0,0,0.9);
 }
-.result-msg.win  { color: var(--green); text-shadow: 0 0 10px #00aa66; }
-.result-msg.big  { color: var(--gold); text-shadow: 0 0 15px var(--gold); font-size: 12px; }
-.result-msg.lose { color: #4040a0; }
  
-@keyframes winFlash { 0%,100%{background:var(--screen-bg)} 40%{background:rgba(255,215,0,0.07)} }
-.screen.flash { animation: winFlash 0.35s ease 3; }
+/* side depth faces — illusion of 3D thickness */
+.depth-face-l,.depth-face-r{
+  position:absolute;top:0;bottom:-8px;width:12px;z-index:1;
+}
+.depth-face-l{
+  left:-10px;
+  background:linear-gradient(90deg,#05051a,#101030);
+  transform:perspective(400px) rotateY(45deg);
+  transform-origin:right center;
+  border-radius:4px 0 0 12px;
+}
+.depth-face-r{
+  right:-10px;
+  background:linear-gradient(270deg,#05051a,#101030);
+  transform:perspective(400px) rotateY(-45deg);
+  transform-origin:left center;
+  border-radius:0 4px 12px 0;
+}
  
-/* ══════════════════════════════
+.machine-controls{
+  position:relative;z-index:2;
+  background:linear-gradient(180deg,#0e0e2c,#090920);
+  border:2px solid #1e1e54;
+  border-top:none;
+  border-radius:0 0 18px 18px;
+  padding:12px 12px 14px;
+  display:flex;flex-direction:column;gap:9px;
+  /* inner top highlight line */
+  box-shadow:inset 0 2px 0 rgba(255,255,255,0.04),0 10px 30px rgba(0,0,0,0.6);
+}
+/* horizontal chrome strip at top of controls */
+.controls-chrome{
+  position:absolute;top:0;left:12px;right:12px;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(200,169,110,0.25),rgba(200,169,110,0.5),rgba(200,169,110,0.25),transparent);
+  border-radius:0 0 2px 2px;
+}
+ 
+.controls-row{display:flex;align-items:center;gap:8px;}
+ 
+/* 3D-style buttons */
+.btn-3d{
+  width:40px;height:40px;border-radius:50%;
+  border-top:1.5px solid rgba(200,200,255,0.2);
+  border-left:1.5px solid rgba(200,200,255,0.1);
+  border-right:1.5px solid rgba(0,0,0,0.4);
+  border-bottom:2px solid rgba(0,0,0,0.5);
+  background:linear-gradient(145deg,#1c1c50,#0e0e30);
+  color:#9090d0;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.12s;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.6),
+    0 2px 4px rgba(0,0,0,0.4),
+    inset 0 1px rgba(255,255,255,0.06);
+}
+.btn-3d:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 4px rgba(0,0,0,0.5),inset 0 2px 4px rgba(0,0,0,0.3);
+}
+.btn-max-3d{
+  font-size:9px;font-family:'Orbitron',monospace;letter-spacing:1px;
+  border-radius:10px;width:auto;padding:0 11px;
+}
+ 
+.bet-center{flex:1;text-align:center;}
+.bet-lbl{font-size:7.5px;color:#383880;letter-spacing:2px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.bet-val{
+  font-family:'Orbitron',monospace;font-size:19px;font-weight:700;
+  color:var(--aeon2);text-shadow:0 0 10px var(--aeon);
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+ 
+/* BIG SPIN BUTTON — 3D */
+.spin-btn-3d{
+  width:100%;height:52px;border-radius:26px;
+  background:linear-gradient(145deg,#5a18c8,#9030f5,#5a18c8);
+  color:var(--gold);
+  font-family:'Orbitron',monospace;font-size:15px;font-weight:900;letter-spacing:3px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:all 0.15s;
+  border-top:2px solid rgba(255,255,255,0.15);
+  border-left:2px solid rgba(255,255,255,0.08);
+  border-right:2px solid rgba(0,0,0,0.3);
+  border-bottom:4px solid rgba(0,0,0,0.5);
+  box-shadow:
+    0 8px 25px rgba(130,30,255,0.5),
+    0 4px 12px rgba(0,0,0,0.4),
+    inset 0 1px rgba(255,255,255,0.14);
+  text-shadow:0 0 10px var(--gold);
+}
+.spin-btn-3d::before{
+  content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+  transition:left 0.55s;
+}
+.spin-btn-3d:hover::before{left:130%;}
+.spin-btn-3d:active{
+  transform:translateY(3px);
+  border-bottom-width:1px;
+  box-shadow:0 4px 12px rgba(130,30,255,0.4),0 1px 4px rgba(0,0,0,0.4),inset 0 2px 4px rgba(0,0,0,0.2);
+}
+.spin-btn-3d:disabled{opacity:0.38;cursor:not-allowed;}
+.spin-btn-3d:disabled::before{display:none;}
+ 
+.result-msg{
+  text-align:center;font-family:'Orbitron',monospace;
+  font-size:9.5px;font-weight:700;letter-spacing:2px;
+  color:#363680;min-height:15px;text-transform:uppercase;transition:all 0.3s;
+}
+.result-msg.win{color:var(--green);text-shadow:0 0 10px #00aa66;}
+.result-msg.big{color:var(--gold);text-shadow:0 0 15px var(--gold);font-size:12px;}
+.result-msg.lose{color:#3a3a80;}
+ 
+@keyframes wFlash{0%,100%{background:var(--screen-bg)}40%{background:rgba(200,169,110,0.07)}}
+.crt-screen.flash{animation:wFlash 0.35s ease 3;}
+ 
+/* ══════════════════════════════════════
+   AEON COIN DESIGN
+══════════════════════════════════════ */
+/* Large coin for wallet page */
+.aeon-coin-large{
+  width:120px;height:120px;
+  margin:0 auto 16px;
+  display:block;
+  animation:coinSpin 8s linear infinite, coinGlow 3s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 18px rgba(200,169,110,0.6));
+}
+@keyframes coinSpin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+@keyframes coinGlow{0%{filter:drop-shadow(0 0 10px rgba(200,169,110,0.4))}100%{filter:drop-shadow(0 0 28px rgba(200,169,110,0.9))}}
+ 
+/* small coin next to numbers */
+.aeon-sm{width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:3px;}
+ 
+/* ══════════════════════════════════════
    PAGE: PROFILE
-══════════════════════════════ */
-#page-profile { padding: 16px; }
+══════════════════════════════════════ */
+#page-profile{padding:13px;}
+.prof-header{
+  display:flex;align-items:center;gap:13px;
+  background:rgba(255,255,255,0.025);
+  border:0.5px solid rgba(100,70,200,0.28);
+  border-radius:15px;padding:13px;margin-bottom:11px;
+}
+.prof-av{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,#4020a0,#8030d0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:23px;font-weight:700;flex-shrink:0;
+  border:2px solid rgba(168,85,247,0.55);
+  box-shadow:0 0 18px rgba(130,40,255,0.3);
+}
+.prof-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#fff;}
+.prof-uid{font-size:9px;color:#363680;margin-top:2px;font-family:'Orbitron',monospace;}
+.prof-lv{display:inline-flex;align-items:center;gap:4px;margin-top:5px;background:rgba(200,169,110,0.1);border:0.5px solid rgba(200,169,110,0.3);border-radius:12px;padding:2px 9px;font-size:9px;color:var(--aeon2);font-family:'Orbitron',monospace;}
  
-.profile-header {
-  display: flex; align-items: center; gap: 14px;
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(100,70,200,0.3);
-  border-radius: 16px; padding: 16px;
-  margin-bottom: 14px;
-}
-.profile-avatar {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: linear-gradient(135deg, #5030b0, #9040e0);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px; font-weight: 700;
-  border: 2px solid rgba(168,85,247,0.6);
-  box-shadow: 0 0 20px rgba(140,40,255,0.3);
-  flex-shrink: 0;
-}
-.profile-info .name {
-  font-family: 'Orbitron', monospace;
-  font-size: 16px; font-weight: 700; color: #fff;
-}
-.profile-info .uid {
-  font-size: 11px; color: #4040a0;
-  margin-top: 2px; font-family: 'Orbitron', monospace;
-}
-.profile-info .level {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 6px;
-  background: rgba(255,215,0,0.1);
-  border: 0.5px solid rgba(255,215,0,0.3);
-  border-radius: 12px; padding: 2px 10px;
-  font-size: 11px; color: var(--gold);
-  font-family: 'Orbitron', monospace;
-}
+.xp-wrap{background:rgba(255,255,255,0.025);border:0.5px solid rgba(100,70,200,0.22);border-radius:11px;padding:10px;margin-bottom:11px;}
+.xp-lbls{display:flex;justify-content:space-between;margin-bottom:5px;}
+.xp-l{font-size:8.5px;color:#363680;font-family:'Orbitron',monospace;}
+.xp-bar{height:7px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple2));border-radius:4px;box-shadow:0 0 8px var(--purple2);transition:width 0.6s ease;}
  
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 8px; margin-bottom: 14px;
-}
-.stat-card {
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(100,70,200,0.25);
-  border-radius: 12px; padding: 12px;
-}
-.stat-card .slbl { font-size: 9px; color: #3a3a80; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Orbitron', monospace; }
-.stat-card .sval {
-  font-family: 'Orbitron', monospace;
-  font-size: 20px; font-weight: 700; color: var(--gold);
-  text-shadow: 0 0 8px var(--gold2); margin-top: 3px;
-}
-.stat-card .sval.g { color: var(--green); text-shadow: 0 0 8px #00aa66; }
-.stat-card .sval.p { color: var(--purple2); text-shadow: 0 0 8px #7c3aed; }
-.stat-card .sval.c { color: var(--cyan); text-shadow: 0 0 8px #00a0cc; }
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px;}
+.stat-card{background:rgba(255,255,255,0.025);border:0.5px solid rgba(100,70,200,0.22);border-radius:11px;padding:10px;}
+.slbl{font-size:7.5px;color:#363680;letter-spacing:1.5px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.sval{font-family:'Orbitron',monospace;font-size:19px;font-weight:700;color:var(--aeon2);text-shadow:0 0 8px var(--aeon);margin-top:3px;}
+.sval.g{color:var(--green);text-shadow:0 0 8px #00aa66;}
+.sval.p{color:var(--purple2);text-shadow:0 0 8px var(--purple);}
+.sval.c{color:var(--cyan);text-shadow:0 0 8px #00a0cc;}
  
-.section-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 11px; font-weight: 700;
-  color: #5050a0; letter-spacing: 2px;
-  text-transform: uppercase; margin-bottom: 8px;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-title::after {
-  content: ''; flex: 1; height: 0.5px;
-  background: linear-gradient(to right, rgba(80,60,180,0.4), transparent);
-}
+.sec-title{font-family:'Orbitron',monospace;font-size:9.5px;font-weight:700;color:#404090;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.sec-title::after{content:'';flex:1;height:0.5px;background:linear-gradient(to right,rgba(80,60,180,0.4),transparent);}
  
-.xp-bar-wrap {
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(100,70,200,0.25);
-  border-radius: 12px; padding: 12px;
-  margin-bottom: 14px;
-}
-.xp-labels { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.xp-lbl { font-size: 10px; color: #4040a0; font-family: 'Orbitron', monospace; }
-.xp-bar {
-  height: 8px; background: rgba(255,255,255,0.06);
-  border-radius: 4px; overflow: hidden;
-}
-.xp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--purple), var(--purple2));
-  border-radius: 4px;
-  box-shadow: 0 0 8px var(--purple2);
-  transition: width 0.6s ease;
-}
+.achievements{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.ach{aspect-ratio:1;background:rgba(255,255,255,0.025);border:0.5px solid rgba(100,70,200,0.18);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:19px;}
+.ach.unlocked{border-color:rgba(200,169,110,0.4);background:rgba(200,169,110,0.05);}
+.ach.locked{filter:grayscale(1);opacity:0.28;}
+.ach .al{font-size:6px;color:#404090;font-family:'Orbitron',monospace;text-align:center;padding:0 2px;}
+.ach.unlocked .al{color:var(--aeon2);}
  
-.achievements { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-.ach {
-  aspect-ratio: 1;
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(100,70,200,0.2);
-  border-radius: 10px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 4px; font-size: 22px;
-  cursor: default;
-  transition: all 0.2s;
-}
-.ach.unlocked { border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.05); }
-.ach.locked { filter: grayscale(1); opacity: 0.3; }
-.ach .ach-lbl { font-size: 7px; color: #5050a0; font-family: 'Orbitron', monospace; text-align: center; }
-.ach.unlocked .ach-lbl { color: var(--gold); }
- 
-/* ══════════════════════════════
+/* ══════════════════════════════════════
    PAGE: LEADERBOARD
-══════════════════════════════ */
-#page-leaders { padding: 16px; }
+══════════════════════════════════════ */
+#page-leaders{padding:13px;}
+.ltabs{display:flex;gap:5px;margin-bottom:11px;}
+.ltab{flex:1;padding:7px;border-radius:8px;border:0.5px solid rgba(100,70,200,0.28);background:rgba(255,255,255,0.02);font-family:'Orbitron',monospace;font-size:7.5px;color:#363680;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center;transition:all 0.2s;}
+.ltab.active{background:rgba(200,169,110,0.08);border-color:rgba(200,169,110,0.4);color:var(--aeon2);}
  
-.leader-tabs {
-  display: flex; gap: 6px; margin-bottom: 14px;
-}
-.ltab {
-  flex: 1; padding: 8px; border-radius: 8px;
-  border: 0.5px solid rgba(100,70,200,0.3);
-  background: rgba(255,255,255,0.02);
-  font-family: 'Orbitron', monospace;
-  font-size: 9px; color: #4040a0;
-  letter-spacing: 1px; text-transform: uppercase;
-  cursor: pointer; text-align: center;
-  transition: all 0.2s;
-}
-.ltab.active {
-  background: rgba(168,85,247,0.12);
-  border-color: rgba(168,85,247,0.5);
-  color: var(--purple2);
-}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:13px;padding:0 6px;}
+.pod-slot{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pod-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;border:2px solid;}
+.p1{background:linear-gradient(135deg,#5020b0,#9038e8);border-color:var(--gold);box-shadow:0 0 14px rgba(255,215,0,0.4);width:50px;height:50px;font-size:21px;}
+.p2{background:linear-gradient(135deg,#1a1a4a,#282868);border-color:#b0bcd0;}
+.p3{background:linear-gradient(135deg,#281208,#482008);border-color:#b06820;}
+.pod-name{font-size:8.5px;color:#6060b0;font-family:'Orbitron',monospace;text-align:center;}
+.pod-score{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--aeon2);}
+.pod-bar{width:100%;background:rgba(255,255,255,0.03);border:0.5px solid rgba(100,70,200,0.18);border-radius:5px 5px 0 0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;color:rgba(255,255,255,0.25);}
+.pb1{height:62px;font-size:24px;background:rgba(255,215,0,0.06);border-color:rgba(255,215,0,0.28);color:var(--gold);}
+.pb2{height:44px;font-size:19px;}
+.pb3{height:30px;font-size:15px;}
  
-.podium {
-  display: flex; align-items: flex-end; justify-content: center;
-  gap: 8px; margin-bottom: 16px; padding: 0 8px;
-}
-.podium-slot {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
-}
-.pod-avatar {
-  width: 44px; height: 44px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 700;
-  border: 2px solid;
-}
-.pod-1st { background: linear-gradient(135deg,#6020c0,#a040f0); border-color: var(--gold); box-shadow: 0 0 15px rgba(255,215,0,0.4); width:54px;height:54px;font-size:22px; }
-.pod-2nd { background: linear-gradient(135deg,#1a1a50,#2a2a70); border-color: #c0c8e0; }
-.pod-3rd { background: linear-gradient(135deg,#2a1010,#4a2010); border-color: #cd7f32; }
-.pod-name { font-size: 10px; color: #8080c0; font-family: 'Orbitron', monospace; text-align: center; }
-.pod-score { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: var(--gold); }
-.pod-bar {
-  width: 100%;
-  background: rgba(255,255,255,0.04);
-  border: 0.5px solid rgba(100,70,200,0.2);
-  border-radius: 6px 6px 0 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Orbitron', monospace; font-weight: 900;
-  color: rgba(255,255,255,0.3);
-}
-.pb-1 { height: 70px; font-size: 28px; background: rgba(255,215,0,0.07); border-color: rgba(255,215,0,0.3); color: var(--gold); }
-.pb-2 { height: 50px; font-size: 22px; }
-.pb-3 { height: 35px; font-size: 18px; }
+.leaders-list{display:flex;flex-direction:column;gap:5px;}
+.l-row{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.022);border:0.5px solid rgba(100,70,200,0.16);border-radius:9px;padding:8px 10px;}
+.l-row.me{background:rgba(200,169,110,0.06);border-color:rgba(200,169,110,0.35);}
+.lrank{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:#383880;width:19px;text-align:center;flex-shrink:0;}
+.lrank.gld{color:var(--gold);}
+.lav{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,#2a1890,#6028c0);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.lname{flex:1;font-size:12px;font-weight:600;color:#c0b0e0;}
+.lname small{display:block;font-size:7.5px;color:#363680;font-family:'Orbitron',monospace;}
+.lscore{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--aeon2);}
  
-.leaders-list { display: flex; flex-direction: column; gap: 6px; }
-.leader-row {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,0.025);
-  border: 0.5px solid rgba(100,70,200,0.18);
-  border-radius: 10px; padding: 9px 12px;
-  transition: all 0.2s;
-}
-.leader-row.me {
-  background: rgba(168,85,247,0.08);
-  border-color: rgba(168,85,247,0.4);
-}
-.lrank {
-  font-family: 'Orbitron', monospace;
-  font-size: 12px; font-weight: 700; color: #4040a0;
-  width: 22px; text-align: center; flex-shrink: 0;
-}
-.lrank.gold { color: var(--gold); }
-.lavatar {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, #3020a0, #7030d0);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; flex-shrink: 0;
-}
-.lname { flex: 1; font-size: 13px; font-weight: 600; color: #d0c0f0; }
-.lname small { display: block; font-size: 9px; color: #4040a0; font-family: 'Orbitron', monospace; }
-.lscore {
-  font-family: 'Orbitron', monospace;
-  font-size: 13px; font-weight: 700; color: var(--gold);
-}
- 
-/* ══════════════════════════════
+/* ══════════════════════════════════════
    PAGE: WALLET
-══════════════════════════════ */
-#page-wallet { padding: 16px; }
+══════════════════════════════════════ */
+#page-wallet{padding:13px;}
  
-.wallet-card {
-  background: linear-gradient(135deg, #13133a 0%, #1e0e3e 50%, #13133a 100%);
-  border: 1px solid rgba(168,85,247,0.4);
-  border-radius: 18px; padding: 20px;
-  margin-bottom: 14px; position: relative; overflow: hidden;
+.wallet-hero{
+  background:linear-gradient(145deg,#10102e,#1c0c38,#10102e);
+  border:1px solid rgba(200,169,110,0.35);
+  border-radius:18px;padding:20px;margin-bottom:12px;
+  position:relative;overflow:hidden;text-align:center;
 }
-.wallet-card::before {
-  content: '';
-  position: absolute; top: -40px; right: -40px;
-  width: 140px; height: 140px;
-  background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 70%);
-  pointer-events: none;
+.wallet-hero::before{
+  content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;
+  background:radial-gradient(circle,rgba(200,169,110,0.1),transparent 70%);pointer-events:none;
 }
-.wallet-label { font-size: 10px; color: #5050a0; letter-spacing: 2px; text-transform: uppercase; font-family: 'Orbitron', monospace; }
-.wallet-amount {
-  font-family: 'Orbitron', monospace;
-  font-size: 36px; font-weight: 900;
-  color: var(--gold); text-shadow: 0 0 20px var(--gold2);
-  margin: 6px 0;
+.wh-label{font-size:8.5px;color:#484890;letter-spacing:2.5px;text-transform:uppercase;font-family:'Orbitron',monospace;margin-bottom:12px;}
+.wh-amount{
+  font-family:'Orbitron',monospace;font-size:34px;font-weight:900;
+  color:var(--aeon2);text-shadow:0 0 20px var(--aeon);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:8px;
 }
-.wallet-ton {
-  font-size: 13px; color: var(--cyan);
-  font-family: 'Orbitron', monospace;
-  display: flex; align-items: center; gap: 6px;
-}
-.ton-badge {
-  background: rgba(0,229,255,0.1);
-  border: 0.5px solid rgba(0,229,255,0.3);
-  border-radius: 8px; padding: 2px 8px;
-  font-size: 10px;
-}
+.wh-sub{display:flex;align-items:center;justify-content:center;gap:8px;}
+.ton-badge{background:rgba(0,229,255,0.08);border:0.5px solid rgba(0,229,255,0.28);border-radius:7px;padding:2px 8px;font-size:8.5px;font-family:'Orbitron',monospace;color:var(--cyan);}
+.wh-ton{font-size:11px;color:var(--cyan);font-family:'Orbitron',monospace;}
  
-.wallet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-.wallet-btn {
-  padding: 14px; border-radius: 12px; border: none;
-  cursor: pointer; font-family: 'Orbitron', monospace;
-  font-size: 11px; font-weight: 700; letter-spacing: 1px;
-  transition: all 0.2s; position: relative; overflow: hidden;
-}
-.wallet-btn.deposit {
-  background: linear-gradient(135deg, #1a4020, #2a6030);
-  border: 1px solid rgba(0,255,159,0.35);
-  color: var(--green);
-}
-.wallet-btn.withdraw {
-  background: linear-gradient(135deg, #1a1a40, #2a2a60);
-  border: 1px solid rgba(168,85,247,0.35);
-  color: var(--purple2);
-}
-.wallet-btn:active { transform: scale(0.97); }
-.wallet-btn .btn-icon { font-size: 20px; display: block; margin-bottom: 6px; }
+.wallet-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.ws-card{background:rgba(255,255,255,0.025);border:0.5px solid rgba(100,70,200,0.2);border-radius:11px;padding:11px;text-align:center;}
+.ws-lbl{font-size:7.5px;color:#363680;letter-spacing:1.5px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.ws-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;margin-top:4px;}
+.ws-val.gold{color:var(--aeon2);text-shadow:0 0 8px var(--aeon);}
+.ws-val.green{color:var(--green);text-shadow:0 0 8px #00aa66;}
  
-.ton-coming {
-  background: rgba(0,229,255,0.04);
-  border: 0.5px dashed rgba(0,229,255,0.25);
-  border-radius: 12px; padding: 14px;
-  text-align: center; margin-bottom: 14px;
+.wallet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.w-btn{
+  padding:14px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;
+  transition:all 0.2s;
+  border-top:1.5px solid rgba(255,255,255,0.1);
+  border-bottom:2.5px solid rgba(0,0,0,0.3);
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
 }
-.ton-coming .tc-title { font-family: 'Orbitron', monospace; font-size: 12px; color: var(--cyan); margin-bottom: 4px; }
-.ton-coming .tc-sub { font-size: 11px; color: #4040a0; }
+.w-btn.dep{background:linear-gradient(145deg,#162e1a,#1e4224);color:var(--green);border-left:1.5px solid rgba(0,255,159,0.15);border-right:1.5px solid rgba(0,0,0,0.2);}
+.w-btn.wit{background:linear-gradient(145deg,#14143a,#1c1c50);color:var(--purple2);border-left:1.5px solid rgba(168,85,247,0.15);border-right:1.5px solid rgba(0,0,0,0.2);}
+.w-btn:active{transform:translateY(2px);box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+.w-btn .bi{font-size:20px;display:block;margin-bottom:6px;}
  
-.tx-list { display: flex; flex-direction: column; gap: 6px; }
-.tx-row {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,0.02);
-  border: 0.5px solid rgba(100,70,200,0.15);
-  border-radius: 10px; padding: 10px 12px;
+/* AEON coin info card */
+.aeon-card{
+  background:linear-gradient(145deg,#0e0c20,#1a1030,#0e0c20);
+  border:1px solid rgba(200,169,110,0.3);
+  border-radius:16px;padding:18px;
+  text-align:center;
 }
-.tx-icon { font-size: 18px; flex-shrink: 0; }
-.tx-info { flex: 1; }
-.tx-info .tx-name { font-size: 12px; font-weight: 600; color: #c0b0e0; }
-.tx-info .tx-date { font-size: 9px; color: #3a3a70; font-family: 'Orbitron', monospace; margin-top: 1px; }
-.tx-amount { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; }
-.tx-amount.plus { color: var(--green); }
-.tx-amount.minus { color: var(--red); }
+.aeon-card-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--aeon2);letter-spacing:2px;margin-bottom:4px;text-shadow:0 0 10px var(--aeon);}
+.aeon-card-sub{font-size:10px;color:#5050a0;margin-bottom:16px;letter-spacing:1px;}
+.aeon-lore{font-size:11px;color:#7070a0;line-height:1.65;margin-top:14px;text-align:left;border-top:0.5px solid rgba(200,169,110,0.15);padding-top:12px;}
+.aeon-lore b{color:var(--aeon2);}
  
-/* ── COIN PARTICLES ── */
-.coin-p { position: fixed; font-size: 18px; pointer-events: none; z-index: 999; animation: coinFall 1.1s ease-in forwards; }
-@keyframes coinFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(180px) rotate(360deg);opacity:0} }
+/* TON coming */
+.ton-coming{background:rgba(0,229,255,0.03);border:0.5px dashed rgba(0,229,255,0.2);border-radius:11px;padding:12px;text-align:center;margin-bottom:12px;}
+.tc-t{font-family:'Orbitron',monospace;font-size:10px;color:var(--cyan);margin-bottom:3px;}
+.tc-s{font-size:10.5px;color:#3a3a80;}
+ 
+/* ── PARTICLES ── */
+.coin-p{position:fixed;pointer-events:none;z-index:999;animation:cfall 1.1s ease-in forwards;}
+@keyframes cfall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(170px) rotate(380deg)}}
  
 /* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(0,0,10,0.7); backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.2s;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal-box {
-  background: linear-gradient(160deg, #0e0e2e, #0a0a1e);
-  border: 1px solid rgba(168,85,247,0.4);
-  border-radius: 20px; padding: 24px; width: min(320px, 90vw);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-}
-.modal-title { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 14px; text-align: center; }
-.modal-close {
-  width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(168,85,247,0.4);
-  background: rgba(168,85,247,0.1); color: var(--purple2);
-  font-family: 'Orbitron', monospace; font-size: 11px; cursor: pointer; margin-top: 14px;
-}
+.modal-ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,10,0.78);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal-box{background:linear-gradient(160deg,#0e0e2c,#0a0a1c);border:1px solid rgba(200,169,110,0.35);border-radius:18px;padding:22px;width:100%;max-width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.75);}
+.modal-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--aeon2);margin-bottom:12px;text-align:center;}
+.modal-close{width:100%;padding:10px;border-radius:9px;border:1px solid rgba(200,169,110,0.3);background:rgba(200,169,110,0.08);color:var(--aeon2);font-family:'Orbitron',monospace;font-size:9.5px;cursor:pointer;margin-top:11px;}
  
-/* scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(100,70,200,0.3); border-radius: 2px; }
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(100,70,200,0.28);border-radius:2px;}
 </style>
 </head>
 <body>
 <canvas id="stars-canvas"></canvas>
  
 <div id="app">
+ 
   <!-- TOP BAR -->
   <div id="topbar">
-    <div class="topbar-logo">✦ COSMIC</div>
-    <div class="topbar-balance">
-      <span class="icon">🪙</span>
+    <div class="tb-logo">✦ COSMIC</div>
+    <div class="tb-balance" onclick="showPage('wallet')">
+      <svg class="coin-icon aeon-coin-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="14" fill="url(#cg1)" stroke="#c8a96e" stroke-width="1.2"/>
+        <circle cx="16" cy="16" r="11" fill="none" stroke="rgba(200,169,110,0.3)" stroke-width="0.6"/>
+        <!-- Eye of ages -->
+        <ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/>
+        <circle cx="16" cy="16" r="1.8" fill="#e8c87e"/>
+        <circle cx="16" cy="16" r="0.7" fill="#07071a"/>
+        <!-- top rune lines -->
+        <line x1="16" y1="5" x2="16" y2="8" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="14" y1="5.6" x2="15" y2="7.8" stroke="#c8a96e" stroke-width="0.6" stroke-linecap="round"/>
+        <line x1="18" y1="5.6" x2="17" y2="7.8" stroke="#c8a96e" stroke-width="0.6" stroke-linecap="round"/>
+        <!-- bottom -->
+        <line x1="16" y1="24" x2="16" y2="27" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="14" y1="26.4" x2="15" y2="24.2" stroke="#c8a96e" stroke-width="0.6" stroke-linecap="round"/>
+        <line x1="18" y1="26.4" x2="17" y2="24.2" stroke="#c8a96e" stroke-width="0.6" stroke-linecap="round"/>
+        <!-- left -->
+        <line x1="5" y1="16" x2="8" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+        <!-- right -->
+        <line x1="27" y1="16" x2="24" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+        <defs>
+          <radialGradient id="cg1" cx="35%" cy="30%">
+            <stop offset="0%" stop-color="#2a1a08"/>
+            <stop offset="100%" stop-color="#0e0806"/>
+          </radialGradient>
+        </defs>
+      </svg>
       <span class="val" id="tb-balance">1000</span>
     </div>
-    <div class="topbar-avatar" id="tb-avatar" onclick="showPage('profile')">?</div>
+    <div class="tb-avatar" id="tb-avatar" onclick="showPage('profile')">?</div>
   </div>
  
   <!-- PAGES -->
@@ -712,32 +604,31 @@ body {
  
     <!-- ── SLOT PAGE ── -->
     <div class="page active" id="page-slot">
-      <div class="machine-frame">
-        <!-- marquee -->
-        <div class="marquee">
-          <div class="marquee-title">✦ COSMIC SLOTS ✦</div>
-          <div class="marquee-sub">★ LUCKY STARS CASINO ★</div>
+      <div class="machine-wrap">
+ 
+        <!-- TOP MARQUEE -->
+        <div class="machine-top">
+          <div class="mq-title">✦ COSMIC SLOTS ✦</div>
+          <div class="mq-sub">★ AEON CASINO ★</div>
           <div class="bulbs-row" id="bulbs-row"></div>
         </div>
-        <!-- body -->
-        <div class="machine-body">
-          <div class="screen-bezel">
-            <div class="screen" id="slot-screen">
-              <div class="screen-glow"></div>
-              <!-- info -->
+ 
+        <!-- SCREEN SECTION -->
+        <div class="machine-screen-section">
+          <div class="crt-bezel">
+            <div class="crt-screen" id="slot-screen">
+              <div class="crt-glow"></div>
               <div class="info-row">
                 <div class="info-box"><div class="info-lbl">Баланс</div><div class="info-val" id="s-bal">1000</div></div>
                 <div class="info-box"><div class="info-lbl">Выигрыш</div><div class="info-val g" id="s-win">0</div></div>
                 <div class="info-box"><div class="info-lbl">Итого</div><div class="info-val p" id="s-total">0</div></div>
               </div>
-              <!-- reels -->
               <div class="reels-area">
                 <div class="win-line-bar" id="win-line"></div>
                 <div class="reel-window"><div class="reel-strip" id="rs0"></div></div>
                 <div class="reel-window"><div class="reel-strip" id="rs1"></div></div>
                 <div class="reel-window"><div class="reel-strip" id="rs2"></div></div>
               </div>
-              <!-- paytable -->
               <div class="paytable">
                 <div class="pay-row">🌙×3=<b>×50</b></div>
                 <div class="pay-row">⭐×3=<b>×30</b></div>
@@ -751,121 +642,232 @@ body {
             </div>
           </div>
         </div>
-        <!-- bottom controls -->
-        <div class="machine-bottom">
-          <div class="controls-row">
-            <button class="btn-round" id="bet-dn">−</button>
-            <div class="bet-center">
-              <div class="bet-lbl">Ставка</div>
-              <div class="bet-val" id="bet-val">10</div>
-            </div>
-            <button class="btn-round" id="bet-up">+</button>
-            <button class="btn-round btn-max" id="bet-max">MAX</button>
-          </div>
-          <button class="spin-btn" id="spin-btn">🚀 SPIN</button>
-          <div class="result-msg" id="result-msg">УДАЧИ В КОСМОСЕ!</div>
+ 
+        <!-- 3D DIVIDER -->
+        <div class="machine-divider">
+          <div class="div-rivet"></div>
+          <div class="div-rivet"></div>
+          <div class="div-badge">A E O N</div>
+          <div class="div-rivet"></div>
+          <div class="div-rivet"></div>
         </div>
-      </div>
-    </div>
+ 
+        <!-- 3D BOTTOM PANEL -->
+        <div class="machine-bottom-3d">
+          <div class="depth-face-l"></div>
+          <div class="depth-face-r"></div>
+          <div class="machine-controls">
+            <div class="controls-chrome"></div>
+            <div class="controls-row">
+              <button class="btn-3d" id="bet-dn">−</button>
+              <div class="bet-center">
+                <div class="bet-lbl">Ставка</div>
+                <div class="bet-val">
+                  <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+                    <circle cx="16" cy="16" r="14" fill="url(#cg2)" stroke="#c8a96e" stroke-width="1.2"/>
+                    <ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/>
+                    <circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/>
+                    <line x1="16" y1="5" x2="16" y2="8" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+                    <line x1="16" y1="24" x2="16" y2="27" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+                    <line x1="5" y1="16" x2="8" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+                    <line x1="27" y1="16" x2="24" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/>
+                    <defs><radialGradient id="cg2" cx="35%" cy="30%"><stop offset="0%" stop-color="#2a1a08"/><stop offset="100%" stop-color="#0e0806"/></radialGradient></defs>
+                  </svg>
+                  <span id="bet-val">10</span>
+                </div>
+              </div>
+              <button class="btn-3d" id="bet-up">+</button>
+              <button class="btn-3d btn-max-3d" id="bet-max">MAX</button>
+            </div>
+            <button class="spin-btn-3d" id="spin-btn">🚀 SPIN</button>
+            <div class="result-msg" id="result-msg">УДАЧИ В КОСМОСЕ!</div>
+          </div>
+        </div>
+ 
+      </div><!-- /machine-wrap -->
+    </div><!-- /page-slot -->
  
     <!-- ── PROFILE PAGE ── -->
     <div class="page" id="page-profile">
-      <div class="profile-header">
-        <div class="profile-avatar" id="prof-avatar">?</div>
-        <div class="profile-info">
-          <div class="name" id="prof-name">Игрок</div>
-          <div class="uid" id="prof-uid">#000000</div>
-          <div class="level">⭐ <span id="prof-level">Новичок</span></div>
+      <div class="prof-header">
+        <div class="prof-av" id="prof-avatar">?</div>
+        <div>
+          <div class="prof-name" id="prof-name">Игрок</div>
+          <div class="prof-uid" id="prof-uid">#000000</div>
+          <div class="prof-lv" id="prof-level">🌱 Новичок</div>
         </div>
       </div>
- 
-      <div class="xp-bar-wrap">
-        <div class="xp-labels">
-          <span class="xp-lbl">ОПЫТ</span>
-          <span class="xp-lbl" id="xp-label">0 / 1000 XP</span>
-        </div>
+      <div class="xp-wrap">
+        <div class="xp-lbls"><span class="xp-l">ОПЫТ</span><span class="xp-l" id="xp-label">0 / 500 XP</span></div>
         <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
       </div>
- 
       <div class="stats-grid">
         <div class="stat-card"><div class="slbl">Всего спинов</div><div class="sval p" id="st-spins">0</div></div>
         <div class="stat-card"><div class="slbl">Джекпотов</div><div class="sval" id="st-jackpots">0</div></div>
         <div class="stat-card"><div class="slbl">Макс. выигрыш</div><div class="sval g" id="st-maxwin">0</div></div>
         <div class="stat-card"><div class="slbl">Выиграно всего</div><div class="sval c" id="st-total">0</div></div>
       </div>
- 
-      <div class="section-title">Достижения</div>
+      <div class="sec-title">Достижения</div>
       <div class="achievements" id="achievements"></div>
     </div>
  
     <!-- ── LEADERBOARD PAGE ── -->
     <div class="page" id="page-leaders">
-      <div class="leader-tabs">
-        <button class="ltab active" onclick="switchLeaderTab('total',this)">Всего выиграно</button>
-        <button class="ltab" onclick="switchLeaderTab('jackpots',this)">Джекпоты</button>
-        <button class="ltab" onclick="switchLeaderTab('spins',this)">Спины</button>
+      <div class="ltabs">
+        <button class="ltab active" onclick="switchLTab('total',this)">Выигрыш</button>
+        <button class="ltab" onclick="switchLTab('jackpots',this)">Джекпоты</button>
+        <button class="ltab" onclick="switchLTab('spins',this)">Спины</button>
       </div>
- 
       <div class="podium" id="podium"></div>
-      <div class="section-title">Топ игроков</div>
+      <div class="sec-title">Топ игроков</div>
       <div class="leaders-list" id="leaders-list"></div>
     </div>
  
     <!-- ── WALLET PAGE ── -->
     <div class="page" id="page-wallet">
-      <div class="wallet-card">
-        <div class="wallet-label">Игровой баланс</div>
-        <div class="wallet-amount" id="w-coins">1000 🪙</div>
-        <div class="wallet-ton">
-          <span class="ton-badge">TON</span>
-          <span id="w-ton">0.00 TON</span>
-          <span style="color:#3a3a80;font-size:10px;margin-left:4px">≈ $0.00</span>
+ 
+      <!-- AEON COIN big display -->
+      <div style="padding:13px 13px 0">
+        <div class="wallet-hero">
+          <!-- Big coin SVG -->
+          <svg class="aeon-coin-large" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bg_main" cx="38%" cy="32%">
+                <stop offset="0%" stop-color="#3a2208"/>
+                <stop offset="60%" stop-color="#1a0e04"/>
+                <stop offset="100%" stop-color="#0e0804"/>
+              </radialGradient>
+              <radialGradient id="rim_grad" cx="50%" cy="0%">
+                <stop offset="0%" stop-color="#f0d890"/>
+                <stop offset="40%" stop-color="#c8a050"/>
+                <stop offset="100%" stop-color="#7a5020"/>
+              </radialGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <!-- outer rim -->
+            <circle cx="60" cy="60" r="56" fill="url(#rim_grad)"/>
+            <!-- inner face -->
+            <circle cx="60" cy="60" r="50" fill="url(#bg_main)"/>
+            <!-- decorative ring 1 -->
+            <circle cx="60" cy="60" r="47" fill="none" stroke="rgba(200,160,80,0.25)" stroke-width="0.8"/>
+            <!-- decorative ring 2 -->
+            <circle cx="60" cy="60" r="43" fill="none" stroke="rgba(200,160,80,0.15)" stroke-width="0.5"/>
+            <!-- 12 outer tick marks -->
+            <g stroke="#c8a050" stroke-width="1" stroke-linecap="round" opacity="0.5">
+              <line x1="60" y1="13" x2="60" y2="20"/>
+              <line x1="60" y1="100" x2="60" y2="107"/>
+              <line x1="13" y1="60" x2="20" y2="60"/>
+              <line x1="100" y1="60" x2="107" y2="60"/>
+              <line x1="28" y1="28" x2="33" y2="33"/>
+              <line x1="87" y1="87" x2="92" y2="92"/>
+              <line x1="92" y1="28" x2="87" y2="33"/>
+              <line x1="33" y1="87" x2="28" y2="92"/>
+              <line x1="20" y1="38" x2="26" y2="41"/>
+              <line x1="94" y1="79" x2="100" y2="82"/>
+              <line x1="100" y1="38" x2="94" y2="41"/>
+              <line x1="20" y1="82" x2="26" y2="79"/>
+            </g>
+            <!-- Pyramid of ages -->
+            <polygon points="60,22 80,54 40,54" fill="none" stroke="#e8c870" stroke-width="1.4" filter="url(#glow)" opacity="0.85"/>
+            <line x1="60" y1="22" x2="60" y2="54" stroke="rgba(232,200,112,0.4)" stroke-width="0.8"/>
+            <line x1="50" y1="38" x2="70" y2="38" stroke="rgba(232,200,112,0.4)" stroke-width="0.8"/>
+            <!-- All-seeing Eye in pyramid centre -->
+            <ellipse cx="60" cy="42" rx="7" ry="4.5" fill="none" stroke="#f0d880" stroke-width="1.2" filter="url(#glow)"/>
+            <circle cx="60" cy="42" r="2.8" fill="#f0d880"/>
+            <circle cx="60" cy="42" r="1.2" fill="#0e0804"/>
+            <!-- pupil rays -->
+            <g stroke="#f0d880" stroke-width="0.5" opacity="0.6">
+              <line x1="60" y1="38" x2="60" y2="36"/>
+              <line x1="64" y1="40" x2="66" y2="39"/>
+              <line x1="56" y1="40" x2="54" y2="39"/>
+            </g>
+            <!-- lower runic text area -->
+            <rect x="35" y="62" width="50" height="14" rx="3" fill="rgba(200,160,80,0.07)" stroke="rgba(200,160,80,0.2)" stroke-width="0.6"/>
+            <!-- rune-like symbols (stylized) -->
+            <text x="60" y="73" text-anchor="middle" font-family="serif" font-size="8" fill="#c8a050" opacity="0.8" letter-spacing="3">ⲀⲈⲰⲚ</text>
+            <!-- bottom inscription -->
+            <text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(200,160,80,0.45)" letter-spacing="2">AGES OF MAN</text>
+            <!-- corner ornaments -->
+            <g fill="#c8a050" opacity="0.4">
+              <polygon points="22,22 26,22 22,26"/>
+              <polygon points="98,22 94,22 98,26"/>
+              <polygon points="22,98 26,98 22,94"/>
+              <polygon points="98,98 94,98 98,94"/>
+            </g>
+          </svg>
+ 
+          <div class="wh-label">AEON БАЛАНС</div>
+          <div class="wh-amount">
+            <span id="w-coins">1000</span>
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="url(#cg3)" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/><line x1="16" y1="5" x2="16" y2="8" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/><line x1="16" y1="24" x2="16" y2="27" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/><line x1="5" y1="16" x2="8" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/><line x1="27" y1="16" x2="24" y2="16" stroke="#c8a96e" stroke-width="0.8" stroke-linecap="round"/><defs><radialGradient id="cg3" cx="35%" cy="30%"><stop offset="0%" stop-color="#2a1a08"/><stop offset="100%" stop-color="#0e0806"/></radialGradient></defs></svg>
+          </div>
+          <div class="wh-sub">
+            <span class="ton-badge">TON</span>
+            <span class="wh-ton">0.00 TON</span>
+          </div>
+        </div>
+ 
+        <div class="wallet-stats">
+          <div class="ws-card"><div class="ws-lbl">Всего выиграно</div><div class="ws-val gold" id="w-total">0</div></div>
+          <div class="ws-card"><div class="ws-lbl">Всего спинов</div><div class="ws-val green" id="w-spins">0</div></div>
+        </div>
+ 
+        <div class="wallet-actions">
+          <button class="w-btn dep" onclick="showModal('deposit')"><span class="bi">⬇️</span>ПОПОЛНИТЬ</button>
+          <button class="w-btn wit" onclick="showModal('withdraw')"><span class="bi">⬆️</span>ВЫВЕСТИ</button>
+        </div>
+ 
+        <div class="ton-coming">
+          <div class="tc-t">💎 TON BLOCKCHAIN</div>
+          <div class="tc-s">Интеграция с TON кошельком<br>будет доступна в следующем обновлении</div>
+        </div>
+ 
+        <!-- AEON lore card -->
+        <div class="aeon-card">
+          <div class="aeon-card-title">⚡ AEON</div>
+          <div class="aeon-card-sub">Валюта Забытых Эпох</div>
+          <svg width="80" height="80" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 4px;filter:drop-shadow(0 0 12px rgba(200,169,110,0.5))">
+            <circle cx="60" cy="60" r="56" fill="url(#bgw)" stroke="#c8a96e" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="50" fill="url(#bgmain2)"/>
+            <circle cx="60" cy="60" r="47" fill="none" stroke="rgba(200,160,80,0.25)" stroke-width="0.8"/>
+            <polygon points="60,22 80,54 40,54" fill="none" stroke="#e8c870" stroke-width="1.4" opacity="0.85"/>
+            <line x1="60" y1="22" x2="60" y2="54" stroke="rgba(232,200,112,0.4)" stroke-width="0.8"/>
+            <line x1="50" y1="38" x2="70" y2="38" stroke="rgba(232,200,112,0.4)" stroke-width="0.8"/>
+            <ellipse cx="60" cy="42" rx="7" ry="4.5" fill="none" stroke="#f0d880" stroke-width="1.2"/>
+            <circle cx="60" cy="42" r="2.8" fill="#f0d880"/>
+            <circle cx="60" cy="42" r="1.2" fill="#0a0804"/>
+            <rect x="35" y="62" width="50" height="14" rx="3" fill="rgba(200,160,80,0.07)" stroke="rgba(200,160,80,0.2)" stroke-width="0.6"/>
+            <text x="60" y="73" text-anchor="middle" font-family="serif" font-size="8" fill="#c8a050" opacity="0.8" letter-spacing="3">ⲀⲈⲰⲚ</text>
+            <text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(200,160,80,0.45)" letter-spacing="2">AGES OF MAN</text>
+            <g fill="#c8a050" opacity="0.35"><polygon points="22,22 26,22 22,26"/><polygon points="98,22 94,22 98,26"/><polygon points="22,98 26,98 22,94"/><polygon points="98,98 94,98 98,94"/></g>
+            <defs>
+              <radialGradient id="bgw" cx="50%" cy="0%"><stop offset="0%" stop-color="#f0d890"/><stop offset="40%" stop-color="#c8a050"/><stop offset="100%" stop-color="#7a5020"/></radialGradient>
+              <radialGradient id="bgmain2" cx="38%" cy="32%"><stop offset="0%" stop-color="#3a2208"/><stop offset="100%" stop-color="#0e0804"/></radialGradient>
+            </defs>
+          </svg>
+          <div class="aeon-lore">
+            Монета <b>AEON</b> — виртуальная валюта Cosmic Slots, вдохновлённая идеей о великих циклах цивилизаций.<br><br>
+            На лицевой стороне изображён <b>Глаз Эпох</b> — символ, встречающийся в архитектуре и мифологии многих древних культур. Он смотрит из вершины пирамиды — формы, независимо возникшей у цивилизаций, разделённых океанами.<br><br>
+            Надпись <b>ⲀⲈⲰⲚ</b> выполнена коптским письмом — одним из наследников древнеегипетского языка. В греческой философии «aeon» означал <b>вечный цикл</b>, эпоху бытия.<br><br>
+            <b>1 AEON</b> = 1 игровой кредит. В будущем — конвертация в TON.
+          </div>
         </div>
       </div>
- 
-      <div class="wallet-actions">
-        <button class="wallet-btn deposit" onclick="showModal('deposit')">
-          <span class="btn-icon">⬇️</span>ПОПОЛНИТЬ
-        </button>
-        <button class="wallet-btn withdraw" onclick="showModal('withdraw')">
-          <span class="btn-icon">⬆️</span>ВЫВЕСТИ
-        </button>
-      </div>
- 
-      <div class="ton-coming">
-        <div class="tc-title">💎 TON интеграция</div>
-        <div class="tc-sub">Пополнение через TON Blockchain<br>скоро будет доступно</div>
-      </div>
- 
-      <div class="section-title">История транзакций</div>
-      <div class="tx-list" id="tx-list"></div>
-    </div>
+    </div><!-- /page-wallet -->
  
   </div><!-- /pages -->
  
   <!-- BOTTOM NAV -->
   <div id="nav">
-    <button class="nav-btn active" onclick="showPage('slot')" id="nav-slot">
-      <span class="nav-icon">🎰</span>
-      <span class="nav-label">Слоты</span>
-    </button>
-    <button class="nav-btn" onclick="showPage('profile')" id="nav-profile">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">Профиль</span>
-    </button>
-    <button class="nav-btn" onclick="showPage('leaders')" id="nav-leaders">
-      <span class="nav-icon">🏆</span>
-      <span class="nav-label">Рейтинг</span>
-    </button>
-    <button class="nav-btn" onclick="showPage('wallet')" id="nav-wallet">
-      <span class="nav-icon">💰</span>
-      <span class="nav-label">Кошелёк</span>
-    </button>
+    <button class="nav-btn active" onclick="showPage('slot')"    id="nav-slot">    <span class="ni">🎰</span><span class="nl">Слоты</span></button>
+    <button class="nav-btn"        onclick="showPage('profile')" id="nav-profile"> <span class="ni">👤</span><span class="nl">Профиль</span></button>
+    <button class="nav-btn"        onclick="showPage('leaders')" id="nav-leaders"> <span class="ni">🏆</span><span class="nl">Рейтинг</span></button>
+    <button class="nav-btn"        onclick="showPage('wallet')"  id="nav-wallet">  <span class="ni">💰</span><span class="nl">Кошелёк</span></button>
   </div>
-</div>
+</div><!-- /app -->
  
 <!-- MODAL -->
-<div class="modal-overlay" id="modal">
+<div class="modal-ov" id="modal">
   <div class="modal-box">
     <div class="modal-title" id="modal-title"></div>
     <div id="modal-body"></div>
@@ -874,69 +876,56 @@ body {
 </div>
  
 <script>
-/* ═══════════════════════════
-   DEVICE DETECTION
-═══════════════════════════ */
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const isTelegram = !!(window.Telegram && window.Telegram.WebApp);
-const tg = isTelegram ? window.Telegram.WebApp : null;
- 
-if (tg) {
+/* ═══════════════════════════════════════
+   TELEGRAM — init ASAP
+═══════════════════════════════════════ */
+var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+if(tg){
   tg.ready();
   tg.expand();
-  tg.setHeaderColor('#07071a');
-  tg.setBackgroundColor('#07071a');
+  if(tg.setHeaderColor)     tg.setHeaderColor('#07071a');
+  if(tg.setBackgroundColor) tg.setBackgroundColor('#07071a');
+  if(tg.requestFullscreen)  tg.requestFullscreen();
+  // retry — TG sometimes needs a tick after ready()
+  setTimeout(function(){ tg.expand(); if(tg.requestFullscreen) tg.requestFullscreen(); }, 200);
+  setTimeout(function(){ tg.expand(); }, 600);
+  tg.onEvent('viewportChanged', function(e){
+    setVH();
+    if(!e.isStateStable) tg.expand();
+  });
 }
  
-/* ═══════════════════════════
-   STATE (localStorage as temp storage — will be replaced by backend)
-═══════════════════════════ */
-function loadState() {
-  try {
-    const s = localStorage.getItem('cosmicSlots_v1');
-    return s ? JSON.parse(s) : null;
-  } catch(e) { return null; }
+/* ── Full-screen height fix (iOS Safari & TG) ── */
+function setVH(){
+  var h = window.innerHeight;
+  document.documentElement.style.setProperty('--vh', (h*0.01)+'px');
+  var app = document.getElementById('app');
+  if(app) app.style.height = h+'px';
 }
-function saveState() {
-  try { localStorage.setItem('cosmicSlots_v1', JSON.stringify(STATE)); } catch(e) {}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', function(){ setTimeout(setVH, 300); });
+ 
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+function loadState(){
+  try{ var s=localStorage.getItem('cs_v3'); return s?JSON.parse(s):null; }catch(e){ return null; }
 }
- 
-let tgUser = null;
-if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-  tgUser = tg.initDataUnsafe.user;
+function saveState(){
+  try{ localStorage.setItem('cs_v3', JSON.stringify(STATE)); }catch(e){}
 }
+var tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+var DEF = {balance:1000, totalWin:0, spins:0, jackpots:0, maxWin:0, xp:0};
+var saved = loadState();
+var STATE = saved ? Object.assign({}, DEF, saved) : Object.assign({}, DEF);
  
-const defaultState = {
-  balance: 1000,
-  totalWin: 0,
-  spins: 0,
-  jackpots: 0,
-  maxWin: 0,
-  xp: 0,
-  transactions: []
-};
- 
-const saved = loadState();
-const STATE = saved ? {...defaultState, ...saved} : {...defaultState};
- 
-/* mock leaderboard data */
-const MOCK_LEADERS = [
-  {name:'CryptoKing',   uid:'#4821', spins:1842, total:98400, jackpots:12, avatar:'👑'},
-  {name:'StarHunter',   uid:'#7734', spins:2103, total:74200, jackpots:9,  avatar:'⭐'},
-  {name:'MoonWalker',   uid:'#1122', spins:960,  total:61000, jackpots:7,  avatar:'🌙'},
-  {name:'CosmicAce',    uid:'#5599', spins:1430, total:43800, jackpots:5,  avatar:'🚀'},
-  {name:'NebulaBoss',   uid:'#3311', spins:788,  total:31200, jackpots:4,  avatar:'🪐'},
-  {name:'GalaxyPro',    uid:'#9900', spins:654,  total:22600, jackpots:2,  avatar:'💫'},
-  {name:'OrbitMaster',  uid:'#2244', spins:430,  total:14100, jackpots:1,  avatar:'☄'},
-];
-let currentLeaderTab = 'total';
- 
-/* ═══════════════════════════
-   PAGE NAVIGATION
-═══════════════════════════ */
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('nav-'+id).classList.add('active');
   if(id==='profile') renderProfile();
@@ -944,29 +933,22 @@ function showPage(id) {
   if(id==='wallet')  renderWallet();
 }
  
-/* ═══════════════════════════
-   STARS BACKGROUND
-═══════════════════════════ */
+/* ═══════════════════════════════════════
+   STARS
+═══════════════════════════════════════ */
 (function(){
-  const c = document.getElementById('stars-canvas');
-  const ctx = c.getContext('2d');
-  let stars = [];
+  var c=document.getElementById('stars-canvas'), ctx=c.getContext('2d'), stars=[];
   function resize(){
-    c.width = window.innerWidth; c.height = window.innerHeight;
-    stars = Array.from({length:100},()=>({
-      x:Math.random()*c.width, y:Math.random()*c.height,
-      r:Math.random()*1.3+0.2, a:Math.random(),
-      s:(Math.random()-0.5)*0.005
-    }));
+    c.width=window.innerWidth; c.height=window.innerHeight; stars=[];
+    for(var i=0;i<90;i++) stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+0.2,a:Math.random(),s:(Math.random()-0.5)*0.005});
   }
   function draw(){
     ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s=>{
-      s.a=Math.max(0,Math.min(1,s.a+s.s));
-      if(s.a<=0||s.a>=1) s.s*=-1;
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i]; s.a+=s.s; if(s.a<=0||s.a>=1) s.s*=-1;
       ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(180,160,255,${s.a})`; ctx.fill();
-    });
+      ctx.fillStyle='rgba(180,160,255,'+s.a+')'; ctx.fill();
+    }
     requestAnimationFrame(draw);
   }
   resize(); window.addEventListener('resize',resize); draw();
@@ -974,344 +956,245 @@ function showPage(id) {
  
 /* BULBS */
 (function(){
-  const colors=['#ff3a5c','#ffd700','#00ff9f','#00e5ff','#a855f7','#ff9900','#ff3a5c','#ffd700','#00ff9f','#00e5ff'];
-  const row = document.getElementById('bulbs-row');
-  colors.forEach((c,i)=>{
-    const b=document.createElement('div');
-    b.className='bulb';
-    b.style.cssText=`background:${c};box-shadow:0 0 6px 2px ${c};animation-delay:${i*0.12}s`;
+  var cols=['#ff3a5c','#c8a96e','#00ff9f','#00e5ff','#a855f7','#ffaa00','#ff3a5c','#c8a96e','#00ff9f','#00e5ff'];
+  var row=document.getElementById('bulbs-row');
+  cols.forEach(function(c,i){
+    var b=document.createElement('div'); b.className='bulb';
+    b.style.cssText='background:'+c+';box-shadow:0 0 6px 2px '+c+';animation-delay:'+i*0.12+'s';
     row.appendChild(b);
   });
 })();
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    SLOT ENGINE
-═══════════════════════════ */
-const SYMS = ['🌙','⭐','🪐','🚀','☄','🌟','💫','🛸'];
-const PAYS = {'🌙🌙🌙':50,'⭐⭐⭐':30,'🪐🪐🪐':20,'🚀🚀🚀':15,'☄☄☄':10,'🌟🌟🌟':8,'💫💫💫':6,'🛸🛸🛸':5};
-const BETS = [5,10,25,50,100,200];
-let betIdx=1, bet=10, spinning=false;
- 
-function rand(a){return a[Math.floor(Math.random()*a.length)];}
+═══════════════════════════════════════ */
+var SYMS=['🌙','⭐','🪐','🚀','☄','🌟','💫','🛸'];
+var PAYS={'🌙🌙🌙':50,'⭐⭐⭐':30,'🪐🪐🪐':20,'🚀🚀🚀':15,'☄☄☄':10,'🌟🌟🌟':8,'💫💫💫':6,'🛸🛸🛸':5};
+var BETS=[5,10,25,50,100,200];
+var betIdx=1, bet=10, spinning=false;
+function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
  
 function initReels(){
-  for(let i=0;i<3;i++){
-    const s=document.getElementById('rs'+i);
-    s.innerHTML='';
-    for(let j=0;j<3;j++){
-      const c=document.createElement('div');
-      c.className='reel-cell'; c.textContent=rand(SYMS);
-      s.appendChild(c);
+  for(var i=0;i<3;i++){
+    var s=document.getElementById('rs'+i); s.innerHTML='';
+    for(var j=0;j<3;j++){
+      var c=document.createElement('div'); c.className='reel-cell'; c.textContent=rand(SYMS); s.appendChild(c);
     }
     s.style.transform='translateY(-44px)';
   }
 }
  
-function updateSlotUI(){
-  const b = STATE.balance;
-  document.getElementById('s-bal').textContent=b;
-  document.getElementById('tb-balance').textContent=b;
-  document.getElementById('w-coins').textContent=b+' 🪙';
-  document.getElementById('bet-val').textContent=bet;
+function updateUI(){
+  document.getElementById('s-bal').textContent    = STATE.balance;
+  document.getElementById('tb-balance').textContent = STATE.balance;
+  document.getElementById('w-coins').textContent  = STATE.balance;
+  document.getElementById('bet-val').textContent  = bet;
 }
  
 function setMsg(txt,cls){
-  const el=document.getElementById('result-msg');
+  var el=document.getElementById('result-msg');
   el.textContent=txt; el.className='result-msg '+(cls||'');
 }
  
 function spawnCoins(n){
-  const rect=document.getElementById('slot-screen').getBoundingClientRect();
-  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
-  for(let i=0;i<n;i++){
-    const el=document.createElement('div');
-    el.className='coin-p'; el.textContent='🪙';
-    el.style.left=(cx+(Math.random()-0.5)*120)+'px';
+  var rect=document.getElementById('slot-screen').getBoundingClientRect();
+  var cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+  for(var i=0;i<n;i++){
+    // use AEON svg coin as particle
+    var el=document.createElement('div'); el.className='coin-p';
+    el.innerHTML='<svg width="18" height="18" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#2a1a08" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/></svg>';
+    el.style.left=(cx+(Math.random()-0.5)*110)+'px';
     el.style.top=cy+'px';
     el.style.animationDelay=(Math.random()*0.4)+'s';
     document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
+    (function(e){ e.addEventListener('animationend',function(){ e.remove(); }); })(el);
   }
 }
  
 function spinReel(idx,finalSym,delay){
-  return new Promise(res=>{
-    setTimeout(()=>{
-      const strip=document.getElementById('rs'+idx);
-      const H=44;
-      const syms=[...Array.from({length:2},()=>rand(SYMS)),
-                  ...Array.from({length:13},()=>rand(SYMS)),
-                  rand(SYMS), finalSym, rand(SYMS)];
+  return new Promise(function(res){
+    setTimeout(function(){
+      var strip=document.getElementById('rs'+idx), H=44;
+      var syms=[];
+      for(var i=0;i<2;i++) syms.push(rand(SYMS));
+      for(var i=0;i<13;i++) syms.push(rand(SYMS));
+      syms.push(rand(SYMS)); syms.push(finalSym); syms.push(rand(SYMS));
       strip.innerHTML=''; strip.style.transition='none'; strip.style.transform='translateY(0)';
-      syms.forEach(s=>{
-        const c=document.createElement('div');
-        c.className='reel-cell'; c.textContent=s; strip.appendChild(c);
-      });
-      const target=syms.length-2;
-      const endY=-(target*H)+H;
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        const dur=0.65+idx*0.26;
-        strip.style.transition=`transform ${dur}s cubic-bezier(0.1,0.85,0.28,1)`;
-        strip.style.transform=`translateY(${endY}px)`;
-        setTimeout(res,dur*1000+80);
-      }));
-    },delay);
+      syms.forEach(function(s){ var c=document.createElement('div'); c.className='reel-cell'; c.textContent=s; strip.appendChild(c); });
+      var endY=-(syms.length-2)*H+H;
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        var dur=0.65+idx*0.27;
+        strip.style.transition='transform '+dur+'s cubic-bezier(0.1,0.85,0.28,1)';
+        strip.style.transform='translateY('+endY+'px)';
+        setTimeout(res, dur*1000+80);
+      }); });
+    }, delay);
   });
 }
  
 async function doSpin(){
   if(spinning) return;
-  if(STATE.balance<bet){setMsg('НЕ ХВАТАЕТ МОНЕТ!','lose');return;}
+  if(STATE.balance<bet){ setMsg('НЕ ХВАТАЕТ AEON!','lose'); return; }
   spinning=true;
   document.getElementById('spin-btn').disabled=true;
-  document.getElementById('win-line').classList.remove('active');
+  document.getElementById('win-line').classList.remove('on');
   setMsg('КРУТИМ...','');
   document.getElementById('s-win').textContent='0';
+  STATE.balance-=bet; STATE.spins++; STATE.xp+=5;
+  updateUI();
  
-  STATE.balance-=bet;
-  STATE.spins++;
-  STATE.xp+=5;
-  updateSlotUI();
- 
-  const res=[rand(SYMS),rand(SYMS),rand(SYMS)];
+  var res=[rand(SYMS),rand(SYMS),rand(SYMS)];
   await Promise.all([spinReel(0,res[0],0),spinReel(1,res[1],220),spinReel(2,res[2],440)]);
  
-  const key=res.join('');
-  let mult=PAYS[key]||0;
-  if(!mult&&new Set(res).size<=2) mult=2;
+  var key=res.join(''), mult=PAYS[key]||0;
+  if(!mult&&(new Set(res)).size<=2) mult=2;
  
   if(mult>0){
-    const earned=bet*mult;
-    STATE.balance+=earned;
-    STATE.totalWin+=earned;
-    STATE.xp+=earned;
+    var earned=bet*mult;
+    STATE.balance+=earned; STATE.totalWin+=earned; STATE.xp+=earned;
     if(earned>STATE.maxWin) STATE.maxWin=earned;
     if(mult>=15) STATE.jackpots++;
     document.getElementById('s-win').textContent=earned;
     document.getElementById('s-total').textContent=STATE.totalWin;
-    document.getElementById('win-line').classList.add('active');
-    const scr=document.getElementById('slot-screen');
+    document.getElementById('win-line').classList.add('on');
+    var scr=document.getElementById('slot-screen');
     scr.classList.add('flash');
-    scr.addEventListener('animationend',()=>scr.classList.remove('flash'),{once:true});
+    scr.addEventListener('animationend',function(){ scr.classList.remove('flash'); },{once:true});
     spawnCoins(mult>=20?14:mult>=8?8:4);
-    addTx(mult>=20?'🎰 Джекпот!':'🎰 Выигрыш', earned, true);
-    if(mult>=20) setMsg(`🎉 ДЖЕКПОТ! +${earned}!`,'big');
-    else if(mult>=8) setMsg(`🌟 ВЫИГРЫШ +${earned}`,'win');
-    else setMsg(`✨ +${earned} МОНЕТ`,'win');
-    if(tg && mult>=20) tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success');
+    if(mult>=20)    setMsg('🎉 ДЖЕКПОТ! +'+earned+' AEON!','big');
+    else if(mult>=8) setMsg('🌟 ВЫИГРЫШ +'+earned+' AEON','win');
+    else             setMsg('✨ +'+earned+' AEON','win');
+    if(tg&&tg.HapticFeedback){ if(mult>=20) tg.HapticFeedback.notificationOccurred('success'); else tg.HapticFeedback.impactOccurred('medium'); }
   } else {
-    addTx('🎰 Проигрыш', bet, false);
     setMsg('НЕ ПОВЕЗЛО... ЕЩЁ РАЗ!','lose');
-    if(tg) tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light');
+    if(tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
   }
- 
-  if(STATE.balance<=0){
-    STATE.balance=1000;
-    addTx('🎁 Бонус: бесплатные монеты', 1000, true);
-    setMsg('БАЛАНС ПОПОЛНЕН! 🚀','win');
-  }
- 
-  updateSlotUI(); saveState(); spinning=false;
+  if(STATE.balance<=0){ STATE.balance=1000; setMsg('БАЛАНС ПОПОЛНЕН! 🚀','win'); }
+  updateUI(); saveState(); spinning=false;
   document.getElementById('spin-btn').disabled=false;
 }
  
-function addTx(name, amount, isPlus){
-  STATE.transactions.unshift({
-    name, amount, plus:isPlus,
-    date: new Date().toLocaleString('ru',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
-  });
-  if(STATE.transactions.length>20) STATE.transactions.pop();
-}
- 
 document.getElementById('spin-btn').addEventListener('click',doSpin);
-document.getElementById('bet-dn').addEventListener('click',()=>{betIdx=Math.max(0,betIdx-1);bet=BETS[betIdx];updateSlotUI();});
-document.getElementById('bet-up').addEventListener('click',()=>{betIdx=Math.min(BETS.length-1,betIdx+1);bet=BETS[betIdx];updateSlotUI();});
-document.getElementById('bet-max').addEventListener('click',()=>{betIdx=BETS.length-1;bet=BETS[betIdx];updateSlotUI();});
-document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();doSpin();}});
+document.getElementById('bet-dn').addEventListener('click',function(){ betIdx=Math.max(0,betIdx-1); bet=BETS[betIdx]; updateUI(); });
+document.getElementById('bet-up').addEventListener('click',function(){ betIdx=Math.min(BETS.length-1,betIdx+1); bet=BETS[betIdx]; updateUI(); });
+document.getElementById('bet-max').addEventListener('click',function(){ betIdx=BETS.length-1; bet=BETS[betIdx]; updateUI(); });
+document.addEventListener('keydown',function(e){ if(e.code==='Space'){ e.preventDefault(); doSpin(); } });
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    PROFILE
-═══════════════════════════ */
-const LEVELS=[
-  {min:0,    name:'Новичок',      icon:'🌱'},
-  {min:500,  name:'Космонавт',    icon:'🚀'},
-  {min:2000, name:'Звёздный',     icon:'⭐'},
-  {min:5000, name:'Лунный Волк',  icon:'🌙'},
-  {min:12000,name:'Галактик',     icon:'🪐'},
-  {min:30000,name:'Космический Бог',icon:'🌌'},
+═══════════════════════════════════════ */
+var LEVELS=[
+  {min:0,    name:'Новичок',        icon:'🌱'},
+  {min:500,  name:'Искатель',       icon:'🔦'},
+  {min:2000, name:'Звёздный',       icon:'⭐'},
+  {min:5000, name:'Хранитель',      icon:'🌙'},
+  {min:12000,name:'Галактик',       icon:'🪐'},
+  {min:30000,name:'Хранитель Эпох', icon:'⚡'},
 ];
-const ACHIEVEMENTS=[
-  {icon:'🚀',label:'Первый спин', cond:()=>STATE.spins>=1},
-  {icon:'💫',label:'10 спинов',   cond:()=>STATE.spins>=10},
-  {icon:'🌙',label:'100 спинов',  cond:()=>STATE.spins>=100},
-  {icon:'🏆',label:'Джекпот',     cond:()=>STATE.jackpots>=1},
-  {icon:'💰',label:'+1000 выигр', cond:()=>STATE.totalWin>=1000},
-  {icon:'👑',label:'+10000 выигр',cond:()=>STATE.totalWin>=10000},
-  {icon:'⭐',label:'Уровень 3',   cond:()=>STATE.xp>=2000},
-  {icon:'🌌',label:'Легенда',     cond:()=>STATE.xp>=30000},
+var ACHES=[
+  {icon:'🚀',label:'Первый спин',  ok:function(){ return STATE.spins>=1; }},
+  {icon:'💫',label:'10 спинов',    ok:function(){ return STATE.spins>=10; }},
+  {icon:'🌙',label:'100 спинов',   ok:function(){ return STATE.spins>=100; }},
+  {icon:'🏆',label:'Джекпот',      ok:function(){ return STATE.jackpots>=1; }},
+  {icon:'💰',label:'+1000 AEON',   ok:function(){ return STATE.totalWin>=1000; }},
+  {icon:'👑',label:'+10k AEON',    ok:function(){ return STATE.totalWin>=10000; }},
+  {icon:'⭐',label:'Уровень 3',    ok:function(){ return STATE.xp>=2000; }},
+  {icon:'⚡',label:'Хранитель',    ok:function(){ return STATE.xp>=30000; }},
 ];
- 
-function getLevel(){
-  let lv=LEVELS[0];
-  for(const l of LEVELS){ if(STATE.xp>=l.min) lv=l; }
-  return lv;
-}
-function getNextLevel(){
-  for(let i=0;i<LEVELS.length-1;i++){ if(STATE.xp<LEVELS[i+1].min) return LEVELS[i+1]; }
-  return null;
-}
+function getLevel(){ var lv=LEVELS[0]; for(var i=0;i<LEVELS.length;i++){ if(STATE.xp>=LEVELS[i].min) lv=LEVELS[i]; } return lv; }
+function getNextLevel(){ for(var i=0;i<LEVELS.length-1;i++){ if(STATE.xp<LEVELS[i+1].min) return LEVELS[i+1]; } return null; }
  
 function renderProfile(){
-  const name = tgUser ? (tgUser.first_name||'Игрок') : 'Игрок';
-  const uid  = tgUser ? '#'+String(tgUser.id).slice(-6) : '#'+Math.floor(Math.random()*900000+100000);
-  const initials = name[0].toUpperCase();
-  const lv = getLevel();
-  const next = getNextLevel();
- 
-  document.getElementById('prof-avatar').textContent = initials;
-  document.getElementById('tb-avatar').textContent = initials;
-  document.getElementById('prof-name').textContent = name;
-  document.getElementById('prof-uid').textContent = uid;
-  document.getElementById('prof-level').textContent = lv.icon+' '+lv.name;
- 
-  const xpPct = next ? Math.min(100,((STATE.xp-lv.min)/(next.min-lv.min)*100)).toFixed(1) : 100;
-  document.getElementById('xp-fill').style.width = xpPct+'%';
-  document.getElementById('xp-label').textContent = (next ? STATE.xp+' / '+next.min : STATE.xp)+' XP';
- 
-  document.getElementById('st-spins').textContent   = STATE.spins;
-  document.getElementById('st-jackpots').textContent = STATE.jackpots;
-  document.getElementById('st-maxwin').textContent   = STATE.maxWin;
-  document.getElementById('st-total').textContent    = STATE.totalWin;
- 
-  const achEl = document.getElementById('achievements');
-  achEl.innerHTML='';
-  ACHIEVEMENTS.forEach(a=>{
-    const unlocked=a.cond();
-    const div=document.createElement('div');
-    div.className='ach '+(unlocked?'unlocked':'locked');
-    div.innerHTML=`<span>${a.icon}</span><span class="ach-lbl">${a.label}</span>`;
-    achEl.appendChild(div);
+  var name=tgUser?(tgUser.first_name||'Игрок'):'Игрок';
+  var uid=tgUser?'#'+String(tgUser.id).slice(-6):'#'+String(Math.floor(Math.random()*900000+100000));
+  var lv=getLevel(), next=getNextLevel();
+  document.getElementById('prof-avatar').textContent=name[0].toUpperCase();
+  document.getElementById('tb-avatar').textContent=name[0].toUpperCase();
+  document.getElementById('prof-name').textContent=name;
+  document.getElementById('prof-uid').textContent=uid;
+  document.getElementById('prof-level').textContent=lv.icon+' '+lv.name;
+  var pct=next?Math.min(100,((STATE.xp-lv.min)/(next.min-lv.min)*100)):100;
+  document.getElementById('xp-fill').style.width=pct.toFixed(1)+'%';
+  document.getElementById('xp-label').textContent=(next?STATE.xp+' / '+next.min:STATE.xp)+' XP';
+  document.getElementById('st-spins').textContent=STATE.spins;
+  document.getElementById('st-jackpots').textContent=STATE.jackpots;
+  document.getElementById('st-maxwin').textContent=STATE.maxWin;
+  document.getElementById('st-total').textContent=STATE.totalWin;
+  var el=document.getElementById('achievements'); el.innerHTML='';
+  ACHES.forEach(function(a){
+    var d=document.createElement('div'); d.className='ach '+(a.ok()?'unlocked':'locked');
+    d.innerHTML='<span>'+a.icon+'</span><span class="al">'+a.label+'</span>';
+    el.appendChild(d);
   });
 }
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    LEADERBOARD
-═══════════════════════════ */
-function switchLeaderTab(tab, el){
-  currentLeaderTab=tab;
-  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderLeaders();
+═══════════════════════════════════════ */
+var MOCK=[
+  {name:'AeonKing',  uid:'#4821',spins:1842,total:98400,jackpots:12,av:'👑'},
+  {name:'StarSeeker',uid:'#7734',spins:2103,total:74200,jackpots:9, av:'⭐'},
+  {name:'MoonKeeper',uid:'#1122',spins:960, total:61000,jackpots:7, av:'🌙'},
+  {name:'CosmicAce', uid:'#5599',spins:1430,total:43800,jackpots:5, av:'🚀'},
+  {name:'NebulaBoss',uid:'#3311',spins:788, total:31200,jackpots:4, av:'🪐'},
+  {name:'GalaxyPro', uid:'#9900',spins:654, total:22600,jackpots:2, av:'💫'},
+  {name:'OrbitMstr', uid:'#2244',spins:430, total:14100,jackpots:1, av:'☄'},
+];
+var lTab='total';
+function switchLTab(tab,el){
+  lTab=tab;
+  document.querySelectorAll('.ltab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active'); renderLeaders();
 }
- 
 function renderLeaders(){
-  const field = currentLeaderTab==='total'?'total':currentLeaderTab==='jackpots'?'jackpots':'spins';
-  const sorted=[...MOCK_LEADERS].sort((a,b)=>b[field]-a[field]);
- 
-  // podium
-  const pod=document.getElementById('podium');
-  const order=[1,0,2];
-  pod.innerHTML='';
-  order.forEach(i=>{
-    const p=sorted[i]; if(!p) return;
-    const rank=i+1;
-    const medal=['🥇','🥈','🥉'][i];
-    const barClass=['pb-1','pb-2','pb-3'][i];
-    const avClass=['pod-1st','pod-2nd','pod-3rd'][i];
-    const slot=document.createElement('div');
-    slot.className='podium-slot';
-    slot.innerHTML=`
-      <div class="pod-avatar ${avClass}">${p.avatar}</div>
-      <div class="pod-name">${p.name.slice(0,8)}</div>
-      <div class="pod-score">${p[field].toLocaleString()}</div>
-      <div class="pod-bar ${barClass}">${medal}</div>`;
-    pod.appendChild(slot);
+  var f=lTab==='total'?'total':lTab==='jackpots'?'jackpots':'spins';
+  var sorted=MOCK.slice().sort(function(a,b){ return b[f]-a[f]; });
+  var pod=document.getElementById('podium'); pod.innerHTML='';
+  var order=[1,0,2], bars=['pb2','pb1','pb3'], avs=['p2','p1','p3'], medals=['🥈','🥇','🥉'];
+  order.forEach(function(i,pos){
+    var p=sorted[i]; if(!p) return;
+    var s=document.createElement('div'); s.className='pod-slot';
+    s.innerHTML='<div class="pod-av '+avs[pos]+'">'+p.av+'</div><div class="pod-name">'+p.name.slice(0,8)+'</div><div class="pod-score">'+p[f].toLocaleString()+'</div><div class="pod-bar '+bars[pos]+'">'+medals[pos]+'</div>';
+    pod.appendChild(s);
   });
- 
-  // list
-  const list=document.getElementById('leaders-list');
-  list.innerHTML='';
-  sorted.forEach((p,i)=>{
-    const row=document.createElement('div');
-    row.className='leader-row';
-    const rankColor=i<3?'gold':'';
-    const medals=['🥇','🥈','🥉'];
-    const rankTxt=i<3?medals[i]:(i+1);
-    row.innerHTML=`
-      <div class="lrank ${rankColor}">${rankTxt}</div>
-      <div class="lavatar">${p.avatar}</div>
-      <div class="lname">${p.name}<small>${p.uid}</small></div>
-      <div class="lscore">${p[field].toLocaleString()}</div>`;
+  var list=document.getElementById('leaders-list'); list.innerHTML='';
+  var m2=['🥇','🥈','🥉'];
+  sorted.forEach(function(p,i){
+    var row=document.createElement('div'); row.className='l-row';
+    row.innerHTML='<div class="lrank '+(i<3?'gld':'')+'">'+( i<3?m2[i]:(i+1) )+'</div><div class="lav">'+p.av+'</div><div class="lname">'+p.name+'<small>'+p.uid+'</small></div><div class="lscore">'+p[f].toLocaleString()+'</div>';
     list.appendChild(row);
   });
 }
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    WALLET
-═══════════════════════════ */
+═══════════════════════════════════════ */
 function renderWallet(){
-  document.getElementById('w-coins').textContent = STATE.balance+' 🪙';
-  const txList=document.getElementById('tx-list');
-  txList.innerHTML='';
-  if(STATE.transactions.length===0){
-    txList.innerHTML='<div style="text-align:center;padding:20px;color:#3a3a70;font-family:Orbitron,monospace;font-size:11px;">НЕТ ТРАНЗАКЦИЙ</div>';
-    return;
-  }
-  STATE.transactions.forEach(tx=>{
-    const row=document.createElement('div');
-    row.className='tx-row';
-    row.innerHTML=`
-      <span class="tx-icon">${tx.plus?'⬇️':'⬆️'}</span>
-      <div class="tx-info">
-        <div class="tx-name">${tx.name}</div>
-        <div class="tx-date">${tx.date}</div>
-      </div>
-      <div class="tx-amount ${tx.plus?'plus':'minus'}">${tx.plus?'+':'-'}${tx.amount}</div>`;
-    txList.appendChild(row);
-  });
+  document.getElementById('w-coins').textContent=STATE.balance;
+  document.getElementById('w-total').textContent=STATE.totalWin;
+  document.getElementById('w-spins').textContent=STATE.spins;
 }
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    MODAL
-═══════════════════════════ */
+═══════════════════════════════════════ */
 function showModal(type){
-  const modal=document.getElementById('modal');
-  const title=document.getElementById('modal-title');
-  const body=document.getElementById('modal-body');
-  if(type==='deposit'){
-    title.textContent='💎 ПОПОЛНЕНИЕ';
-    body.innerHTML=`
-      <div style="text-align:center;padding:10px 0">
-        <div style="font-size:40px;margin-bottom:10px">💎</div>
-        <div style="font-family:Orbitron,monospace;font-size:12px;color:#00e5ff;margin-bottom:8px">TON BLOCKCHAIN</div>
-        <div style="font-size:12px;color:#4040a0;line-height:1.6">Интеграция с TON кошельком<br>будет добавлена в следующем обновлении.<br><br>
-        <span style="color:#a855f7">После запуска бэкенда</span> вы сможете<br>пополнять баланс через TON.</div>
-      </div>`;
-  } else {
-    title.textContent='⬆️ ВЫВОД СРЕДСТВ';
-    body.innerHTML=`
-      <div style="text-align:center;padding:10px 0">
-        <div style="font-size:40px;margin-bottom:10px">🔒</div>
-        <div style="font-family:Orbitron,monospace;font-size:12px;color:#a855f7;margin-bottom:8px">СКОРО</div>
-        <div style="font-size:12px;color:#4040a0;line-height:1.6">Вывод будет доступен<br>после интеграции TON кошелька<br>и запуска серверной части.</div>
-      </div>`;
-  }
-  modal.classList.add('open');
+  var m=document.getElementById('modal');
+  document.getElementById('modal-title').textContent=type==='deposit'?'💎 ПОПОЛНЕНИЕ AEON':'⬆️ ВЫВОД СРЕДСТВ';
+  document.getElementById('modal-body').innerHTML=type==='deposit'
+    ?'<div style="text-align:center;padding:8px 0"><div style="font-size:34px;margin-bottom:10px">💎</div><div style="font-family:Orbitron,monospace;font-size:10px;color:#00e5ff;margin-bottom:8px;letter-spacing:2px">TON BLOCKCHAIN</div><div style="font-size:11.5px;color:#404090;line-height:1.75">Пополнение баланса AEON через<br>TON кошелёк появится в следующем<br>обновлении после запуска бэкенда.</div></div>'
+    :'<div style="text-align:center;padding:8px 0"><div style="font-size:34px;margin-bottom:10px">🔒</div><div style="font-family:Orbitron,monospace;font-size:10px;color:#a855f7;margin-bottom:8px;letter-spacing:2px">СКОРО</div><div style="font-size:11.5px;color:#404090;line-height:1.75">Вывод AEON в TON появится<br>после интеграции blockchain-<br>кошелька и запуска сервера.</div></div>';
+  m.classList.add('open');
 }
 function closeModal(){ document.getElementById('modal').classList.remove('open'); }
 document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
  
-/* ═══════════════════════════
+/* ═══════════════════════════════════════
    INIT
-═══════════════════════════ */
+═══════════════════════════════════════ */
 initReels();
-updateSlotUI();
+updateUI();
 renderProfile();
- 
-// Telegram WebApp theme
-if(tg){
-  document.documentElement.style.setProperty('--safe-top', (tg.viewportStableHeight ? 0 : 0)+'px');
-}
 </script>
 </body>
 </html>
