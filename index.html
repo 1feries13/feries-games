@@ -1,621 +1,690 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AEON Universe - Space Station</title>
-    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta name="app-version" content="5.0.0">
+<title>БЫТИЕ — Эпоха Разума</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<script>(function(){var V='5.0.0',k='aeon_ver',s=sessionStorage.getItem(k);if(s&&s!==V){sessionStorage.setItem(k,V);window.location.reload(true);return;}sessionStorage.setItem(k,V);})();</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --gold: #ffd700; --gold2: #d4af37; --bronze: #cd7f32; --marble: #e0e0e0;
+  --dark: #0a0a0f; --screen-bg: #030305; --dark-blue: #0f111a;
+  --green: #00ffaa; --cyan: #00e5ff; --red: #ff3a5c; --nav-h: 62px;
+  --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px);
+}
+*{box-shrink:0;box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-family:'Rajdhani',sans-serif;color:#fff;}
+#app{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;overflow:hidden;padding-top:var(--sat);padding-bottom:var(--sab);background:var(--dark);z-index:1;}
+#stars-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
 
-    <style>
-        :root {
-            --bg-space: #03050a;
-            --bg-ship: #0b0f19;
-            --card-bg: rgba(15, 22, 36, 0.85);
-            --accent-blue: #00f0ff;
-            --accent-purple: #8a2be2;
-            --accent-green: #00ffcc;
-            --text-main: #ffffff;
-            --text-muted: #738396;
-            --text-dark: #415570;
-            --gold: #ffcc00;
-        }
+/* REGISTRATION */
+#reg-screen{position:fixed;inset:0;z-index:1000;background:radial-gradient(ellipse 120% 120% at 50% 110%,rgba(40,35,25,0.6),var(--dark) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+#reg-screen.hidden{display:none;}
+.reg-logo{font-family:'Cinzel',serif;font-size:32px;font-weight:900;color:var(--gold);text-shadow:0 0 20px var(--gold2);letter-spacing:6px;text-align:center;margin-bottom:4px;}
+.reg-tagline{font-family:'Cinzel',serif;font-size:11px;color:rgba(212,175,55,0.6);letter-spacing:4px;text-align:center;margin-bottom:24px;}
+.reg-coin{display:block;margin:0 auto 20px;animation:rcSpin 8s linear infinite,rcGlow 3s ease-in-out infinite alternate;}
+@keyframes rcSpin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+@keyframes rcGlow{0%{filter:drop-shadow(0 0 10px rgba(212,175,55,0.3))}100%{filter:drop-shadow(0 0 25px rgba(212,175,55,0.8))}}
+.reg-card{background:rgba(15,15,20,0.95);border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:24px;width:100%;max-width:340px;backdrop-filter:blur(20px);}
+.reg-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px;letter-spacing:2px;}
+.reg-sub{font-size:11px;color:#8a8a9e;text-align:center;margin-bottom:20px;line-height:1.5;}
+.reg-field{margin-bottom:14px;}
+.reg-field label{display:block;font-size:9px;color:var(--gold2);letter-spacing:2px;text-transform:uppercase;font-family:'Orbitron',monospace;margin-bottom:5px;}
+.reg-field input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:11px 14px;font-size:13px;color:#fff;font-family:'Rajdhani',sans-serif;outline:none;}
+.reg-field input::placeholder{color:#444454;}
+.age-warning{background:rgba(255,58,92,0.08);border:0.5px solid rgba(255,58,92,0.3);border-radius:8px;padding:10px;font-size:10px;color:#ff8090;text-align:center;margin-bottom:14px;display:none;}
+.age-warning.show{display:block;}
+.reg-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;}
+.reg-check input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--gold);}
+.reg-check label{font-size:10.5px;color:#8a8a9e;line-height:1.5;}
+.reg-check label b{color:var(--gold);}
+.reg-bonus-banner{background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(20,20,30,0.5));border:0.5px solid rgba(212,175,55,0.3);border-radius:8px;padding:12px;text-align:center;margin-bottom:16px;}
+.reg-bonus-banner .bb-top{font-size:9px;color:#8a8a9e;letter-spacing:2px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.reg-bonus-banner .bb-amount{font-family:'Cinzel',serif;font-size:24px;font-weight:900;color:var(--gold);text-shadow:0 0 10px var(--gold2);}
+.reg-btn{width:100%;height:48px;border-radius:24px;border:1px solid var(--gold);background:linear-gradient(145deg,#2a2518,#15130e,#2a2518);color:var(--gold);font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;box-shadow:0 6px 20px rgba(212,175,55,0.2);text-shadow:0 0 5px var(--gold);}
+.reg-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+/* TOP BAR */
+#topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;min-height:48px;background:rgba(10,10,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,175,55,0.15);z-index:10;}
+.tb-logo{font-family:'Cinzel',serif;font-size:14px;font-weight:900;color:var(--gold);text-shadow:0 0 8px var(--gold2);letter-spacing:2px;}
+.tb-balance{display:flex;align-items:center;gap:6px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:20px;padding:4px 12px;cursor:pointer;}
+.tb-balance .val{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--gold);}
+.tb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1c1a16,#3a3321);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:1px solid var(--gold2);cursor:pointer;font-family:'Cinzel',serif;}
+.tb-station{font-family:'Cinzel',serif;font-size:8px;color:var(--marble);letter-spacing:1px;}
 
-        body {
-            background-color: var(--bg-space);
-            color: var(--text-main);
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: calc(20px + env(safe-area-inset-top)) 14px calc(95px + env(safe-area-inset-bottom)) 14px;
-            transition: background 0.5s ease;
-            
-            /* БЕСШОВНЫЙ ГЛУБОКИЙ КОСМОС */
-            background-image: 
-                radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.18) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #090d16 0%, #03050a 100px);
-            background-attachment: fixed;
-        }
+/* PAGES & NAV */
+#pages{flex:1;min-height:0;position:relative;overflow:hidden;}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity 0.2s ease;padding-bottom:15px;}
+.page.active{opacity:1;pointer-events:all;}
+#nav{flex-shrink:0;display:flex;height:var(--nav-h);background:rgba(10,10,15,0.98);backdrop-filter:blur(18px);border-top:1px solid rgba(212,175,55,0.15);z-index:10;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;cursor:pointer;}
+.nav-btn .ni{font-size:18px;opacity:0.4;transition:all 0.2s;}
+.nav-btn .nl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#666677;font-family:'Orbitron',monospace;}
+.nav-btn.active .ni{opacity:1;transform:scale(1.1);}
+.nav-btn.active .nl{color:var(--gold);}
+.nav-btn.active::after{content:'';position:absolute;top:0;width:30px;height:2px;background:var(--gold);box-shadow:0 0 8px var(--gold2);}
 
-        /* ЭФФЕКТ МЕРЦАЮЩИХ ЗВЕЗД */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                radial-gradient(circle at 15% 15%, #fff 1.2px, transparent 1.2px),
-                radial-gradient(circle at 45% 35%, rgba(255,255,255,0.8) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 85% 20%, #fff 1px, transparent 1px),
-                radial-gradient(circle at 30% 75%, #fff 1.6px, transparent 1.6px),
-                radial-gradient(circle at 70% 60%, rgba(0, 240, 255, 0.9) 1.2px, transparent 1.2px),
-                radial-gradient(circle at 90% 80%, #fff 1.4px, transparent 1.4px);
-            background-size: 320px 320px;
-            opacity: 0.6;
-            z-index: -1;
-            animation: spaceTwinkle 4s infinite ease-in-out;
-        }
+/* SHARED CONTROLS */
+.sec-title{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold2);letter-spacing:2px;text-transform:uppercase;margin:14px 0 8px 0;display:flex;align-items:center;gap:7px;}
+.sec-title::after{content:'';flex:1;height:0.5px;background:linear-gradient(to right,rgba(212,175,55,0.3),transparent);}
+.btn-3d{width:40px;height:40px;border-radius:50%;border-top:1px solid rgba(255,255,255,0.1);border-bottom:3px solid rgba(0,0,0,0.6);background:linear-gradient(145deg,#222,#111);color:var(--marble);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.btn-3d:active{transform:translateY(1px);border-bottom-width:1px;}
+.btn-max-3d{font-size:9px;font-family:'Orbitron',monospace;border-radius:8px;width:54px;}
+.bet-center{flex:1;text-align:center;}
+.bet-lbl{font-size:8px;color:#666677;letter-spacing:1px;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.bet-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:4px;}
+.controls-row{display:flex;align-items:center;gap:12px;width:100%;}
+.spin-btn-3d{width:100%;height:50px;border-radius:25px;background:linear-gradient(145deg,#3a3321,#1a1710,#3a3321);color:var(--gold);font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:3px;cursor:pointer;border:1px solid var(--gold2);box-shadow:0 6px 20px rgba(0,0,0,0.5);text-shadow:0 0 5px var(--gold);}
+.spin-btn-3d:active{transform:translateY(2px);}
+.result-msg{text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:#666677;min-height:16px;text-transform:uppercase;margin-top:4px;}
+.result-msg.win{color:var(--green);text-shadow:0 0 10px rgba(0,255,170,0.5);}
+.result-msg.big{color:var(--gold);text-shadow:0 0 15px var(--gold);}
 
-        /* Переключение темы на "Внутри Корабля" */
-        body.inside-ship {
-            background: var(--bg-ship);
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px),
-                radial-gradient(circle at 50% -20%, rgba(138, 43, 226, 0.15), transparent 70%);
-            background-size: 30px 30px, 30px 30px, 100% 100%;
-        }
-        body.inside-ship::before { opacity: 0.1; } /* Звезды за иллюминатором еле видны */
+/* TABS */
+.game-tabs{display:flex;gap:6px;padding:12px 12px 4px;overflow-x:auto;}
+.game-tab{flex:1;min-width:75px;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15);background:rgba(255,255,255,0.01);font-family:'Orbitron',monospace;font-size:9px;color:#666677;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.game-tab.active{background:rgba(212,175,55,0.06);border-color:var(--gold2);color:var(--gold);}
+.game-tab.locked{opacity:0.3;position:relative;}
 
-        @keyframes spaceTwinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.75; }
-        }
+/* MACHINE STYLES */
+#game-slot, #game-dice, #game-gates{display:none;}
+#game-slot.shown, #game-dice.shown, #game-gates.shown{display:flex;flex-direction:column;align-items:center;padding:8px 12px;}
+.machine-wrap{width:100%;max-width:350px;display:flex;flex-direction:column;}
+.machine-top{background:linear-gradient(180deg,#14141a,#0a0a0f);border:1px solid rgba(212,175,55,0.2);border-bottom:none;border-radius:12px 12px 0 0;padding:12px;text-align:center;}
+.mq-title{font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:var(--gold);letter-spacing:3px;}
+.mq-sub{font-size:9px;color:#555566;letter-spacing:2px;margin-top:2px;font-family:'Orbitron',monospace;}
+.machine-screen-section{background:#0a0a0f;border-left:1px solid rgba(212,175,55,0.2);border-right:1px solid rgba(212,175,55,0.2);padding:0 12px 12px;}
+.crt-bezel{background:#030305;border:1px solid #222;border-radius:8px;padding:8px;}
+.crt-screen{background:var(--screen-bg);border-radius:6px;padding:10px 6px;position:relative;}
+.info-row{display:flex;gap:6px;margin-bottom:10px;}
+.info-box{flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.1);border-radius:4px;padding:4px;text-align:center;}
+.info-lbl{font-size:7px;color:#555566;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.info-val{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--marble);}
+.info-val.g{color:var(--green);}
+.info-val.p{color:var(--gold);}
 
-        /* ВЕРХНЯЯ СТАТУС-ПАНЕЛЬ */
-        .top-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: var(--card-bg);
-            padding: 12px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 15px;
-        }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; }
-        .wallet-pill {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,204,0,0.25);
-            border-radius: 20px;
-            padding: 5px 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: bold;
-            color: var(--gold);
-            font-size: 13px;
-        }
+/* REELS AREA */
+.reels-area{position:relative;display:flex;gap:6px;background:#000;border:1px solid #111;border-radius:6px;padding:6px;overflow:hidden;}
+.win-line-bar{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;background:rgba(212,175,55,0.1);pointer-events:none;z-index:5;}
+.win-line-bar.on{background:var(--gold);box-shadow:0 0 10px var(--gold2);}
+.reel-window{flex:1;height:120px;overflow:hidden;background:#050508;border:1px solid #111;position:relative;}
+.reel-strip{display:flex;flex-direction:column;align-items:center;}
+.reel-cell{width:100%;height:40px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.paytable{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;justify-content:center;}
+.pay-row{font-size:9px;color:#666677;background:rgba(255,255,255,0.01);border:1px solid #111;border-radius:4px;padding:2px 6px;font-family:'Orbitron',monospace;}
+.pay-row b{color:var(--gold2);}
 
-        /* ОКНО ОЗНАКОМЛЕНИЯ / ПРЕДУПРЕЖДЕНИЯ */
-        #auth-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 10px;
-        }
-        .brand-header { font-size: 36px; letter-spacing: 8px; color: var(--accent-blue); text-shadow: 0 0 20px rgba(0, 240, 255, 0.4); text-transform: uppercase; font-weight: 800; }
-        .brand-subheader { font-size: 11px; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; }
-        
-        .auth-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 22px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .input-group { text-align: left; margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 10px; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .input-group input {
-            width: 100%; background: rgba(10, 15, 26, 0.85); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px; color: white; font-size: 14px; outline: none;
-        }
-        .warning-box {
-            background: rgba(255, 59, 48, 0.08); border-left: 3px solid #ff3b30;
-            padding: 12px; border-radius: 4px; font-size: 11px; line-height: 1.4; color: #ffb3b0; margin-bottom: 15px; text-align: left;
-        }
-        .checkbox-container { display: flex; align-items: flex-start; text-align: left; font-size: 11px; color: var(--text-muted); cursor: pointer; margin-bottom: 18px; }
-        .checkbox-container input { margin-top: 2px; margin-right: 8px; width: 15px; height: 15px; }
+.machine-controls{background:linear-gradient(180deg,#0a0a0f,#14141a);border:1px solid rgba(212,175,55,0.2);border-top:none;border-radius:0 0 12px 12px;padding:12px;display:flex;flex-direction:column;gap:10px;}
 
-        /* ЭКРАНЫ ПРИЛОЖЕНИЯ */
-        .app-screen { display: none; width: 100%; max-width: 450px; flex-direction: column; gap: 14px; }
-        .app-screen.active { display: flex; }
+/* DICE GAME STYLES */
+.dice-result-area{display:flex;align-items:center;justify-content:center;gap:20px;margin:15px 0;min-height:70px;}
+.die{width:54px;height:54px;border-radius:8px;background:linear-gradient(145deg,#111,#222);border:1px solid rgba(212,175,55,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--marble);box-shadow:0 4px 10px rgba(0,0,0,0.5);transition:transform 0.1s;}
+.die.rolling{animation:diceRoll 0.1s infinite;}
+@keyframes diceRoll{0%{transform:scale(0.95) rotate(-5deg)}50%{transform:scale(1.05) rotate(5deg)}100%{transform:scale(0.95) rotate(-5deg)}}
+.dice-vs{font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);}
+.dice-target-row{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+.dtb{padding:6px;border-radius:6px;border:1px solid rgba(212,175,55,0.15);background:rgba(0,0,0,0.3);font-family:'Orbitron',monospace;font-size:11px;color:#666677;cursor:pointer;min-width:32px;text-align:center;}
+.dtb.sel{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold);}
 
-        /* КАРТА ТУМАННОСТЕЙ (ГЛАВНЫЙ КОСМОС) */
-        .nebula-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 5px;
-        }
-        .nebula-card {
-            background: linear-gradient(135deg, rgba(15, 22, 36, 0.7) 0%, rgba(5, 8, 15, 0.9) 100%);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.3s;
-        }
-        .nebula-card:active { transform: scale(0.98); }
-        .nebula-card::before {
-            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, var(--nebula-color, var(--accent-blue)) 0%, transparent 60%);
-            opacity: 0.12; z-index: 0; pointer-events: none;
-        }
-        .nebula-icon { font-size: 32px; z-index: 1; }
-        .nebula-info { text-align: left; z-index: 1; }
-        .nebula-name { font-size: 16px; font-weight: bold; color: #fff; letter-spacing: 0.5px; }
-        .nebula-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+/* GATES GAME STYLES */
+.gates-lore{font-family:'Cinzel',serif;font-size:11px;color:#8a8a9e;text-align:center;line-height:1.5;margin:10px 0;}
+.gates-area{display:flex;justify-content:center;gap:8px;margin:15px 0;width:100%;}
+.gate-btn{flex:1;aspect-ratio:0.65;border-radius:6px;border:1px solid rgba(212,175,55,0.3);background:linear-gradient(180deg,#111,#050508);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.gate-btn .gate-arch{font-size:24px;color:var(--gold2);}
+.gate-btn .gate-num{font-family:'Cinzel',serif;font-size:9px;color:#555;}
+.gate-btn.win{border-color:var(--green)!important;background:rgba(0,255,170,0.05)!important;}
+.gate-btn.lose{border-color:var(--red)!important;background:rgba(255,58,92,0.05)!important;}
 
-        /* ИГРОВЫЕ МОДУЛИ ВНУТРИ ТУМАННОСТЕЙ */
-        .game-overlay-module {
-            display: none; background: var(--card-bg); border-radius: 24px; padding: 20px 14px;
-            border: 1px solid rgba(255,255,255,0.08); text-align: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        }
-        .game-overlay-module.active { display: block; }
-        .btn-back-to-space { background: none; border: none; color: var(--accent-blue); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 5px; }
+/* OVERLAYS */
+#bonus-overlay, #jackpot-overlay{position:fixed;inset:0;z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,5,8,0.96);backdrop-filter:blur(10px);padding:20px;}
+#bonus-overlay.show, #jackpot-overlay.show{display:flex;}
+.bonus-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:4px;}
+.bonus-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:340px;margin:15px 0;}
+.relic-btn{aspect-ratio:0.8;border-radius:6px;border:1px solid rgba(212,175,55,0.2);background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;}
+.relic-btn .ri{font-size:20px;}
+.relic-btn .rn{font-size:6px;font-family:'Orbitron',monospace;color:#555;margin-top:4px;}
+.relic-btn.chosen{border-color:var(--gold);background:rgba(212,175,55,0.1);}
+.relic-btn.miss{opacity:0.2;}
+.bonus-relic-info{background:rgba(255,255,255,0.01);border:1px solid rgba(212,175,55,0.15);border-radius:8px;padding:12px;width:100%;max-width:340px;text-align:center;min-height:70px;font-size:11px;color:#8a8a9e;line-height:1.4;}
+.bri-name{font-family:'Cinzel',serif;color:var(--gold);font-weight:700;margin-bottom:2px;}
+.bri-mult{font-family:'Orbitron',monospace;color:var(--green);font-weight:700;margin-bottom:4px;}
+.bonus-close, .jp-close{padding:10px 24px;border-radius:20px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-family:'Cinzel',serif;font-size:11px;cursor:pointer;margin-top:12px;}
 
-        /* ИГРА 1: СЛОТЫ */
-        .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 14px; border-radius: 16px; margin-bottom: 14px; }
-        .slot-cell { background: rgba(10, 15, 26, 0.95); border-radius: 12px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 38px; border: 1px solid rgba(255,255,255,0.07); }
-        
-        /* ИГРА 2: СКАЧОК */
-        .radar-circle { width: 200px; height: 200px; border-radius: 50%; border: 2px solid rgba(0,240,255,0.15); margin: 0 auto 15px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 75%); }
-        .radar-sector { position: absolute; font-size: 10px; color: var(--text-muted); cursor: pointer; padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: #0b0f19; }
-        .radar-sector.selected { border-color: var(--accent-green); color: var(--accent-green); background: rgba(0,255,204,0.1); }
-        .sector-top { top: 10px; } .sector-right { right: 2px; } .sector-bottom { bottom: 10px; } .sector-left { left: 2px; } .sector-center { font-size: 20px; }
+/* PROFILE & WALLET STYLES */
+.prof-header, .wallet-hero, .wager-progress, .stat-card, .ref-card{background:rgba(255,255,255,0.01);border:1px solid rgba(212,175,55,0.15);border-radius:12px;padding:14px;margin-bottom:12px;width:100%;}
+.prof-header{display:flex;align-items:center;gap:12px;}
+.prof-av{width:48px;height:48px;border-radius:50%;background:#1a1712;border:1px solid var(--gold2);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:18px;}
+.prof-name{font-family:'Cinzel',serif;font-size:14px;color:var(--marble);}
+.prof-uid{font-size:9px;color:#555566;font-family:'Orbitron',monospace;margin-top:2px;}
+.prof-lv{font-size:9px;color:var(--gold);background:rgba(212,175,55,0.1);padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
+.xp-bar, .wp-bar{height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin-top:6px;}
+.xp-fill, .wp-fill{height:100%;background:var(--gold);width:0%;transition:width 0.3s;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.slbl{font-size:8px;color:#555566;font-family:'Orbitron',monospace;}
+.sval{font-size:16px;font-family:'Orbitron',monospace;color:var(--marble);margin-top:2px;}
 
-        /* ИГРА 3: КУБИКИ */
-        .dice-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 15px; }
-        .dice-cell { background: rgba(10, 15, 26, 0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 0; font-size: 14px; cursor: pointer; color: var(--text-muted); text-align: center; font-weight: bold; }
-        .dice-cell.selected { border-color: var(--accent-blue); background: rgba(0,240,255,0.12); color: var(--accent-blue); }
+.wallet-hero{text-align:center;}
+.wh-amount{font-family:'Orbitron',monospace;font-size:28px;color:var(--gold);margin:6px 0;}
+.wallet-actions{display:flex;gap:8px;margin-bottom:12px;width:100%;}
+.w-btn{flex:1;padding:12px;border-radius:8px;border:1px solid rgba(212,175,55,0.3);background:#111;color:var(--marble);font-family:'Orbitron',monospace;font-size:10px;cursor:pointer;}
+.w-btn.dep{border-color:var(--green);color:var(--green);}
 
-        /* ОБЩИЕ ЭЛЕМЕНТЫ УПРАВЛЕНИЯ СТАВКАМИ */
-        .bet-controller { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 15px 0; }
-        .btn-circle { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: white; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .bet-display { font-size: 12px; text-transform: uppercase; } .bet-display span { color: var(--gold); font-weight: bold; }
-        .btn-action { width: 100%; border: none; border-radius: 30px; padding: 15px; color: white; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: transform 0.1s; }
-        .btn-action:disabled { background: #2c3545 !important; color: var(--text-dark) !important; cursor: not-allowed; box-shadow: none !important; }
+/* MODALS */
+.modal-ov{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal-box{background:#0a0a0f;border:1px solid var(--gold2);border-radius:12px;padding:20px;width:100%;max-width:300px;text-align:center;}
+.modal-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:10px;}
+.modal-close{width:100%;padding:8px;background:transparent;border:1px solid #333;color:#666;margin-top:12px;border-radius:6px;cursor:pointer;}
 
-        /* ================= ЛОКАЦИЯ: КАЮТА / ВНУТРИ КОРАБЛЯ ================= */
-        .ship-dashboard {
-            background: rgba(13, 20, 35, 0.85); border: 1px solid rgba(0, 240, 255, 0.15);
-            border-radius: 24px; padding: 20px; box-shadow: 0 0 25px rgba(0,240,255,0.05);
-        }
-        .dashboard-header { font-size: 18px; letter-spacing: 1px; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 15px; font-weight: bold; border-bottom: 1px solid rgba(0,240,255,0.1); padding-bottom: 8px; text-align: left; }
-        
-        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; text-align: left; }
-        .profile-stat { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.04); }
-        .stat-lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
-        .stat-val { font-size: 14px; font-weight: bold; color: #fff; margin-top: 3px; }
-
-        /* ДОСТИЖЕНИЯ И БОНУСЫ */
-        .achievements-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
-        .ach-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .ach-title { font-size: 12px; font-weight: 600; }
-        .ach-bonus { font-size: 11px; color: var(--accent-green); }
-
-        /* ТАБЛИЦА РЕЙТИНГА ВНУТРИ ХАБА */
-        .leader-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
-        .leader-table th, .leader-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-        .leader-table th { color: var(--text-muted); font-size: 9px; text-transform: uppercase; }
-
-        /* ================= ЛОКАЦИЯ: КОСМИЧЕСКИЙ МАГАЗИН ================= */
-        .shop-container { background: var(--card-bg); border-radius: 24px; padding: 20px; border: 1px solid rgba(138,43,226,0.2); }
-        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-        .shop-item { background: rgba(10, 15, 26, 0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
-        .item-art { font-size: 28px; padding: 8px; }
-        .item-name { font-size: 13px; font-weight: bold; }
-        .item-cost { font-size: 11px; color: var(--gold); font-weight: 600; }
-        .btn-buy { background: rgba(138, 43, 226, 0.2); border: 1px solid var(--accent-purple); border-radius: 14px; padding: 6px; color: #fff; font-size: 11px; cursor: pointer; }
-
-        /* НИЖНЕЕ ФИКСИРОВАННОЕ МЕНЮ (НА ВЕСЬ ЭКРАН С УЧЕТОМ SAFE AREA) */
-        .bottom-tabs {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(8, 12, 20, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 12px 6px calc(12px + env(safe-area-inset-bottom)) 6px;
-            z-index: 1000; box-shadow: 0 -8px 30px rgba(0,0,0,0.6);
-        }
-        .tab-btn {
-            background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 700;
-            padding: 10px 14px; cursor: pointer; border-radius: 24px; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .tab-btn.active {
-            color: var(--accent-blue); background: rgba(0, 240, 255, 0.12);
-            box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2); text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
-        }
-    </style>
+.coin-p{position:fixed;pointer-events:none;z-index:2500;animation:cfall 1.2s ease-in forwards;}
+@keyframes cfall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(180px) rotate(360deg)}}
+</style>
 </head>
 <body>
+<canvas id="stars-canvas"></canvas>
 
-    <div id="top-navbar" class="top-nav" style="display: none;">
-        <div class="nav-row">
-            <div style="font-weight: bold; letter-spacing: 1px; font-size: 12px; text-transform: uppercase;">
-                Пилот: <span id="display-pilot-name" style="color: var(--accent-blue);">Pilot</span>
-            </div>
-            <div class="wallet-pill">
-                <span>⬡</span><span id="balance-value">300</span> AEON
-            </div>
-        </div>
+<!-- REGISTRATION -->
+<div id="reg-screen">
+  <div class="reg-logo">БЫТИЕ</div>
+  <div class="reg-tagline">Cosmic Philosophy Journey</div>
+  <svg class="reg-coin" width="80" height="80" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="54" fill="#111" stroke="#d4af37" stroke-width="2"/>
+    <polygon points="60,25 90,75 30,75" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+    <circle cx="60" cy="58" r="6" fill="#d4af37"/>
+  </svg>
+  <div class="reg-card">
+    <div class="reg-title">ПРОБУЖДЕНИЕ РАЗУМА</div>
+    <div class="reg-sub">Создай ментальный профиль и получи начальную энергию</div>
+    <div class="reg-bonus-banner">
+      <div class="bb-top">Стартовый дар</div>
+      <div class="bb-amount">300 EXIST</div>
     </div>
-
-
-    <div id="auth-screen">
-        <div class="brand-header">AEON</div>
-        <div class="brand-subheader">Universe of Ages</div>
-        
-        <div class="auth-card">
-            <div class="warning-box">
-                <strong>Внимание (18+):</strong> Синхронизация сессии устанавливает доступ к игровому симулятору космических сингулярностей AEON Universe. Риск потери виртуальной энергии.
-            </div>
-
-            <div class="input-group">
-                <label for="pilot-name">Позывной Пилота (Телеграм)</label>
-                <input type="text" id="pilot-name" value="Pilot">
-            </div>
-
-            <div class="input-group">
-                <label for="pilot-dob">Дата рождения (ДД.ММ.ГГГГ)</label>
-                <input type="text" id="pilot-dob" placeholder="09.10.2003" maxlength="10">
-            </div>
-
-            <label class="checkbox-container">
-                <input type="checkbox" id="terms-checkbox">
-                <span>Я ознакомлен с предупреждением, правилами безопасности и подтверждаю возраст авторизации.</span>
-            </label>
-
-            <button class="btn-action" id="btn-start" style="background: linear-gradient(135deg, var(--accent-purple) 0%, #4b0082 100%);" disabled>Начать приключение</button>
-        </div>
+    <div class="reg-field">
+      <label>Имя странника</label>
+      <input type="text" id="reg-name" placeholder="Введи имя" maxlength="20">
     </div>
+    <div class="reg-field">
+      <label>Дата рождения</label>
+      <input type="date" id="reg-dob">
+    </div>
+    <div class="age-warning" id="age-warning">🔞 Доступно только для достигших осознанности (18+)</div>
+    <div class="reg-check">
+      <input type="checkbox" id="reg-agree">
+      <label for="reg-agree">Мне есть 18 лет. Я понимаю, что это симуляция бытия на виртуальную энергию.</label>
+    </div>
+    <button class="reg-btn" id="reg-submit" disabled>🚀 НАЧАТЬ ПУТЬ</button>
+  </div>
+</div>
 
+<!-- JACKPOT OVERLAY -->
+<div id="jackpot-overlay">
+  <div class="bonus-title">ВЕЛИКОЕ ОЗАРИНИЕ</div>
+  <div class="wh-amount" id="jp-amount">+0 EXIST</div>
+  <div class="gates-lore">«Счастье твоей жизни зависит от качества твоих мыслей»</div>
+  <button class="jp-close" onclick="closeJackpot()">ОСОЗНАТЬ</button>
+</div>
 
-    <div id="screen-space" class="app-screen">
-        <div id="nebula-selection-map" class="nebula-grid">
-            <div class="nebula-card" style="--nebula-color: var(--accent-blue);" onclick="openGameModule('game-slots')">
-                <div class="nebula-icon">⭐</div>
-                <div class="nebula-info">
-                    <div class="nebula-name">Туманность Реактора (Slots)</div>
-                    <div class="nebula-desc">Левитирующие фракталы сингулярности. Выигрыш до х100.</div>
+<!-- BONUS GAME OVERLAY -->
+<div id="bonus-overlay">
+  <div class="bonus-title">Хранилище Мудрости</div>
+  <div class="gates-lore">Выбери артефакт прошлого интуитивно</div>
+  <div class="bonus-grid" id="bonus-grid"></div>
+  <div class="bonus-relic-info" id="bonus-info"></div>
+  <button class="bonus-close" id="bonus-close-btn" style="display:none" onclick="closeBonus()">ПРОДОЛЖИТЬ</button>
+</div>
+
+<div id="app">
+  <div id="topbar">
+    <div>
+      <div class="tb-logo">БЫТИЕ</div>
+      <div class="tb-station" id="tb-station">РАЗУМ ИСТОКА</div>
+    </div>
+    <div class="tb-balance" onclick="showPage('wallet')">
+      <span class="val" id="tb-balance">300</span>
+    </div>
+    <div class="tb-avatar" id="tb-avatar" onclick="showPage('profile')">?</div>
+  </div>
+
+  <div id="pages">
+    <!-- GAMES PAGE -->
+    <div class="page active" id="page-slot">
+      <div class="game-tabs">
+        <div class="game-tab active" id="gtab-slot" onclick="switchGame('slot')">🎰 СЛОТЫ</div>
+        <div class="game-tab" id="gtab-dice" onclick="switchGame('dice')">🎲 КОСТИ</div>
+        <div class="game-tab" id="gtab-gates" onclick="switchGame('gates')">🚪 ВРАТА</div>
+      </div>
+
+      <!-- SLOT GAME -->
+      <div id="game-slot" class="shown">
+        <div class="machine-wrap">
+          <div class="machine-top">
+            <div class="mq-title">СЛОТЫ СУДЬБЫ</div>
+            <div class="mq-sub">СИМУЛЯЦИЯ СЛУЧАЙНОСТИ</div>
+          </div>
+          <div class="machine-screen-section">
+            <div class="crt-bezel">
+              <div class="crt-screen" id="slot-screen">
+                <div class="win-line-bar" id="win-line"></div>
+                <div class="info-row">
+                  <div class="info-box"><div class="info-lbl">Дух</div><div class="info-val" id="s-bal">300</div></div>
+                  <div class="info-box"><div class="info-lbl">Озарение</div><div class="info-val g" id="s-win">0</div></div>
                 </div>
-            </div>
-
-            <div class="nebula-card" style="--nebula-color: var(--accent-green);" onclick="openGameModule('game-leap')">
-                <div class="nebula-icon">🚀</div>
-                <div class="nebula-info">
-                    <div class="nebula-name">Квантовый Скачок (Leap)</div>
-                    <div class="nebula-desc">Запуск импульса в неизведанные квадранты галактики.</div>
+                <div class="reels-area">
+                  <div class="reel-window"><div class="reel-strip" id="rs0"></div></div>
+                  <div class="reel-window"><div class="reel-strip" id="rs1"></div></div>
+                  <div class="reel-window"><div class="reel-strip" id="rs2"></div></div>
                 </div>
-            </div>
-
-            <div class="nebula-card" style="--nebula-color: var(--accent-purple);" onclick="openGameModule('game-dice')">
-                <div class="nebula-icon">🎲</div>
-                <div class="nebula-info">
-                    <div class="nebula-name">Доска Судьбы (Dice)</div>
-                    <div class="nebula-desc">Прогнозирование квантовых чисел фрактальной матрицы.</div>
+                <div class="paytable">
+                  <div class="pay-row">👁×3=<b>БОНУС</b></div>
+                  <div class="pay-row">🪐×3=<b>×50</b></div>
+                  <div class="pay-row">📜×3=<b>×30</b></div>
+                  <div class="pay-row">⏳×3=<b>×15</b></div>
+                  <div class="pay-row">⭐×3=<b>×8</b></div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="machine-controls">
+            <div class="controls-row">
+              <button class="btn-3d" id="bet-dn">−</button>
+              <div class="bet-center">
+                <div class="bet-lbl">Аскеза (Ставка)</div>
+                <div class="bet-val"><span id="bet-val">5</span></div>
+              </div>
+              <button class="btn-3d" id="bet-up">+</button>
+              <button class="btn-3d btn-max-3d" id="bet-max">MAX</button>
+            </div>
+            <button class="spin-btn-3d" id="spin-btn">ИСПЫТАТЬ РОК</button>
+            <div class="result-msg" id="result-msg">Вглядись в пустоту бытия</div>
+          </div>
         </div>
+      </div>
 
-        <div id="game-slots" class="game-overlay-module">
-            <button class="btn-back-to-space" onclick="backToNebulaMap()">« Вернуться в открытый космос</button>
-            <div class="slots-grid">
-                <div class="slot-cell" id="slot1">⭐</div>
-                <div class="slot-cell" id="slot2">🚀</div>
-                <div class="slot-cell" id="slot3">🛸</div>
+      <!-- DICE GAME -->
+      <div id="game-dice">
+        <div class="machine-wrap">
+          <div class="machine-top">
+            <div class="mq-title">КУБЫ ХРИЗИППА</div>
+            <div class="mq-sub">МАТЕМАТИКА ХАОСА</div>
+          </div>
+          <div class="machine-screen-section">
+            <div class="crt-bezel">
+              <div class="crt-screen">
+                <div class="dice-result-area">
+                  <div class="die" id="die0">⚀</div>
+                  <div class="dice-vs">+</div>
+                  <div class="die" id="die1">⚀</div>
+                </div>
+                <div class="dice-target-row" id="dice-targets"></div>
+                <div class="info-row" style="margin-top:10px;">
+                  <div class="info-box"><div class="info-lbl">Цель</div><div class="info-val" id="d-target">7</div></div>
+                  <div class="info-box"><div class="info-lbl">Выпало</div><div class="info-val" id="d-result">—</div></div>
+                </div>
+              </div>
             </div>
-            <div class="bet-controller">
-                <button class="btn-circle" onclick="adjustSlotsBet(-5)">-</button>
-                <div class="bet-display">Заряд: <span id="slots-bet">10</span> AEON</div>
-                <button class="btn-circle" onclick="adjustSlotsBet(5)">+</button>
+          </div>
+          <div class="machine-controls">
+            <div class="controls-row">
+              <button class="btn-3d" id="dbet-dn">−</button>
+              <div class="bet-center">
+                <div class="bet-lbl">Ставка</div>
+                <div class="bet-val"><span id="dbet-val">5</span></div>
+              </div>
+              <button class="btn-3d" id="dbet-up">+</button>
             </div>
-            <button class="btn-action" id="btn-spin-slots" style="background: linear-gradient(135deg, var(--accent-blue) 0%, #004b87 100%);">Запустить реактор</button>
+            <button class="spin-btn-3d" id="dice-btn">БРОСИТЬ КУБЫ</button>
+            <div class="result-msg" id="dice-msg">Выбери сумму чисел выше</div>
+          </div>
         </div>
+      </div>
 
-        <div id="game-leap" class="game-overlay-module">
-            <button class="btn-back-to-space" onclick="backToNebulaMap()">« Вернуться в открытый космос</button>
-            <div class="radar-circle">
-                <div class="radar-sector sector-top selected" data-sector="alpha">ALPHA (x1.2)</div>
-                <div class="radar-sector sector-right" data-sector="beta">BETA (x1.5)</div>
-                <div class="radar-sector sector-bottom" data-sector="gamma">GAMMA (x3.5)</div>
-                <div class="radar-sector sector-left" data-sector="delta">DELTA (x2.0)</div>
-                <div class="radar-sector sector-center">🛸</div>
+      <!-- GATES GAME -->
+      <div id="game-gates">
+        <div class="machine-wrap">
+          <div class="machine-top">
+            <div class="mq-title">ВРАТА ПОЗНАНИЯ</div>
+            <div class="mq-sub">ВЫБОР И СЛЕДСТВИЕ</div>
+          </div>
+          <div class="machine-screen-section">
+            <div class="gates-lore">За одними из врат сокрыта истина. Остальные — лишь иллюзия. Доверься разуму.</div>
+            <div class="gates-area" id="gates-area"></div>
+          </div>
+          <div class="machine-controls">
+            <div class="controls-row">
+              <button class="btn-3d" id="gbet-dn">−</button>
+              <div class="bet-center">
+                <div class="bet-lbl">Ставка</div>
+                <div class="bet-val"><span id="gbet-val">5</span></div>
+              </div>
+              <button class="btn-3d" id="gbet-up">+</button>
             </div>
-            <div class="bet-controller">
-                <button class="btn-circle" onclick="adjustLeapBet(-5)">-</button>
-                <div class="bet-display">Импульс: <span id="leap-bet">25</span> AEON</div>
-                <button class="btn-circle" onclick="adjustLeapBet(5)">+</button>
-            </div>
-            <button class="btn-action" id="btn-activate-jump" style="background: linear-gradient(135deg, var(--accent-green) 0%, #006644 100%);">Гиперпрыжок</button>
+            <button class="spin-btn-3d" id="gates-new-btn">ОТКРЫТЬ ВРАТА</button>
+            <div class="result-msg" id="gates-msg">Сделай свой выбор</div>
+          </div>
         </div>
-
-        <div id="game-dice" class="game-overlay-module">
-            <button class="btn-back-to-space" onclick="backToNebulaMap()">« Вернуться в открытый космос</button>
-            <div class="dice-grid">
-                <div class="dice-cell selected" data-num="1">1</div>
-                <div class="dice-cell" data-num="2">2</div>
-                <div class="dice-cell" data-num="3">3</div>
-                <div class="dice-cell" data-num="4">4</div>
-                <div class="dice-cell" data-num="5">5</div>
-                <div class="dice-cell" data-num="6">6</div>
-            </div>
-            <div class="bet-controller"><div class="bet-display">Фиксированная ставка: <span>15</span> AEON</div></div>
-            <button class="btn-action" id="btn-roll-dice" style="background: linear-gradient(135deg, #e0a900 0%, #806000 100%);">Бросить кубик</button>
-        </div>
+      </div>
     </div>
 
-
-    <div id="screen-shop" class="app-screen">
-        <div class="shop-container">
-            <div class="dashboard-header">🛸 Космический Военторг</div>
-            <div class="shop-grid">
-                <div class="shop-item">
-                    <div class="item-art">💠</div>
-                    <div class="item-name">Синий Иллюминатор</div>
-                    <div class="item-cost">150 AEON</div>
-                    <button class="btn-buy" onclick="alert('Недостаточно деталей для кастомизации!')">Купить</button>
-                </div>
-                <div class="shop-item">
-                    <div class="item-art">🔋</div>
-                    <div class="item-name">Энергопакет Х2</div>
-                    <div class="item-cost">400 AEON</div>
-                    <button class="btn-buy" onclick="alert('В разработке инженерами станции')">Купить</button>
-                </div>
-            </div>
+    <!-- PROFILE PAGE -->
+    <div class="page" id="page-profile">
+      <div style="padding:12px;">
+        <div class="prof-header">
+          <div class="prof-av" id="prof-avatar">?</div>
+          <div>
+            <div class="prof-name" id="prof-name">Странник</div>
+            <div class="prof-uid" id="prof-uid">#000000</div>
+            <div class="prof-lv" id="prof-level">Уровень Познания</div>
+          </div>
         </div>
-    </div>
-
-
-    <div id="screen-cabin" class="app-screen">
-        <div class="ship-dashboard">
-            <div class="dashboard-header">🎛️ Главный Терминал Корабля</div>
-            
-            <div class="profile-grid">
-                <div class="profile-stat"><div class="stat-lbl">Статус пилота</div><div class="stat-val" style="color: var(--accent-green);">ONLINE</div></div>
-                <div class="profile-stat"><div class="stat-lbl">Квадрант сессии</div><div class="stat-val">TMA-ALPHA</div></div>
-            </div>
-
-            <div style="font-size: 11px; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; text-align: left;">🏆 Бортовые Достижения</div>
-            <div class="achievements-list">
-                <div class="ach-item"><span class="ach-title">Первая Синхронизация</span><span class="ach-bonus">Получено ✔</span></div>
-                <div class="ach-item"><span class="ach-title">Покоритель Реактора (10 спинов)</span><span class="ach-bonus" style="color: var(--gold);">+50 AEON</span></div>
-            </div>
-
-            <div style="font-size: 11px; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; text-align: left;">📊 Галактический Рейтинг Пилотов</div>
-            <table class="leader-table">
-                <thead><tr><th>#</th><th>Пилот</th><th>Баланс</th></tr></thead>
-                <tbody id="leaderboard-rows">
-                    <tr><td>1</td><td>AeonKing</td><td style="color: var(--gold);">2,400 ⬡</td></tr>
-                    <tr><td>2</td><td>StarPilot</td><td>1,250 ⬡</td></tr>
-                    <tr><td>3</td><td>MoonAce</td><td>950 ⬡</td></tr>
-                </tbody>
-            </table>
+        <div class="wager-progress">
+          <div class="slbl">ОПЫТ ДУХА</div>
+          <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
         </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="slbl">Медитаций (Спинов)</div><div class="sval" id="st-spins">0</div></div>
+          <div class="stat-card"><div class="slbl">Прозрений (Макс)</div><div class="sval" id="st-maxwin">0</div></div>
+        </div>
+        <div class="ref-card">
+          <div class="slbl">СВЯЗЬ РАЗУМОВ (РЕФЕРАЛЫ)</div>
+          <div class="prof-uid" id="ref-link" style="margin:6px 0; word-break:break-all;">t.me/ExistBot?start=REF</div>
+          <button class="w-btn" onclick="copyRef()" style="width:100%; margin-top:6px;">Скопировать ментальный код</button>
+        </div>
+      </div>
     </div>
 
-
-    <div id="bottom-navbar" class="bottom-tabs" style="display: none;">
-        <button id="tab-btn-space" class="tab-btn active" onclick="switchMainLocation('space')">Космос</button>
-        <button id="tab-btn-shop" class="tab-btn" onclick="switchMainLocation('shop')">Магазин</button>
-        <button id="tab-btn-cabin" class="tab-btn" onclick="switchMainLocation('cabin')">Каюта</button>
+    <!-- WALLET PAGE -->
+    <div class="page" id="page-wallet">
+      <div style="padding:12px;">
+        <div class="wallet-hero">
+          <div class="slbl">МЕНТАЛЬНАЯ ЭНЕРГИЯ</div>
+          <div class="wh-amount"><span id="w-coins">300</span> EXIST</div>
+          <div class="prof-uid">Эквивалент внутренней гармонии</div>
+        </div>
+        <div class="wallet-actions">
+          <button class="w-btn dep" onclick="alert('Доступно в следующей эпохе бэкенда')">ПОПОЛНИТЬ</button>
+          <button class="w-btn" onclick="alert('Энергия заблокирована в симуляции')">ВЫВЕСТИ</button>
+        </div>
+        <div class="ref-card" style="font-family:'Cinzel', serif; font-size:11px; line-height:1.6;">
+          <b>Концепция «Бытия»:</b><br>
+          Вся здешняя валюта — это отображение времени и фокуса. Наш стоический путь учит принимать случайность как закон вселенной (Amor Fati). Играй умом, а не азартом.
+        </div>
+      </div>
     </div>
+  </div>
 
+  <div id="nav">
+    <button class="nav-btn active" onclick="showPage('slot')" id="nav-slot"><span class="ni">🪐</span><span class="nl">Путь</span></button>
+    <button class="nav-btn" onclick="showPage('profile')" id="nav-profile"><span class="ni">👤</span><span class="nl">Разум</span></button>
+    <button class="nav-btn" onclick="showPage('wallet')" id="nav-wallet"><span class="ni">📜</span><span class="nl">Баланс</span></button>
+  </div>
+</div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        if (tg) { tg.ready(); tg.expand(); }
+<div class="modal-ov" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div id="modal-body" style="font-size:12px; color:#8a8a9e;"></div>
+    <button class="modal-close" onclick="closeModal()">✕ Закрыть</button>
+  </div>
+</div>
 
-        let localState = { name: 'Pilot', balance: 300 };
+<script>
+/* TG INIT */
+var tg=(window.Telegram&&window.Telegram.WebApp)?window.Telegram.WebApp:null;
+if(tg){
+  tg.ready(); tg.expand();
+  if(tg.setHeaderColor) tg.setHeaderColor('#0a0a0f');
+}
 
-        // ЭЛЕМЕНТЫ УПРАВЛЕНИЯ ПРЕДУПРЕЖДЕНИЕМ
-        const termsCheckbox = document.getElementById('terms-checkbox');
-        const btnStart = document.getElementById('btn-start');
-        const dobInput = document.getElementById('pilot-dob');
+/* STATE MANAGEMENT */
+function ls(k){try{var s=localStorage.getItem(k);return s?JSON.parse(s):null;}catch(e){return null;}}
+function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var tgUser=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+var DEF={balance:300,totalWin:0,spins:0,jackpots:0,maxWin:0,xp:0,registered:false,playerName:'',dob:''};
+var STATE=Object.assign({},DEF,ls('existence_v1')||{});
+function save(){ss('existence_v1',STATE);}
 
-        // Валидация галочки: пока не нажал — кнопка заблокирована
-        termsCheckbox.addEventListener('change', () => {
-            btnStart.disabled = !termsCheckbox.checked;
-        });
+/* STATIONS OF MIND */
+var STATIONS=[
+  {name:'Разум Истока', xpReq:0},
+  {name:'Сфера Осознанности', xpReq:500},
+  {name:'Абсолютное Бытие', xpReq:2000}
+];
+function getStation(){
+  var s=STATIONS[0];
+  STATIONS.forEach(function(x){if(STATE.xp>=x.xpReq)s=x;});
+  return s;
+}
 
-        // СТРОГОЕ ОГРАНИЧЕНИЕ И МАСКА НА ВВОД ДАТЫ РОЖДЕНИЯ (Никаких лишних цифр и букв)
-        dobInput.addEventListener('input', (e) => {
-            let matrix = e.target.value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
-            if (matrix.length > 8) matrix = matrix.substring(0, 8); // Лимит на 8 цифр
-            
-            if (matrix.length > 4) {
-                e.target.value = `${matrix.substring(0,2)}.${matrix.substring(2,4)}.${matrix.substring(4,8)}`;
-            } else if (matrix.length > 2) {
-                e.target.value = `${matrix.substring(0,2)}.${matrix.substring(2,4)}`;
-            } else {
-                e.target.value = matrix;
-            }
-        });
+/* REGISTRATION CODE */
+var regScreen=document.getElementById('reg-screen');
+if(STATE.registered){regScreen.classList.add('hidden');}
+else{
+  if(tgUser&&tgUser.first_name)document.getElementById('reg-name').value=tgUser.first_name;
+}
+function checkRegForm(){
+  var name=document.getElementById('reg-name').value.trim();
+  var dob=document.getElementById('reg-dob').value;
+  var agree=document.getElementById('reg-agree').checked;
+  document.getElementById('reg-submit').disabled=!(name&&dob&&agree);
+}
+document.getElementById('reg-name').oninput=checkRegForm;
+document.getElementById('reg-dob').onchange=checkRegForm;
+document.getElementById('reg-agree').onchange=checkRegForm;
+document.getElementById('reg-submit').onclick=function(){
+  STATE.registered=true;
+  STATE.playerName=document.getElementById('reg-name').value.trim();
+  STATE.dob=document.getElementById('reg-dob').value;
+  STATE.balance=300; save();
+  regScreen.classList.add('hidden');
+  updateUI();
+};
 
-        // --- ЛОГИКА ПЕРВОГО И ПОВТОРНОГО ВХОДА ---
-        window.addEventListener('DOMContentLoaded', () => {
-            // Пытаемся подтянуть имя из ТГ сразу
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                localState.name = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || "Pilot";
-                document.getElementById('pilot-name').value = localState.name;
-            }
+/* BACKGROUND STARS MOCKUP EFFECT */
+(function(){
+  var c=document.getElementById('stars-canvas'),ctx=c.getContext('2d'),stars=[];
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;stars=[];for(var i=0;i<40;i++)stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1+0.5,a:Math.random()});}
+  function draw(){ctx.clearRect(0,0,c.width,c.height);stars.forEach(function(s){ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(212,175,55,'+s.a+')';ctx.fill();});}
+  resize(); window.addEventListener('resize',resize); draw();
+})();
 
-            // Проверяем локальную память: заходил ли пилот раньше?
-            const alreadyVisited = localStorage.getItem(`aeon_visited_${localState.name}`);
-            if (alreadyVisited) {
-                // Если заходил — мгновенно пропускаем предупреждение, берём старый баланс
-                let savedData = localStorage.getItem(`aeon_user_${localState.name}`);
-                if (savedData) localState = JSON.parse(savedData);
-                
-                launchUniverse();
-            }
-        });
+/* UI UPDATER */
+function updateUI(){
+  document.getElementById('s-bal').textContent=STATE.balance;
+  document.getElementById('tb-balance').textContent=STATE.balance;
+  document.getElementById('w-coins').textContent=STATE.balance;
+  var st=getStation();
+  document.getElementById('tb-station').textContent=st.name.toUpperCase();
+  document.getElementById('prof-name').textContent=STATE.playerName||"Странник";
+  document.getElementById('prof-level').textContent=st.name;
+  var xpPercent=Math.min(100,(STATE.xp/2000)*100);
+  document.getElementById('xp-fill').style.width=xpPercent+'%';
+}
 
-        // Нажатие кнопки входа в первый раз
-        btnStart.addEventListener('click', () => {
-            const nameInput = document.getElementById('pilot-name').value.trim();
-            if(!nameInput) return alert('Укажите позывной пилота!');
-            if(dobInput.value.length < 10) return alert('Введите дату рождения полностью (ДД.ММ.ГГГГ)!');
+/* NAVIGATION SYSTEM */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  updateUI();
+  if(id==='profile'){
+    document.getElementById('st-spins').textContent=STATE.spins;
+    document.getElementById('st-maxwin').textContent=STATE.maxWin;
+    document.getElementById('prof-uid').textContent="#"+Math.floor(STATE.xp+1023);
+  }
+}
+function switchGame(g){
+  ['slot','dice','gates'].forEach(function(x){
+    document.getElementById('game-'+x).classList.toggle('shown',x===g);
+    document.getElementById('gtab-'+x).classList.toggle('active',x===g);
+  });
+}
 
-            localState.name = nameInput;
-            // Сохраняем метку посещения, чтобы окно предупреждения больше никогда не вылезало
-            localStorage.setItem(`aeon_visited_${nameInput}`, 'true');
-            localStorage.setItem(`aeon_user_${nameInput}`, JSON.stringify(localState));
+/* SLOT LOGIC SYSTEM */
+var SYMS=['👁','🪐','📜','⏳','⭐'];
+var BETS=[5,10,25,50,100],betIdx=0,bet=5,spinning=false;
 
-            launchUniverse();
-        });
+function initReels(){
+  for(var i=0;i<3;i++){
+    var s=document.getElementById('rs'+i); s.innerHTML='';
+    for(var j=0;j<3;j++){
+      var c=document.createElement('div'); c.className='reel-cell';
+      c.textContent=SYMS[Math.floor(Math.random()*SYMS.length)];
+      s.appendChild(c);
+    }
+  }
+}
+initReels();
 
-        function launchUniverse() {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('top-navbar').style.display = 'flex';
-            document.getElementById('bottom-navbar').style.display = 'flex';
-            document.getElementById('display-pilot-name').innerText = localState.name.toUpperCase();
-            document.getElementById('balance-value').innerText = localState.balance;
-            
-            switchMainLocation('space'); // Открываем стартовый космос
-        }
+function setMsg(t,c){var e=document.getElementById('result-msg'); e.textContent=t; e.className='result-msg '+(c||'');}
 
-        // --- ЛОГИКА НАВИГАЦИИ (ЛОКАЦИИ И КОРАБЛЬ) ---
-        function switchMainLocation(loc) {
-            // Сбрасываем активность экранов и кнопок
-            document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
-            // Если переходим в каюту, "наша вселенная пропадает и мы внутри корабля"
-            if (loc === 'cabin') {
-                document.body.classList.add('inside-ship');
-                document.getElementById('screen-cabin').classList.add('active');
-                document.getElementById('tab-btn-cabin').classList.add('active');
-            } else if (loc === 'shop') {
-                document.body.classList.remove('inside-ship');
-                document.getElementById('screen-shop').classList.add('active');
-                document.getElementById('tab-btn-shop').classList.add('active');
-            } else {
-                // Вкладка "Космос"
-                document.body.classList.remove('inside-ship');
-                document.getElementById('screen-space').classList.add('active');
-                document.getElementById('tab-btn-space').classList.add('active');
-                backToNebulaMap(); // Возвращаем карту туманностей
-            }
-        }
+async function doSpin(){
+  if(spinning)return;
+  if(STATE.balance<bet){setMsg('Недостаточно ментальной энергии','');return;}
+  spinning=true; document.getElementById('spin-btn').disabled=true;
+  setMsg('Колеса судьбы вращаются...','');
+  STATE.balance-=bet; STATE.spins++; STATE.xp+=10; save(); updateUI();
 
-        // --- ВНУТРЕННЯЯ ЛОГИКА ТУМАННОСТЕЙ (ИГРЫ) ---
-        function openGameModule(modId) {
-            document.getElementById('nebula-selection-map').style.display = 'none';
-            document.querySelectorAll('.game-overlay-module').forEach(g => g.classList.remove('active'));
-            document.getElementById(modId).classList.add('active');
-        }
+  setTimeout(function(){
+    var finalRes=[
+      SYMS[Math.floor(Math.random()*SYMS.length)],
+      SYMS[Math.floor(Math.random()*SYMS.length)],
+      SYMS[Math.floor(Math.random()*SYMS.length)]
+    ];
+    
+    for(var i=0;i<3;i++){
+      var strip=document.getElementById('rs'+i);
+      strip.children[1].textContent=finalRes[i];
+    }
 
-        function backToNebulaMap() {
-            document.querySelectorAll('.game-overlay-module').forEach(g => g.classList.remove('active'));
-            document.getElementById('nebula-selection-map').style.display = 'grid';
-        }
+    if(finalRes[0]===finalRes[1] && finalRes[1]===finalRes[2]){
+      var winSym=finalRes[0];
+      if(winSym==='👁'){
+        openBonusGame(bet);
+      } else {
+        var mult=winSym==='🪐'?50:(winSym==='📜'?30:15);
+        var winAmt=bet*mult;
+        STATE.balance+=winAmt; STATE.xp+=winAmt;
+        if(winAmt>STATE.maxWin)STATE.maxWin=winAmt;
+        setMsg('Великое совпадение! +'+winAmt,'win');
+      }
+    } else {
+      setMsg('Хаос поглотил энергию. Иди дальше.','');
+    }
+    
+    if(STATE.balance<=0){STATE.balance=50; setMsg('Энергия истощена. Источник дал вам +50 единиц.','win');}
+    spinning=false; document.getElementById('spin-btn').disabled=false;
+    save(); updateUI();
+  },1000);
+}
+document.getElementById('spin-btn').addEventListener('click',doSpin);
 
-        function updateUIBalance() {
-            document.getElementById('balance-value').innerText = localState.balance;
-            localStorage.setItem(`aeon_user_${localState.name}`, JSON.stringify(localState));
-        }
+/* RECOVERED BONUS GAME FIX (WHAT CLAUDE ACCIDENTALLY CUT) */
+var RELICS=[
+  {icon:'📜', name:'Записки Марка Аврелия', mult:10, lore:'«Разрушай иллюзии. Перестань быть марионеткой своих импульсов».'},
+  {icon:'⏳', name:'Часы Стоика', mult:20, lore:'Каждая секунда возвращает тебя к осознанию момента Memento Mori.'},
+  {icon:'👁', name:'Глаз Бытия', mult:50, lore:'Ты заглянул за грань симуляции и обрел абсолютный покой.'}
+];
 
-        // --- МЕХАНИКА ИГРЫ: СЛОТЫ ---
-        let slotsBet = 10;
-        function adjustSlotsBet(val) { slotsBet = Math.max(5, slotsBet + val); document.getElementById('slots-bet').innerText = slotsBet; }
-        document.getElementById('btn-spin-slots').addEventListener('click', () => {
-            if(localState.balance < slotsBet) return alert('Недостаточно энергии!');
-            const icons = ['⭐', '🚀', '🛸', '🪐', '💎'];
-            let spinTime = setInterval(() => {
-                document.getElementById('slot1').innerText = icons[Math.floor(Math.random()*icons.length)];
-                document.getElementById('slot2').innerText = icons[Math.floor(Math.random()*icons.length)];
-                document.getElementById('slot3').innerText = icons[Math.floor(Math.random()*icons.length)];
-            }, 50);
+function openBonusGame(b){
+  document.getElementById('bonus-overlay').classList.add('show');
+  var grid=document.getElementById('bonus-grid'); grid.innerHTML='';
+  document.getElementById('bonus-info').innerHTML='Кликни на одну из сфер, чтобы высвободить скрытую мудрость.';
+  document.getElementById('bonus-close-btn').style.display='none';
 
-            setTimeout(() => {
-                clearInterval(spinTime);
-                let results = [icons[Math.floor(Math.random()*icons.length)], icons[Math.floor(Math.random()*icons.length)], icons[Math.floor(Math.random()*icons.length)]];
-                document.getElementById('slot1').innerText = results[0];
-                document.getElementById('slot2').innerText = results[1];
-                document.getElementById('slot3').innerText = results[2];
+  for(var i=0;i<5;i++){
+    var cell=document.createElement('div'); cell.className='relic-btn';
+    cell.innerHTML='<span class="ri">?</span>';
+    cell.onclick=function(){
+      var item=RELICS[Math.floor(Math.random()*RELICS.length)];
+      var win=b*item.mult;
+      STATE.balance+=win; save(); updateUI();
+      this.innerHTML='<span class="ri">'+item.icon+'</span>';
+      document.getElementById('bonus-info').innerHTML='<div class="bri-name">'+item.name+'</div><div class="bri-mult">×'+item.mult+' (+'+win+' EXIST)</div><div>'+item.lore+'</div>';
+      document.getElementById('bonus-close-btn').style.display='block';
+    };
+    grid.appendChild(cell);
+  }
+}
+function closeBonus(){document.getElementById('bonus-overlay').classList.remove('show');}
+function closeJackpot(){document.getElementById('jackpot-overlay').classList.remove('show');}
 
-                let win = 0;
-                if(results[0] === results[1] && results[1] === results[2]) win = slotsBet * 20;
-                else if(results[0] === results[1] || results[1] === results[2]) win = Math.floor(slotsBet * 1.5);
+/* DICE GAME CODE IMPLEMENTATION */
+var diceTargets=document.getElementById('dice-targets');
+var chosenDiceTarget=7;
+for(var d=2; d<=12; d++){
+  var db=document.createElement('div'); db.className='dtb'+(d===7?' sel':''); db.textContent=d;
+  db.onclick=function(){
+    document.querySelectorAll('.dtb').forEach(function(x){x.classList.remove('sel');});
+    this.classList.add('sel');
+    chosenDiceTarget=parseInt(this.textContent);
+    document.getElementById('d-target').textContent=chosenDiceTarget;
+  };
+  diceTargets.appendChild(db);
+}
 
-                localState.balance = localState.balance - slotsBet + win;
-                updateUIBalance();
-            }, 800);
-        });
+document.getElementById('dice-btn').onclick=function(){
+  var d0=document.getElementById('die0'); var d1=document.getElementById('die1');
+  d0.classList.add('rolling'); d1.classList.add('rolling');
+  setTimeout(function(){
+    d0.classList.remove('rolling'); d1.classList.remove('rolling');
+    var v0=Math.floor(Math.random()*6)+1; var v1=Math.floor(Math.random()*6)+1;
+    var faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+    d0.textContent=faces[v0-1]; d1.textContent=faces[v1-1];
+    var sum=v0+v1;
+    document.getElementById('d-result').textContent=sum;
+    if(sum===chosenDiceTarget){
+      var reward=bet*5; STATE.balance+=reward;
+      document.getElementById('dice-msg').textContent="Ментальный расчет верен! +"+reward;
+    }else{
+      document.getElementById('dice-msg').textContent="Сумма чисел равна "+sum+". Попробуй еще раз.";
+    }
+    updateUI(); save();
+  },800);
+};
 
-        // --- МЕХАНИКА ИГРЫ: СКАЧОК ---
-        let leapBet = 25; let selectedSector = 'alpha';
-        function adjustLeapBet(val) { leapBet = Math.max(5, leapBet + val); document.getElementById('leap-bet').innerText = leapBet; }
-        document.querySelectorAll('.radar-sector').forEach(s => {
-            s.addEventListener('click', (e) => {
-                document.querySelectorAll('.radar-sector').forEach(sec => sec.classList.remove('selected'));
-                e.target.classList.add('selected');
-                selectedSector = e.target.getAttribute('data-sector');
-            });
-        });
-        document.getElementById('btn-activate-jump').addEventListener('click', () => {
-            if(localState.balance < leapBet) return alert('Ядро пусто!');
-            let success = Math.random() < 0.4;
-            let win = success ? Math.floor(leapBet * 2) : 0;
-            localState.balance = localState.balance - leapBet + win;
-            updateUIBalance();
-            alert(success ? 'Успешный выход из гиперпространства!' : 'Траектория потеряна.');
-        });
+/* GATES GAME CODE IMPLEMENTATION */
+var gatesArea=document.getElementById('gates-area');
+function initGates(){
+  gatesArea.innerHTML='';
+  var luckyGate=Math.floor(Math.random()*3);
+  for(var g=0; g<3; g++){
+    var gb=document.createElement('div'); gb.className='gate-btn';
+    gb.innerHTML='<span class="gate-arch">🚪</span><span class="gate-num">ВРАТА '+(g+1)+'</span>';
+    gb.dataset.idx=g;
+    gb.onclick=function(){
+      if(this.classList.contains('win')||this.classList.contains('lose'))return;
+      if(parseInt(this.dataset.idx)===luckyGate){
+        this.classList.add('win'); var rew=bet*3; STATE.balance+=rew;
+        document.getElementById('gates-msg').textContent="Вы нашли истину за этими вратами! +"+rew;
+      } else {
+        this.classList.add('lose');
+        document.getElementById('gates-msg').textContent="Эти врата вели в пустоту иллюзий.";
+      }
+      updateUI(); save();
+    };
+    gatesArea.appendChild(gb);
+  }
+}
+initGates();
+document.getElementById('gates-new-btn').onclick=function(){ initGates(); document.getElementById('gates-msg').textContent="Новые пути сформированы.";};
 
-        // --- МЕХАНИКА ИГРЫ: КУБИКИ ---
-        let chosenDiceNum = 1;
-        document.querySelectorAll('.dice-cell').forEach(cell => {
-            cell.addEventListener('click', (e) => {
-                document.querySelectorAll('.dice-cell').forEach(c => c.classList.remove('selected'));
-                e.target.classList.add('selected');
-                chosenDiceNum = parseInt(e.target.getAttribute('data-num'));
-            });
-        });
-        document.getElementById('btn-roll-dice').addEventListener('click', () => {
-            if(localState.balance < 15) return alert('Минимальный заряд 15 AEON!');
-            let rolled = Math.floor(Math.random() * 6) + 1;
-            let win = rolled === chosenDiceNum ? 15 * 5 : 0;
-            localState.balance = localState.balance - 15 + win;
-            updateUIBalance();
-            alert(`На кубах: ${rolled}. ${win > 0 ? 'Квантовое совпадение!' : 'Мимо.'}`);
-        });
-    </script>
+/* UTILS */
+function copyRef(){ alert('Код скопирован в астрал (буфер обмена)'); }
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  updateUI();
+}
+</script>
 </body>
 </html>
