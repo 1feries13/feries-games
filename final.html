@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<meta name="app-version" content="5.0.0">
+<meta name="app-version" content="10.0.0">
 <title>AEON Universe</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-<script>(function(){var V='5.0.0',k='aeon_ver',s=sessionStorage.getItem(k);if(s&&s!==V){sessionStorage.setItem(k,V);window.location.reload(true);return;}sessionStorage.setItem(k,V);})();</script>
+<script>(function(){var V='10.0.0',k='aeon_v10',s=sessionStorage.getItem(k);if(s&&s!==V){sessionStorage.setItem(k,V);window.location.reload(true);return;}sessionStorage.setItem(k,V);})();</script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -324,9 +324,1027 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
 .modal-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--aeon2);margin-bottom:12px;text-align:center;}
 .modal-close{width:100%;padding:10px;border-radius:9px;border:1px solid rgba(200,169,110,0.3);background:rgba(200,169,110,0.08);color:var(--aeon2);font-family:'Orbitron',monospace;font-size:9.5px;cursor:pointer;margin-top:11px;}
 ::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(100,70,200,0.28);border-radius:2px;}
+
+/* ═══════════════════════════════════════
+   КВАНТОВЫЙ ПРЫЖОК & СИНГУЛЯРНОСТЬ
+   GPU-friendly: only transform/opacity
+═══════════════════════════════════════ */
+
+/* Tunnel overlay — lightweight radial gradient */
+#quantum-tunnel {
+  position: fixed; inset: 0; z-index: 750;
+  pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse 30% 30% at 50% 50%,
+    rgba(255,255,255,0) 0%,
+    rgba(176,114,255,0) 60%,
+    rgba(176,114,255,0) 100%);
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+}
+#quantum-tunnel.active {
+  opacity: 1;
+  animation: qTunnel 1.2s ease-in forwards;
+}
+@keyframes qTunnel {
+  0%   { background: radial-gradient(ellipse 100% 100% at 50% 50%, rgba(176,114,255,0) 0%, rgba(7,7,26,0) 100%); opacity:0; }
+  20%  { opacity: 1; background: radial-gradient(ellipse 20% 20% at 50% 50%, rgba(255,255,255,0.08) 0%, rgba(176,114,255,0.15) 40%, rgba(7,7,26,0.4) 100%); }
+  60%  { background: radial-gradient(ellipse 8% 8% at 50% 50%, rgba(255,255,255,0.25) 0%, rgba(176,114,255,0.4) 30%, rgba(7,7,26,0.85) 100%); }
+  85%  { background: radial-gradient(ellipse 4% 4% at 50% 50%, rgba(255,255,255,0.9) 0%, rgba(176,114,255,0.7) 20%, rgba(7,7,26,0.95) 100%); opacity:1; }
+  100% { background: radial-gradient(ellipse 100% 100% at 50% 50%, rgba(255,215,0,0.05) 0%, rgba(7,7,26,0) 70%); opacity:0; }
+}
+
+/* Stars speed-up — CSS custom property driven */
+#stars-canvas { transition: filter 0.4s ease; }
+#stars-canvas.warp { filter: blur(1.5px) brightness(1.4); }
+
+/* Reel warp during spin */
+.reel-w.warping .reel-strip {
+  filter: blur(2px) brightness(1.3);
+  transition: filter 0.2s ease;
+}
+.reel-w.resolved .reel-strip {
+  filter: none;
+  transition: filter 0.4s ease-out;
+}
+
+/* Singularity flash on result */
+#singularity-flash {
+  position: fixed; inset: 0; z-index: 760;
+  pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%,
+    rgba(255,215,0,0.9) 0%,
+    rgba(176,114,255,0.6) 40%,
+    transparent 70%);
+  will-change: opacity;
+}
+#singularity-flash.burst {
+  animation: sBurst 0.55s ease-out forwards;
+}
+@keyframes sBurst {
+  0%   { opacity: 0; transform: scale(0.2); }
+  25%  { opacity: 1; transform: scale(1); }
+  60%  { opacity: 0.6; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
+/* Reel cell collapse into singularity */
+.reel-cell.collapse {
+  animation: cellCollapse 0.4s cubic-bezier(0.4,0,1,1) forwards;
+}
+@keyframes cellCollapse {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(0.3) translateY(10px); opacity: 0.5; filter: brightness(3); }
+  100% { transform: scale(1); opacity: 1; filter: none; }
+}
+
+/* Win cell glow after singularity */
+.reel-cell.win-glow {
+  animation: winGlow 0.6s ease-out 0.35s both;
+}
+@keyframes winGlow {
+  0%   { filter: drop-shadow(0 0 2px rgba(255,215,0,0)); }
+  50%  { filter: drop-shadow(0 0 16px rgba(255,215,0,1)) brightness(1.5); }
+  100% { filter: drop-shadow(0 0 6px rgba(255,215,0,0.5)); }
+}
+
+/* Marcus Aurelius quote block */
+#marcus-block {
+  width: min(340px, 96vw);
+  margin: 10px 0 0;
+  padding: 14px 16px;
+  background: rgba(10, 8, 24, 0.7);
+  border: 0.5px solid rgba(200,169,110,0.2);
+  border-left: 2px solid rgba(200,169,110,0.5);
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  backdrop-filter: blur(4px);
+}
+#marcus-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.marcus-quote {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: rgba(200,169,110,0.75);
+  line-height: 1.65;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.marcus-author {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px;
+  color: rgba(200,169,110,0.35);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Spin button warp state */
+.spin-btn.warping {
+  animation: btnWarp 0.8s ease-in-out infinite alternate;
+}
+@keyframes btnWarp {
+  0%  { box-shadow: 0 8px 25px rgba(130,30,255,0.45), inset 0 1px rgba(255,255,255,0.12); }
+  100%{ box-shadow: 0 8px 40px rgba(176,114,255,0.9), 0 0 60px rgba(176,114,255,0.4), inset 0 1px rgba(255,255,255,0.2); }
+}
+
+/* Intrigue tension bar */
+#tension-bar {
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 1px;
+  overflow: hidden;
+  margin: -4px 0 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#tension-bar.active { opacity: 1; }
+#tension-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple2), #ff9040, var(--gold));
+  border-radius: 1px;
+  transition: width 4.5s linear;
+}
+#tension-fill.go { width: 100%; }
+
+
+/* ══════════════════════════════════════════════
+   КОСМИЧЕСКИЙ МОСТИК — ГЛАВНОЕ МЕНЮ
+══════════════════════════════════════════════ */
+
+/* Экран выбора — полноэкранный */
+#cosmos-screen {
+  position: fixed; inset: 0; z-index: 850;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: #00000a;
+}
+#cosmos-screen.hidden { display: none; }
+
+/* Звёздный canvas позади */
+#cosmos-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+/* Мостик корабля — нижняя декорация */
+.bridge-floor {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 28vh; z-index: 2; pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(5,5,30,1) 0%,
+    rgba(5,5,30,0.85) 40%,
+    transparent 100%);
+}
+.bridge-floor::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(0,229,255,0.15) 20%,
+    rgba(0,229,255,0.4) 50%,
+    rgba(0,229,255,0.15) 80%, transparent 100%);
+}
+/* Центральная консоль мостика */
+.bridge-console {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: min(320px, 88vw); height: 22vh;
+  background: linear-gradient(to top, #03031a, #060630 80%, transparent);
+  border-top: 1px solid rgba(0,229,255,0.2);
+  border-left: 1px solid rgba(0,229,255,0.08);
+  border-right: 1px solid rgba(0,229,255,0.08);
+  border-radius: 12px 12px 0 0;
+  z-index: 3; pointer-events: none;
+}
+.bridge-console::before {
+  content: '';
+  position: absolute; top: 10px; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.3), transparent);
+}
+/* Огни мостика */
+.bridge-lights {
+  position: absolute; bottom: 18vh; left: 0; right: 0;
+  display: flex; justify-content: space-between;
+  padding: 0 8vw; z-index: 3; pointer-events: none;
+}
+.b-light {
+  width: 3px; height: 40px;
+  background: linear-gradient(to top, rgba(0,229,255,0.6), transparent);
+  border-radius: 2px;
+  animation: bLightBlink 3s ease-in-out infinite;
+}
+.b-light:nth-child(2) { animation-delay: 0.8s; opacity: 0.6; }
+.b-light:nth-child(3) { animation-delay: 1.6s; opacity: 0.4; }
+.b-light:nth-child(4) { animation-delay: 0.4s; opacity: 0.6; }
+.b-light:nth-child(5) { animation-delay: 1.2s; }
+@keyframes bLightBlink {
+  0%,100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
+
+/* Шлем/иллюминатор — верхние боковые декорации */
+.cosmos-top-ui {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: calc(var(--sat) + 10px) 16px 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  z-index: 4; pointer-events: none;
+}
+.cosmos-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 12px; font-weight: 900;
+  color: rgba(200,169,110,0.8);
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(200,169,110,0.4);
+}
+.cosmos-coords {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px; color: rgba(0,229,255,0.4);
+  letter-spacing: 1px; text-align: right; line-height: 1.8;
+}
+
+/* Центральный заголовок */
+.cosmos-center-label {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: calc(var(--sat) + 10px);
+  z-index: 4; pointer-events: none;
+  text-align: center;
+}
+.ccl-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px; font-weight: 700;
+  color: rgba(200,169,110,0.5);
+  letter-spacing: 4px; text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(200,169,110,0.2);
+}
+
+/* ── ТУМАННОСТИ / ЗВЁЗДНЫЕ СИСТЕМЫ ── */
+.nebula-zone {
+  position: absolute; inset: 0;
+  z-index: 2; pointer-events: all;
+}
+
+/* Невидимая линия — эффект глаза */
+#eye-line-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2; pointer-events: none;
+  opacity: 0.18;
+}
+
+/* Узел туманности */
+.nebula-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+  cursor: pointer; z-index: 5;
+  transition: transform 0.2s ease;
+}
+.nebula-node:active { transform: translate(-50%,-50%) scale(0.93); }
+
+/* Сама туманность — свечение + значок */
+.nebula-glow {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  animation: nebulaFloat 4s ease-in-out infinite;
+}
+.nebula-node:nth-child(2) .nebula-glow { animation-delay: 1.3s; }
+.nebula-node:nth-child(3) .nebula-glow { animation-delay: 2.6s; }
+
+@keyframes nebulaFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Большой круг свечения туманности */
+.nebula-aura {
+  position: absolute;
+  border-radius: 50%;
+  animation: auraPulse 3s ease-in-out infinite;
+  border: none !important;
+}
+@keyframes auraPulse {
+  0%,100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.12); opacity: 0.25; }
+}
+
+/* Значок игры */
+.nebula-icon {
+  font-size: 22px;
+  position: relative; z-index: 2;
+  filter: drop-shadow(0 0 12px var(--ncolor));
+  animation: iconGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes iconGlow {
+  0%   { filter: drop-shadow(0 0 8px var(--ncolor)); }
+  100% { filter: drop-shadow(0 0 22px var(--ncolor)) brightness(1.3); }
+}
+
+/* Название игры под иконкой */
+.nebula-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 0 8px var(--ncolor);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.nebula-label small {
+  display: block;
+  font-size: 6px; opacity: 0.5; letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Заблокированная нода */
+.nebula-node.locked .nebula-icon { filter: grayscale(1); opacity: 0.35; }
+.nebula-node.locked .nebula-aura { opacity: 0.15; }
+.nebula-node.locked .nebula-label { opacity: 0.3; }
+.nebula-node.locked { cursor: default; }
+.nebula-lock-badge {
+  position: absolute; top: -4px; right: -6px;
+  background: rgba(255,58,92,0.8);
+  border-radius: 10px; padding: 1px 5px;
+  font-size: 7px; font-family: 'Orbitron', monospace;
+  color: #fff; font-weight: 700; z-index: 3;
+  border: 0.5px solid rgba(255,58,92,0.5);
+}
+
+/* ── КАРТОЧКА ИГРЫ (при нажатии на ноду) ── */
+#game-card-overlay {
+  position: fixed; inset: 0; z-index: 860;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(0,0,10,0); pointer-events: none;
+  transition: background 0.35s ease;
+}
+#game-card-overlay.open {
+  background: rgba(0,0,10,0.7);
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+}
+#game-card {
+  width: min(380px, 100vw);
+  background: linear-gradient(160deg, #0a0820, #060414, #0a0820);
+  border: 1px solid rgba(200,169,110,0.25);
+  border-bottom: none;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px calc(20px + var(--sab));
+  transform: translateY(110%);
+  transition: transform 0.45s cubic-bezier(0.34,1.3,0.64,1);
+  position: relative; overflow: hidden;
+}
+#game-card::before {
+  content: '';
+  position: absolute; top: 0; left: 15%; right: 15%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--card-color, var(--aeon2)), transparent);
+  border-radius: 2px;
+}
+#game-card-overlay.open #game-card {
+  transform: translateY(0);
+}
+.gc-icon { font-size: 40px; margin-bottom: 10px; }
+.gc-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px; font-weight: 900;
+  color: var(--card-color, var(--aeon2));
+  letter-spacing: 2px; margin-bottom: 6px;
+  text-shadow: 0 0 14px var(--card-color, var(--aeon));
+}
+.gc-desc {
+  font-size: 12px; color: rgba(200,200,255,0.6);
+  line-height: 1.65; margin-bottom: 14px;
+}
+.gc-bonuses {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;
+}
+.gc-bonus-tag {
+  font-family: 'Orbitron', monospace;
+  font-size: 8px; letter-spacing: 1px;
+  color: var(--card-color, var(--aeon2));
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 20px; padding: 4px 10px;
+}
+.gc-jump-btn {
+  width: 100%; height: 52px; border-radius: 26px;
+  border: none; cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  font-size: 14px; font-weight: 900; letter-spacing: 2px;
+  color: #07071a;
+  background: linear-gradient(135deg, var(--card-color, var(--aeon2)), var(--card-color2, var(--aeon)));
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 20px var(--card-color, var(--aeon));
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.gc-jump-btn::before {
+  content: '';
+  position: absolute; top: 0; left: -80%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  animation: btnShine 2.5s ease-in-out infinite;
+}
+@keyframes btnShine {
+  0% { left: -80%; }
+  60%,100% { left: 130%; }
+}
+.gc-jump-btn:active { transform: scale(0.97); }
+.gc-close-btn {
+  position: absolute; top: 16px; right: 16px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── ГИПЕРПРЫЖОК ── */
+#hyperjump-screen {
+  position: fixed; inset: 0; z-index: 900;
+  display: none; align-items: center; justify-content: center;
+  background: #00000a;
+  overflow: hidden;
+}
+#hyperjump-screen.active { display: flex; }
+
+#hyperjump-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; z-index: 0;
+}
+
+.hj-center {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  text-align: center;
+}
+.hj-dest-icon {
+  font-size: 48px;
+  animation: hjIconPulse 0.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 20px var(--hj-color, var(--aeon2)));
+}
+@keyframes hjIconPulse {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+.hj-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 3px; text-transform: uppercase;
+}
+.hj-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 900;
+  color: var(--hj-color, var(--aeon2));
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px var(--hj-color, var(--aeon));
+  animation: hjNameGlow 0.4s ease-in-out infinite alternate;
+}
+@keyframes hjNameGlow {
+  0%   { text-shadow: 0 0 10px var(--hj-color, var(--aeon)); }
+  100% { text-shadow: 0 0 30px var(--hj-color, var(--aeon2)), 0 0 60px var(--hj-color, var(--aeon)); }
+}
+.hj-speed-bar-wrap {
+  width: 200px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px; height: 3px; overflow: hidden;
+}
+.hj-speed-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--purple2), var(--hj-color, var(--aeon2)), #fff);
+  border-radius: 3px;
+  transition: width 3s linear;
+}
+.hj-speed-bar.go { width: 100%; }
+
+/* ── КНОПКА НАЗАД в игре ── */
+.back-to-cosmos {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 8px 14px 0;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(100,70,200,0.3);
+  border-radius: 20px; padding: 5px 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: 8px; color: #6060a0;
+  cursor: pointer; letter-spacing: 1px;
+  width: fit-content; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.back-to-cosmos:hover {
+  color: var(--aeon2);
+  border-color: rgba(200,169,110,0.35);
+}
+
+/* Совместимость со старым .back-btn */
+.back-btn { display: none !important; }
+
+
+/* ═══ КАЮТА ═══ */
+#cabin-screen {
+  position: fixed; inset: 0; z-index: 840;
+  display: none; flex-direction: column;
+  background: #00000c; overflow-y: auto; overflow-x: hidden;
+}
+#cabin-screen.show { display: flex; }
+#cabin-bg-canvas {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+.cabin-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; padding: 0 0 40px; min-height: 100%;
+}
+/* Дверь в космос */
+.cabin-door-wrap {
+  width: 100%; height: 38vh; position: relative; overflow: hidden; flex-shrink: 0;
+  background: linear-gradient(180deg,#00000a 0%,#03021a 100%);
+}
+.cabin-door {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  width: min(200px,55vw); height: min(280px,70vw);
+  border-radius: 50% 50% 12px 12px / 60% 60% 12px 12px;
+  border: 2px solid rgba(0,229,255,0.35);
+  background: radial-gradient(ellipse 80% 80% at 50% 40%,
+    rgba(0,20,60,0.9), rgba(0,5,20,0.98));
+  box-shadow: 0 0 30px rgba(0,229,255,0.15), inset 0 0 40px rgba(0,10,40,0.8);
+  overflow: hidden;
+}
+.cabin-door-stars { position: absolute; inset: 0; }
+.cabin-door-frame {
+  position: absolute; inset: -3px;
+  border-radius: 50% 50% 12px 12px / 60% 60% 12px 12px;
+  border: 1px solid rgba(0,229,255,0.12);
+}
+.cabin-door-handle {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  width: 28px; height: 6px; border-radius: 3px;
+  background: linear-gradient(90deg,#304060,#506090,#304060);
+  border: 0.5px solid rgba(0,229,255,0.25);
+}
+.cabin-porthole-ring {
+  position: absolute; inset: 10px;
+  border-radius: 50% 50% 8px 8px / 55% 55% 8px 8px;
+  border: 0.5px solid rgba(0,229,255,0.08);
+}
+.cabin-door-glow {
+  position: absolute; bottom: -10px; left: 50%;
+  transform: translateX(-50%);
+  width: 120%; height: 60px;
+  background: radial-gradient(ellipse, rgba(0,229,255,0.08), transparent 70%);
+}
+/* Пол каюты */
+.cabin-floor-line {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg,transparent,rgba(0,229,255,0.2),rgba(0,229,255,0.4),rgba(0,229,255,0.2),transparent);
+  flex-shrink: 0;
+}
+/* Виджеты каюты */
+.cabin-widgets { width:100%; max-width:420px; padding: 16px 14px; display:flex; flex-direction:column; gap:12px; }
+.cabin-back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(0,229,255,0.2);
+  border-radius: 20px; padding: 5px 14px;
+  font-family: 'Orbitron', monospace; font-size: 8px; color: rgba(0,229,255,0.6);
+  cursor: pointer; letter-spacing: 1px; width: fit-content; margin: 14px 14px 0;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.cabin-back-btn:hover { color: var(--cyan); border-color: rgba(0,229,255,0.4); }
+/* Карточка игрока */
+.cabin-player-card {
+  background: linear-gradient(145deg,rgba(10,8,30,0.9),rgba(6,4,20,0.95));
+  border: 0.5px solid rgba(0,229,255,0.2); border-radius: 16px; padding: 16px;
+  position: relative; overflow: hidden;
+}
+.cabin-player-card::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle,rgba(0,229,255,0.06),transparent 70%);
+}
+.cp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.cp-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg,#0a2040,#1040a0);
+  border: 2px solid rgba(0,229,255,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(0,229,255,0.15);
+}
+.cp-avatar-placeholder { font-size: 22px; opacity: 0.7; }
+.cp-name { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; color: #fff; }
+.cp-uid  { font-size: 8.5px; color: rgba(0,229,255,0.4); font-family: 'Orbitron', monospace; margin-top: 2px; }
+.cp-rank { display:inline-flex;align-items:center;gap:3px;margin-top:5px;background:rgba(200,169,110,.09);border:.5px solid rgba(200,169,110,.28);border-radius:11px;padding:2px 9px;font-size:8.5px;color:var(--aeon2);font-family:'Orbitron',monospace; }
+.cp-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.cp-stat { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(0,229,255,0.1); border-radius: 8px; padding: 8px; text-align: center; }
+.cp-stat-val { font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; color: var(--cyan); }
+.cp-stat-lbl { font-size: 7px; color: rgba(0,229,255,0.35); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Orbitron', monospace; margin-top: 2px; }
+.cp-xp-row { margin-top: 10px; }
+.cp-xp-lbl { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 7.5px; color: rgba(0,229,255,0.4); font-family: 'Orbitron', monospace; }
+.cp-xp-bar { height: 5px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+.cp-xp-fill { height: 100%; background: linear-gradient(90deg, #0040a0, var(--cyan)); border-radius: 3px; transition: width .6s ease; }
+/* Кошелёк виджет */
+.cabin-wallet-card {
+  background: linear-gradient(145deg,rgba(15,10,35,0.9),rgba(8,4,22,0.95));
+  border: 0.5px solid rgba(200,169,110,0.2); border-radius: 16px; padding: 16px;
+}
+.cw-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cw-title { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--aeon2); letter-spacing: 2px; }
+.cw-balance { display: flex; align-items: center; gap: 6px; }
+.cw-amount { font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900; color: var(--aeon2); text-shadow: 0 0 12px var(--aeon); }
+.cw-wager { margin-bottom: 12px; }
+.cw-wager-top { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 7.5px; color: rgba(200,169,110,0.4); font-family: 'Orbitron', monospace; }
+.cw-bar { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+.cw-bar-fill { height: 100%; background: linear-gradient(90deg,var(--purple),var(--aeon)); border-radius: 2px; transition: width .5s; }
+.cw-note { font-size: 8px; color: rgba(200,169,110,0.3); font-family: 'Orbitron', monospace; margin-top: 5px; }
+.cw-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cw-btn { padding: 11px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; letter-spacing: .8px; transition: all .18s; }
+.cw-btn.dep { background: linear-gradient(145deg,#142a18,#1c3e22); color: var(--green); border: 0.5px solid rgba(0,255,159,0.2); }
+.cw-btn.wit { background: linear-gradient(145deg,#12123a,#1a1a4e); color: var(--purple2); border: 0.5px solid rgba(168,85,247,0.2); }
+.cw-btn:active { transform: translateY(1px); }
+/* Рейтинг виджет */
+.cabin-leaderboard {
+  background: linear-gradient(145deg,rgba(10,5,25,0.9),rgba(6,3,16,0.95));
+  border: 0.5px solid rgba(168,85,247,0.2); border-radius: 16px; padding: 16px;
+}
+.cl-title { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--purple2); letter-spacing: 2px; margin-bottom: 10px; }
+.cl-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid rgba(255,255,255,0.04); }
+.cl-row:last-child { border-bottom: none; }
+.cl-rank { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; width: 20px; flex-shrink: 0; }
+.cl-rank.g { color: var(--gold); }
+.cl-av { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#201060,#4820a0); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+.cl-name { flex: 1; font-size: 11px; color: rgba(255,255,255,0.75); }
+.cl-score { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; color: var(--aeon2); }
+/* Магазин — скоро */
+.cabin-shop-teaser {
+  background: linear-gradient(145deg,rgba(20,5,5,0.8),rgba(10,3,3,0.9));
+  border: 0.5px dashed rgba(255,100,50,0.2); border-radius: 16px; padding: 16px; text-align: center;
+}
+.cst-icon { font-size: 32px; margin-bottom: 8px; }
+.cst-title { font-family: 'Orbitron', monospace; font-size: 11px; color: rgba(255,150,80,0.7); letter-spacing: 2px; margin-bottom: 4px; }
+.cst-sub { font-size: 10px; color: rgba(255,255,255,0.25); line-height: 1.5; }
+/* Реферальный виджет */
+.cabin-ref-card {
+  background: rgba(80,20,160,0.08); border: 0.5px solid rgba(168,85,247,0.2);
+  border-radius: 16px; padding: 16px;
+}
+.cr-title { font-family: 'Orbitron', monospace; font-size: 9px; color: var(--purple2); margin-bottom: 8px; letter-spacing: 1px; }
+.cr-link { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(168,85,247,0.15); border-radius: 8px; padding: 7px 10px; font-family: 'Orbitron', monospace; font-size: 8.5px; color: #6050a0; margin-bottom: 8px; word-break: break-all; }
+.cr-btns { display: flex; gap: 6px; }
+.cr-btn { flex: 1; padding: 8px; border-radius: 8px; border: 0.5px solid rgba(168,85,247,0.28); background: rgba(168,85,247,0.07); color: var(--purple2); font-family: 'Orbitron', monospace; font-size: 8px; cursor: pointer; }
+
+/* ═══ СЛОТ В КОСМОСЕ ═══ */
+#slot-cosmos-screen {
+  position: fixed; inset: 0; z-index: 830; display: none; flex-direction: column; background: #00000a;
+}
+#slot-cosmos-screen.show { display: flex; }
+#slot-cosmos-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.slot-cosmos-content {
+  position: relative; z-index: 2; flex: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: calc(var(--sat) + 8px) 0 20px; overflow-y: auto;
+  animation: cosmosLevitate 5s ease-in-out infinite;
+}
+@keyframes cosmosLevitate {
+  0%,100% { transform: translateY(0) rotate(0.15deg); }
+  30%      { transform: translateY(-6px) rotate(-0.1deg); }
+  70%      { transform: translateY(4px) rotate(0.2deg); }
+}
+.game-cosmos-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.05); border: 0.5px solid rgba(200,169,110,0.25);
+  border-radius: 20px; padding: 5px 14px; margin-bottom: 10px;
+  font-family: 'Orbitron', monospace; font-size: 8px; color: rgba(200,169,110,0.6);
+  cursor: pointer; letter-spacing: 1px; transition: all .2s; width: fit-content;
+}
+.game-cosmos-back:hover { color: var(--aeon2); border-color: rgba(200,169,110,.4); }
+
+/* ═══ КОСТИ В КОСМОСЕ ═══ */
+#dice-cosmos-screen {
+  position: fixed; inset: 0; z-index: 830; display: none; flex-direction: column; background: #00000a;
+}
+#dice-cosmos-screen.show { display: flex; }
+#dice-cosmos-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.dice-cosmos-content {
+  position: relative; z-index: 2; flex: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: calc(var(--sat) + 8px) 14px 20px; overflow-y: auto;
+}
+/* Игральная доска */
+.dice-board-wrap {
+  width: min(360px,96vw);
+  animation: boardLevitate 4.5s ease-in-out infinite;
+}
+@keyframes boardLevitate {
+  0%,100% { transform: translateY(0) rotate(-0.2deg); }
+  40%      { transform: translateY(-8px) rotate(0.15deg); }
+  75%      { transform: translateY(3px) rotate(-0.1deg); }
+}
+.dice-board {
+  background: linear-gradient(145deg,#0e1a30,#08101e);
+  border: 1.5px solid rgba(0,229,255,0.25); border-radius: 20px;
+  overflow: hidden; box-shadow: 0 0 40px rgba(0,100,200,0.2), 0 20px 60px rgba(0,0,0,0.6);
+}
+/* Заголовок доски */
+.db-header {
+  background: linear-gradient(180deg,#0a1828,#060e18);
+  padding: 10px 16px 8px; border-bottom: 1px solid rgba(0,229,255,0.12); text-align: center;
+}
+.db-title { font-family: 'Orbitron', monospace; font-size: clamp(13px,3.5vw,16px); font-weight: 900; color: var(--cyan); text-shadow: 0 0 12px var(--cyan); letter-spacing: 3px; }
+.db-sub { font-size: 8px; color: rgba(0,229,255,0.35); letter-spacing: 3px; margin-top: 1px; }
+/* Кубики */
+.db-dice-area {
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  padding: 18px 14px 10px; background: rgba(0,0,0,0.3);
+}
+.db-die {
+  width: 72px; height: 72px; border-radius: 14px;
+  background: linear-gradient(145deg,#0c1830,#060e20);
+  border: 2px solid rgba(0,229,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 42px; box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.04);
+  transition: all .2s; position: relative; overflow: hidden;
+}
+.db-die::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(0,229,255,0.05), transparent 60%);
+}
+.db-die.rolling { animation: dbRoll .07s ease-in-out infinite; }
+@keyframes dbRoll { 0%{transform:rotate(-6deg)scale(.93)} 50%{transform:rotate(6deg)scale(1.07)} 100%{transform:rotate(-6deg)scale(.93)} }
+.db-die.win-die { border-color: var(--aeon2); box-shadow: 0 0 20px rgba(200,169,110,0.4); }
+.db-die.double-die { border-color: var(--gold); box-shadow: 0 0 25px rgba(255,215,0,0.5); animation: doublePulse .4s ease-in-out infinite alternate; }
+@keyframes doublePulse { 0%{box-shadow:0 0 15px rgba(255,215,0,0.4)} 100%{box-shadow:0 0 30px rgba(255,215,0,0.8)} }
+.db-vs { font-family: 'Orbitron', monospace; font-size: 16px; color: rgba(0,229,255,0.2); letter-spacing: 2px; }
+/* Результат суммы */
+.db-result-row { display: flex; justify-content: space-around; padding: 8px 14px; background: rgba(0,0,0,0.2); }
+.db-res-item { text-align: center; }
+.db-res-lbl { font-size: 6.5px; color: rgba(0,229,255,0.3); letter-spacing: 2px; text-transform: uppercase; font-family: 'Orbitron', monospace; }
+.db-res-val { font-family: 'Orbitron', monospace; font-size: 20px; font-weight: 900; color: var(--aeon2); }
+.db-res-val.win { color: var(--green); text-shadow: 0 0 10px rgba(0,255,159,0.5); }
+.db-res-val.lose { color: var(--red); }
+/* Таблица выплат */
+.db-paytable { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 12px; justify-content: center; background: rgba(0,0,0,0.15); }
+.db-pay { font-size: 8px; color: rgba(0,229,255,0.45); background: rgba(0,229,255,0.04); border: 0.5px solid rgba(0,229,255,0.1); border-radius: 4px; padding: 2px 6px; font-family: 'Orbitron', monospace; }
+.db-pay b { color: var(--aeon2); }
+.db-pay.special b { color: var(--gold); }
+/* Выбор числа */
+.db-choose-label { font-family: 'Orbitron', monospace; font-size: 8px; color: rgba(0,229,255,0.4); letter-spacing: 2px; text-align: center; padding: 8px 0 4px; }
+.db-number-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; padding: 0 12px 10px; }
+.db-num-btn {
+  padding: 6px 2px; border-radius: 8px; border: 0.5px solid rgba(0,229,255,0.18);
+  background: rgba(0,229,255,0.03); font-family: 'Orbitron', monospace;
+  font-size: 11px; font-weight: 700; color: rgba(0,229,255,0.5); cursor: pointer;
+  transition: all .18s; display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.db-num-btn .dbn-multi { font-size: 5.5px; color: rgba(0,229,255,0.3); }
+.db-num-btn.sel { background: rgba(0,229,255,0.12); border-color: rgba(0,229,255,0.5); color: var(--cyan); }
+.db-num-btn.sel .dbn-multi { color: rgba(0,229,255,0.6); }
+.db-num-btn.double-highlight { border-color: rgba(255,215,0,0.4); }
+.db-num-btn.double-highlight .dbn-multi { color: rgba(255,215,0,0.6); }
+/* Ставка и кнопка броска */
+.db-bet-row { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(0,0,0,0.2); }
+.db-msg { text-align: center; font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; letter-spacing: 2px; color: rgba(0,229,255,0.3); min-height: 13px; text-transform: uppercase; transition: all .3s; padding: 4px 12px 6px; }
+.db-msg.win { color: var(--green); text-shadow: 0 0 10px rgba(0,255,159,0.4); }
+.db-msg.big { color: var(--gold); text-shadow: 0 0 15px var(--gold); font-size: 11px; }
+.db-msg.lose { color: rgba(255,58,92,0.6); }
+.db-roll-btn {
+  width: 100%; height: 52px; border-radius: 26px;
+  background: linear-gradient(145deg,#083048,#0e5878,#083048);
+  color: var(--cyan); font-family: 'Orbitron', monospace; font-size: 14px;
+  font-weight: 900; letter-spacing: 3px; cursor: pointer;
+  border-top: 2px solid rgba(255,255,255,0.12); border-bottom: 4px solid rgba(0,0,0,0.5);
+  box-shadow: 0 8px 25px rgba(0,150,255,.3), inset 0 1px rgba(255,255,255,.1);
+  text-shadow: 0 0 10px var(--cyan); transition: all .15s; margin: 0 12px 12px; width: calc(100% - 24px);
+}
+.db-roll-btn:active { transform: translateY(3px); border-bottom-width: 1px; }
+.db-roll-btn:disabled { opacity: .38; cursor: not-allowed; }
+
+/* NAV кнопка Каюта */
+.nav-cabin-indicator {
+  position: absolute; top: -2px; right: 4px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan); box-shadow: 0 0 6px var(--cyan);
+  animation: cabinDot 2s ease-in-out infinite;
+}
+@keyframes cabinDot { 0%,100%{opacity:1} 50%{opacity:.3} }
+
 </style>
 </head>
 <body>
+
+<!-- QUANTUM TUNNEL OVERLAY -->
+
+<!-- ══ COSMOS SCREEN — ГЛАВНОЕ МЕНЮ ══ -->
+<div id="cosmos-screen" class="hidden">
+  <canvas id="cosmos-canvas"></canvas>
+  <div class="cosmos-top-ui">
+    <div class="cosmos-logo">✦ AEON</div>
+    <div class="cosmos-coords" id="cosmos-coords">СЕКТОР: Α-7<br>ПАРСЕК: 2847.3<br>СТАТУС: ОРБИТА</div>
+  </div>
+  <div class="cosmos-center-label"><div class="ccl-title">Навигационная система</div></div>
+  <div class="bridge-floor"></div>
+  <div class="bridge-console"></div>
+  <div class="bridge-lights">
+    <div class="b-light"></div><div class="b-light"></div>
+    <div class="b-light"></div><div class="b-light"></div>
+    <div class="b-light"></div>
+  </div>
+  <svg id="eye-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="eyeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="rgba(200,169,110,0)"/>
+        <stop offset="30%" stop-color="rgba(200,169,110,0.5)"/>
+        <stop offset="50%" stop-color="rgba(0,229,255,0.7)"/>
+        <stop offset="70%" stop-color="rgba(200,169,110,0.5)"/>
+        <stop offset="100%" stop-color="rgba(200,169,110,0)"/>
+      </linearGradient>
+    </defs>
+    <path id="eye-path-top" fill="none" stroke="url(#eyeGrad)" stroke-width="0.4"/>
+    <path id="eye-path-bot" fill="none" stroke="url(#eyeGrad)" stroke-width="0.4"/>
+  </svg>
+  <div class="nebula-zone" id="nebula-zone"></div>
+</div>
+
+
+<!-- ══ КАЮТА ══ -->
+<div id="cabin-screen">
+  <canvas id="cabin-bg-canvas"></canvas>
+  <div class="cabin-content">
+    <button class="cabin-back-btn" onclick="closeCabin()">← Вернуться в космос</button>
+    <div class="cabin-door-wrap">
+      <div class="cabin-door">
+        <canvas class="cabin-door-stars" id="cabin-door-canvas"></canvas>
+        <div class="cabin-porthole-ring"></div>
+        <div class="cabin-door-frame"></div>
+        <div class="cabin-door-handle"></div>
+        <div class="cabin-door-glow"></div>
+      </div>
+    </div>
+    <div class="cabin-floor-line"></div>
+    <div class="cabin-widgets">
+      <!-- Карточка игрока -->
+      <div class="cabin-player-card">
+        <div class="cp-header">
+          <div class="cp-avatar"><div class="cp-avatar-placeholder" id="cabin-av">👨‍🚀</div></div>
+          <div>
+            <div class="cp-name" id="cabin-name">Космонавт</div>
+            <div class="cp-uid" id="cabin-uid">#000000</div>
+            <div class="cp-rank" id="cabin-rank">🌱 Новичок</div>
+          </div>
+        </div>
+        <div class="cp-stats">
+          <div class="cp-stat"><div class="cp-stat-val" id="cabin-spins">0</div><div class="cp-stat-lbl">Игры</div></div>
+          <div class="cp-stat"><div class="cp-stat-val" id="cabin-jacks">0</div><div class="cp-stat-lbl">Джекпот</div></div>
+          <div class="cp-stat"><div class="cp-stat-val" id="cabin-maxwin">0</div><div class="cp-stat-lbl">Рекорд</div></div>
+        </div>
+        <div class="cp-xp-row">
+          <div class="cp-xp-lbl"><span>ОПЫТ</span><span id="cabin-xp-lbl">0 / 500</span></div>
+          <div class="cp-xp-bar"><div class="cp-xp-fill" id="cabin-xp-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <!-- Кошелёк -->
+      <div class="cabin-wallet-card">
+        <div class="cw-header">
+          <div class="cw-title">💎 AEON КОШЕЛЁК</div>
+          <div class="cw-balance">
+            <div class="cw-amount" id="cabin-balance">300</div>
+            <svg width="18" height="18" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a0e04" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/></svg>
+          </div>
+        </div>
+        <div class="cw-wager">
+          <div class="cw-wager-top"><span>ВЕЙДЖЕР ДО ВЫВОДА</span><span id="cabin-wager-val">0/50</span></div>
+          <div class="cw-bar"><div class="cw-bar-fill" id="cabin-wager-fill" style="width:0%"></div></div>
+          <div class="cw-note">Сыграй 50 игр + депозит 250 TON для вывода</div>
+        </div>
+        <div class="cw-actions">
+          <button class="cw-btn dep" onclick="showModal('deposit')">⬇️ ПОПОЛНИТЬ</button>
+          <button class="cw-btn wit" onclick="showModal('withdraw')">⬆️ ВЫВЕСТИ</button>
+        </div>
+      </div>
+      <!-- Реферальная программа -->
+      <div class="cabin-ref-card">
+        <div class="cr-title">👥 Реферальная программа</div>
+        <div class="cr-link" id="cabin-ref-link">https://t.me/feries_casinoBot</div>
+        <div class="cr-btns">
+          <button class="cr-btn" onclick="copyRef()">📋 Копировать</button>
+          <button class="cr-btn" onclick="shareRef()">📤 Поделиться</button>
+        </div>
+      </div>
+      <!-- Топ игроков -->
+      <div class="cabin-leaderboard">
+        <div class="cl-title">🏆 ТОП ВСЕЛЕННОЙ</div>
+        <div id="cabin-leaders-list"></div>
+      </div>
+      <!-- Магазин — скоро -->
+      <div class="cabin-shop-teaser">
+        <div class="cst-icon">🛍️</div>
+        <div class="cst-title">КОСМИЧЕСКИЙ МАГАЗИН</div>
+        <div class="cst-sub">Скоро откроется. Здесь можно будет купить скафандры, артефакты и улучшения для корабля.<br>Некоторые предметы можно найти во время путешествий по вселенной.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ СЛОТ В КОСМОСЕ ══ -->
+<div id="slot-cosmos-screen">
+  <canvas id="slot-cosmos-canvas"></canvas>
+  <div class="slot-cosmos-content">
+    <button class="game-cosmos-back" onclick="returnToCosmosFromGame()">← В навигацию</button>
+    <!-- Слот-машина вставляется сюда через JS -->
+    <div id="slot-cosmos-mount"></div>
+  </div>
+</div>
+
+<!-- ══ КОСТИ В КОСМОСЕ ══ -->
+<div id="dice-cosmos-screen">
+  <canvas id="dice-cosmos-canvas"></canvas>
+  <div class="dice-cosmos-content">
+    <button class="game-cosmos-back" onclick="returnToCosmosFromGame()">← В навигацию</button>
+    <div class="dice-board-wrap">
+      <div class="dice-board">
+        <div class="db-header">
+          <div class="db-title">✦ КОСТИ СУДЬБЫ ✦</div>
+          <div class="db-sub">УГАДАЙ — И ПОЛУЧИ КУШИ</div>
+        </div>
+        <div class="db-dice-area">
+          <div class="db-die" id="db-die0">⚄</div>
+          <div class="db-vs">+</div>
+          <div class="db-die" id="db-die1">⚂</div>
+        </div>
+        <div class="db-result-row">
+          <div class="db-res-item"><div class="db-res-lbl">СТАВКА НА</div><div class="db-res-val" id="db-target-disp">—</div></div>
+          <div class="db-res-item"><div class="db-res-lbl">ВЫПАЛО</div><div class="db-res-val" id="db-result-disp">—</div></div>
+          <div class="db-res-item"><div class="db-res-lbl">ВЫИГРЫШ</div><div class="db-res-val" id="db-win-disp">0</div></div>
+        </div>
+        <div class="db-paytable">
+          <div class="db-pay">2=<b>×25</b></div>
+          <div class="db-pay">3=<b>×12</b></div>
+          <div class="db-pay">4=<b>×8</b></div>
+          <div class="db-pay">5=<b>×6</b></div>
+          <div class="db-pay">6=<b>×5</b></div>
+          <div class="db-pay">7=<b>×3</b></div>
+          <div class="db-pay">8=<b>×5</b></div>
+          <div class="db-pay">9=<b>×6</b></div>
+          <div class="db-pay">10=<b>×8</b></div>
+          <div class="db-pay">11=<b>×12</b></div>
+          <div class="db-pay">12=<b>×25</b></div>
+          <div class="db-pay special">Дубль=<b>×БОНУС</b></div>
+        </div>
+        <div class="db-choose-label">ВЫБЕРИ ЧИСЛО (2–12)</div>
+        <div class="db-number-grid" id="db-number-grid"></div>
+        <div class="db-msg" id="db-msg">СДЕЛАЙ СТАВКУ И БРОСАЙ!</div>
+        <div class="db-bet-row">
+          <button class="btn-3d" id="db-bet-dn">−</button>
+          <div class="bet-center">
+            <div class="bet-lbl">Ставка</div>
+            <div class="bet-val">
+              <svg width="14" height="14" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a0e04" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/></svg>
+              <span id="db-bet-val">10</span>
+            </div>
+          </div>
+          <button class="btn-3d" id="db-bet-up">+</button>
+          <button class="btn-3d btn-max" id="db-bet-max">MAX</button>
+        </div>
+        <button class="db-roll-btn" id="db-roll-btn">🎲 БРОСИТЬ КОСТИ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ КАРТОЧКА ИГРЫ ══ -->
+<div id="game-card-overlay">
+  <div id="game-card">
+    <button class="gc-close-btn" onclick="closeGameCard()">✕</button>
+    <div class="gc-icon" id="gc-icon">🎰</div>
+    <div class="gc-name" id="gc-name">COSMIC SLOTS</div>
+    <div class="gc-desc" id="gc-desc"></div>
+    <div class="gc-bonuses" id="gc-bonuses"></div>
+    <button class="gc-jump-btn" id="gc-jump-btn" onclick="initiateHyperjump()">
+      🚀 СОВЕРШИТЬ ГИПЕРПРЫЖОК
+    </button>
+  </div>
+</div>
+
+<!-- ══ ГИПЕРПРЫЖОК ══ -->
+<div id="hyperjump-screen">
+  <canvas id="hyperjump-canvas"></canvas>
+  <div class="hj-center">
+    <div class="hj-dest-icon" id="hj-dest-icon">🎰</div>
+    <div class="hj-label">ПРЫЖОК К СТАНЦИИ</div>
+    <div class="hj-name" id="hj-dest-name">COSMIC SLOTS</div>
+    <div class="hj-speed-bar-wrap"><div class="hj-speed-bar" id="hj-speed-bar"></div></div>
+  </div>
+</div>
+
+<div id="quantum-tunnel"></div>
+<!-- SINGULARITY FLASH -->
+<div id="singularity-flash"></div>
+
 <canvas id="stars-canvas"></canvas>
 <!-- REGISTRATION -->
 <div id="reg-screen">
@@ -403,7 +1421,7 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
   </div>
   <button class="bonus-close" id="bonus-close-btn" style="display:none" onclick="closeBonus()">✦ ПРОДОЛЖИТЬ</button>
 </div>
-<div id="app">
+<div id="app" style="display:none">
   <div id="topbar">
     <div>
       <div class="tb-logo">✦ AEON</div>
@@ -453,6 +1471,10 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
                   <div class="pay-row">🌙×3=<b>×50</b></div>
                   <div class="pay-row">⭐×3=<b>×30</b></div>
                   <div class="pay-row">🪐×3=<b>×20</b></div>
+<div id="marcus-block">
+  <div class="marcus-quote" id="marcus-quote-text">Потеря — это не что иное, как изменение, а изменение — радость природы.</div>
+  <div class="marcus-author">— Марк Аврелий, Размышления</div>
+</div>
                   <div class="pay-row">🚀×3=<b>×15</b></div>
                   <div class="pay-row">☄×3=<b>×10</b></div>
                   <div class="pay-row">🌟×3=<b>×8</b></div>
@@ -479,7 +1501,8 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
                 <button class="btn-3d btn-max-3d" id="bet-max">MAX</button>
               </div>
               <button class="spin-btn-3d" id="spin-btn">🚀 SPIN</button>
-              <div class="result-msg" id="result-msg">УДАЧИ В КОСМОСЕ!</div>
+              <div id="tension-bar"><div id="tension-fill"></div></div>
+<div class="result-msg" id="result-msg">УДАЧИ В КОСМОСЕ!</div>
             </div>
           </div>
         </div>
@@ -571,7 +1594,7 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
         </div>
         <div class="ref-card">
           <div class="ref-title">👥 Реферальная программа</div>
-          <div class="ref-link" id="ref-link">t.me/AeonBot?start=REF000000</div>
+          <div class="ref-link" id="ref-link">https://t.me/feries_casinoBot?start=REF000000</div>
           <div style="display:flex;gap:8px;margin-bottom:8px">
             <button class="ref-btn" onclick="copyRef()" style="flex:1">📋 Скопировать</button>
             <button class="ref-btn" onclick="shareRef()" style="flex:1">📤 Поделиться</button>
@@ -611,9 +1634,9 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
           <div class="wh-sub"><span class="ton-badge">TON</span><span style="font-size:11px;color:var(--cyan);font-family:'Orbitron',monospace">0.00 TON</span></div>
         </div>
         <div class="wager-progress">
-          <div class="wp-header"><span class="wp-title">ВЕЙДЖЕР ДО ВЫВОДА</span><span class="wp-val" id="wager-val">0/30 игр</span></div>
+          <div class="wp-header"><span class="wp-title">ВЕЙДЖЕР ДО ВЫВОДА</span><span class="wp-val" id="wager-val">0/50 игр</span></div>
           <div class="wp-bar"><div class="wp-fill" id="wager-fill" style="width:0%"></div></div>
-          <div style="font-size:9px;color:#3a3a70;margin-top:5px;font-family:'Orbitron',monospace">Сыграй 30 игр и внеси депозит для вывода</div>
+          <div style="font-size:9px;color:#3a3a70;margin-top:5px;font-family:'Orbitron',monospace">Сыграй 50 игр и внеси депозит для вывода</div>
         </div>
         <div class="sec-title">Пополнение TON</div>
         <div class="dep-tiers">
@@ -640,10 +1663,8 @@ html,body{width:100%;height:100%;background:var(--dark);overflow:hidden;font-fam
     </div>
   </div>
   <div id="nav">
-    <button class="nav-btn active" onclick="showPage('slot')"    id="nav-slot">    <span class="ni">🎮</span><span class="nl">Игры</span></button>
-    <button class="nav-btn"        onclick="showPage('profile')" id="nav-profile"> <span class="ni">👤</span><span class="nl">Профиль</span></button>
-    <button class="nav-btn"        onclick="showPage('leaders')" id="nav-leaders"> <span class="ni">🏆</span><span class="nl">Рейтинг</span></button>
-    <button class="nav-btn"        onclick="showPage('wallet')"  id="nav-wallet">  <span class="ni">💰</span><span class="nl">Кошелёк</span></button>
+    <button class="nav-btn active" onclick="returnToCosmos()" id="nav-map"><span class="ni">🌌</span><span class="nl">Карта</span></button>
+    <button class="nav-btn" onclick="openCabin()" id="nav-cabin"><span class="ni">🛸</span><span class="nl">Каюта</span><div class="nav-cabin-indicator"></div></button>
   </div>
 </div>
 <div class="modal-ov" id="modal">
@@ -678,8 +1699,8 @@ function ls(k){try{var s=localStorage.getItem(k);return s?JSON.parse(s):null;}ca
 function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 var tgUser=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
 var DEF={balance:300,totalWin:0,spins:0,jackpots:0,maxWin:0,xp:0,registered:false,playerName:'',dob:'',refCount:0,refEarned:0,wagerGames:0};
-var STATE=Object.assign({},DEF,ls('aeon_v5')||{});
-function save(){ss('aeon_v5',STATE);}
+var STATE=Object.assign({},DEF,ls('aeon_v10')||{});
+function save(){ss('aeon_v10',STATE);}
 /* STATIONS */
 var STATIONS=[
   {id:'elysium',name:'Станция Элизиум',icon:'🛸',desc:'Начало пути. Открыты базовые игры.',xpReq:0},
@@ -791,9 +1812,9 @@ function updateUI(){
   document.getElementById('w-coins').textContent=STATE.balance;
   var st=getStation();
   document.getElementById('tb-station').textContent=st.name.toUpperCase();
-  var wp=Math.min(100,(STATE.wagerGames/30)*100);
+  var wp=Math.min(100,(STATE.wagerGames/50)*100);
   document.getElementById('wager-fill').style.width=wp+'%';
-  document.getElementById('wager-val').textContent=Math.min(STATE.wagerGames,30)+'/30 игр';
+  document.getElementById('wager-val').textContent=Math.min(STATE.wagerGames,50)+'/50 игр';
 }
 /* SLOT ENGINE */
 var SYMS=['💎','🌙','⭐','🪐','🚀','☄','🌟','🛸'];
@@ -811,24 +1832,6 @@ function initReels(){
   }
 }
 function setMsg(t,c){var e=document.getElementById('result-msg');e.textContent=t;e.className='result-msg '+(c||'');}
-function spinReel(idx,finalSym,delay){
-  return new Promise(function(res){
-    setTimeout(function(){
-      var strip=document.getElementById('rs'+idx),H=44,syms=[];
-      for(var i=0;i<15;i++)syms.push(randReel());
-      syms.push(randReel());syms.push(finalSym);syms.push(randReel());
-      strip.innerHTML='';strip.style.transition='none';strip.style.transform='translateY(0)';
-      syms.forEach(function(s){var c=document.createElement('div');c.className='reel-cell';c.textContent=s;strip.appendChild(c);});
-      var endY=-(syms.length-2)*H+H;
-      requestAnimationFrame(function(){requestAnimationFrame(function(){
-        var dur=0.65+idx*0.27;
-        strip.style.transition='transform '+dur+'s cubic-bezier(0.1,0.85,0.28,1)';
-        strip.style.transform='translateY('+endY+'px)';
-        setTimeout(res,dur*1000+80);
-      });});
-    },delay);
-  });
-}
 function genSlotResult(){
   var r=Math.random();
   if(r<0.003)return['💎','💎','💎'];
@@ -840,45 +1843,6 @@ function genSlotResult(){
     res[p1]=s;res[p2]=s;return res;
   }
   return[randReel(),randReel(),randReel()];
-}
-async function doSpin(){
-  if(spinning)return;
-  if(STATE.balance<bet){setMsg('НЕ ХВАТАЕТ AEON!','lose');return;}
-  spinning=true;document.getElementById('spin-btn').disabled=true;
-  document.getElementById('win-line').classList.remove('on');
-  setMsg('КРУТИМ...','');document.getElementById('s-win').textContent='0';
-  STATE.balance-=bet;STATE.spins++;STATE.xp+=5;STATE.wagerGames=Math.min(STATE.wagerGames+1,30);
-  updateUI();save();
-  var res=genSlotResult();
-  await Promise.all([spinReel(0,res[0],0),spinReel(1,res[1],220),spinReel(2,res[2],440)]);
-  var key=res.join(''),mult=PAYS[key]||0;
-  if(key==='💎💎💎'){
-    setMsg('💎 БОНУСНАЯ ИГРА!','big');
-    spawnCoins(10);
-    setTimeout(function(){openBonusGame(bet);},700);
-  } else {
-    if(!mult&&(new Set(res)).size<=2)mult=2;
-    if(mult>0){
-      var earned=bet*mult;
-      STATE.balance+=earned;STATE.totalWin+=earned;STATE.xp+=earned;
-      if(earned>STATE.maxWin)STATE.maxWin=earned;
-      if(mult>=15)STATE.jackpots++;
-      document.getElementById('s-win').textContent=earned;
-      document.getElementById('s-total').textContent=STATE.totalWin;
-      document.getElementById('win-line').classList.add('on');
-      var scr=document.getElementById('slot-screen');scr.classList.add('flash');scr.addEventListener('animationend',function(){scr.classList.remove('flash');},{once:true});
-      if(key==='🌙🌙🌙'){spawnCoins(20);setTimeout(function(){showJackpot(earned);},600);setMsg('🎉 JACKPOT!','big');}
-      else if(mult>=20){spawnCoins(14);setMsg('🌟 ЭПОХА УДАЧИ! +'+earned,'big');}
-      else if(mult>=8){spawnCoins(8);setMsg('✨ ВЫИГРЫШ +'+earned+' AEON','win');}
-      else{spawnCoins(4);setMsg('✨ +'+earned+' AEON','win');}
-      if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('medium');
-    }else{
-      setMsg('НЕ ПОВЕЗЛО... ЕЩЁ РАЗ!','lose');
-      if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
-    }
-  }
-  if(STATE.balance<=0){STATE.balance=300;setMsg('БАЛАНС ПОПОЛНЕН! 🚀','win');}
-  updateUI();save();spinning=false;document.getElementById('spin-btn').disabled=false;
 }
 document.getElementById('spin-btn').addEventListener('click',doSpin);
 document.getElementById('bet-dn').addEventListener('click',function(){betIdx=Math.max(0,betIdx-1);bet=BETS[betIdx];document.getElementById('bet-val').textContent=bet;});
@@ -963,7 +1927,7 @@ async function rollDice(){
   if(STATE.balance<dbet){setDMsg('НЕ ХВАТАЕТ AEON!','lose');return;}
   drolling=true;document.getElementById('dice-btn').disabled=true;
   setDMsg('КИДАЕМ КОСТИ...','');
-  STATE.balance-=dbet;STATE.spins++;STATE.xp+=3;STATE.wagerGames=Math.min(STATE.wagerGames+1,30);
+  STATE.balance-=dbet;STATE.spins++;STATE.xp+=3;STATE.wagerGames=Math.min(STATE.wagerGames+1,50);
   updateUI();
   var d1=Math.ceil(Math.random()*6),d2=Math.ceil(Math.random()*6),sum=d1+d2;
   await animDice(d1,d2);
@@ -1018,7 +1982,7 @@ function buildGates(){
 function setGMsg(t,c){var e=document.getElementById('gates-msg');e.textContent=t;e.className='gates-result-msg '+(c||'');}
 function chooseGate(i){
   if(!gPlaying)return;gPlaying=false;
-  STATE.balance-=gbet;STATE.spins++;STATE.xp+=4;STATE.wagerGames=Math.min(STATE.wagerGames+1,30);
+  STATE.balance-=gbet;STATE.spins++;STATE.xp+=4;STATE.wagerGames=Math.min(STATE.wagerGames+1,50);
   updateUI();
   document.querySelectorAll('.gate-btn').forEach(function(b,j){
     b.classList.add('revealed');
@@ -1088,7 +2052,7 @@ function renderProfile(){
   document.getElementById('st-maxwin').textContent=STATE.maxWin;
   document.getElementById('st-total').textContent=STATE.totalWin;
   var refId=uid.replace('#','');
-  document.getElementById('ref-link').textContent='t.me/AeonBot?start=REF'+refId;
+  document.getElementById('ref-link').textContent='https://t.me/feries_casinoBot?start=REF'+refId+refId+refId+refId;
   document.getElementById('ref-count').textContent=STATE.refCount;
   document.getElementById('ref-earned').textContent=STATE.refEarned+' AEON';
   var el=document.getElementById('achievements');el.innerHTML='';
@@ -1123,7 +2087,7 @@ function showModal(type){
   document.getElementById('modal-title').textContent=type==='deposit'?'💎 ПОПОЛНЕНИЕ':'⬆️ ВЫВОД СРЕДСТВ';
   document.getElementById('modal-body').innerHTML=type==='deposit'
     ?'<div style="text-align:center;padding:8px 0"><div style="font-size:32px;margin-bottom:10px">💎</div><div style="font-family:Orbitron,monospace;font-size:10px;color:#00e5ff;margin-bottom:8px;letter-spacing:2px">TON BLOCKCHAIN</div><div style="font-size:11px;color:#404090;line-height:1.75">Пополнение через TON Connect появится в следующем обновлении.</div></div>'
-    :'<div style="text-align:center;padding:8px 0"><div style="font-size:32px;margin-bottom:10px">🔒</div><div style="font-family:Orbitron,monospace;font-size:10px;color:#a855f7;margin-bottom:8px;letter-spacing:2px">УСЛОВИЯ ВЫВОДА</div><div style="font-size:11px;color:#404090;line-height:1.75">Для вывода необходимо:<br>• Сыграть 30 игр ('+Math.min(STATE.wagerGames,30)+'/30)<br>• Внести депозит от 250 TON<br><br>После выполнения условий вывод доступен через TON кошелёк.</div></div>';
+    :'<div style="text-align:center;padding:8px 0"><div style="font-size:32px;margin-bottom:10px">🔒</div><div style="font-family:Orbitron,monospace;font-size:10px;color:#a855f7;margin-bottom:8px;letter-spacing:2px">УСЛОВИЯ ВЫВОДА</div><div style="font-size:11px;color:#404090;line-height:1.75">Для вывода необходимо:<br>• Сыграть 50 игр ('+Math.min(STATE.wagerGames,50)+'/50)<br>• Внести депозит от 250 TON<br><br>После выполнения условий вывод доступен через TON кошелёк.</div></div>';
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');}
@@ -1151,6 +2115,1319 @@ document.addEventListener('DOMContentLoaded',function(){
   initReels();updateUI();renderProfile();
 });
 initReels();updateUI();renderProfile();
+
+
+/* ═══════════════════════════════════════════════════
+   КВАНТОВЫЙ ПРЫЖОК — визуальный движок v8
+   Все расчёты выигрыша изолированы в API-функциях
+   готовых к замене на fetch() к Python-бэкенду
+═══════════════════════════════════════════════════ */
+
+/* ── MARCUS AURELIUS QUOTES ── */
+var MARCUS_QUOTES = [
+  "Потеря — это не что иное, как изменение, а изменение — радость природы.",
+  "Если тебе больно от какой-нибудь внешней вещи, не она тебя беспокоит, а твоё суждение о ней.",
+  "Препятствие действию продвигает действие. То, что стоит на пути, становится путём.",
+  "Ты имеешь власть над своим разумом, а не над внешними событиями. Осознай это — и обретёшь силу.",
+  "Мудрость достигается не умножением знаний, а углублением в себя.",
+  "Не трать больше слов, чем нужно. Не думай больше, чем нужно думать.",
+  "Если не в твоих силах изменить вещи — прими их такими, какие они есть.",
+  "Каждый момент — это возможность действовать, а не ждать.",
+  "Вселенная — это изменение. Жизнь — это мнение об этом изменении.",
+  "То, что враждебно разуму, враждебно природе.",
+  "Сначала говори себе, кем ты хочешь стать, затем делай то, что нужно.",
+  "Ничто так не совершенствует душу, как умение исследовать истину систематически.",
+  "Вспомни, как долго ты откладываешь это. Сколько раз ты получал возможность от богов — и не использовал её.",
+  "Счастье твоей жизни зависит от качества твоих мыслей.",
+  "Делай каждый поступок так, словно он последний в твоей жизни.",
+];
+
+function getRandomQuote() {
+  return MARCUS_QUOTES[Math.floor(Math.random() * MARCUS_QUOTES.length)];
+}
+
+function showMarcusQuote() {
+  var block = document.getElementById('marcus-block');
+  var txt   = document.getElementById('marcus-quote-text');
+  if (!block || !txt) return;
+  block.classList.remove('visible');
+  txt.textContent = getRandomQuote();
+  setTimeout(function() { block.classList.add('visible'); }, 80);
+}
+
+function hideMarcusQuote() {
+  var block = document.getElementById('marcus-block');
+  if (block) block.classList.remove('visible');
+}
+
+/* ── QUANTUM JUMP ENGINE ── */
+var _hyperActive = false;
+
+function startQuantumJump() {
+  if (_hyperActive) return;
+  _hyperActive = true;
+
+  var tunnel  = document.getElementById('quantum-tunnel');
+  var canvas  = document.getElementById('stars-canvas');
+  var spinBtn = document.getElementById('spin-btn');
+
+  // 1. Stars warp
+  if (canvas) canvas.classList.add('warp');
+
+  // 2. Tunnel animation
+  if (tunnel) {
+    tunnel.classList.remove('active');
+    void tunnel.offsetWidth; // reflow
+    tunnel.classList.add('active');
+  }
+
+  // 3. Button glow
+  if (spinBtn) spinBtn.classList.add('warping');
+
+  // 4. Reel warp blur
+  for (var i = 0; i < 3; i++) {
+    var rw = document.getElementById('reel-w-' + i) ||
+             document.querySelectorAll('.reel-w')[i];
+    if (rw) rw.classList.add('warping');
+  }
+
+  // 5. Hide quote while jumping
+  hideMarcusQuote();
+}
+
+function endQuantumJump(won) {
+  _hyperActive = false;
+
+  var tunnel  = document.getElementById('quantum-tunnel');
+  var canvas  = document.getElementById('stars-canvas');
+  var spinBtn = document.getElementById('spin-btn');
+  var flash   = document.getElementById('singularity-flash');
+
+  // 1. Stars back to slow
+  if (canvas) canvas.classList.remove('warp');
+
+  // 2. Remove button warp
+  if (spinBtn) spinBtn.classList.remove('warping');
+
+  // 3. Remove reel warp
+  for (var i = 0; i < 3; i++) {
+    var rw = document.querySelectorAll('.reel-w')[i];
+    if (rw) {
+      rw.classList.remove('warping');
+      rw.classList.add('resolved');
+      setTimeout((function(el){ return function(){ el.classList.remove('resolved'); }; })(rw), 500);
+    }
+  }
+
+  // 4. Singularity flash
+  if (flash) {
+    flash.classList.remove('burst');
+    void flash.offsetWidth;
+    flash.classList.add('burst');
+    flash.addEventListener('animationend', function() {
+      flash.classList.remove('burst');
+    }, { once: true });
+  }
+
+  // 5. Collapse reel cells then show result
+  var cells = document.querySelectorAll('.reel-cell');
+  cells.forEach(function(c, idx) {
+    c.classList.remove('collapse','win-glow');
+    setTimeout(function() {
+      c.classList.add('collapse');
+      c.addEventListener('animationend', function() {
+        c.classList.remove('collapse');
+        if (won) c.classList.add('win-glow');
+      }, { once: true });
+    }, idx * 40);
+  });
+
+  // 6. Show marcus quote after jump settles
+  setTimeout(showMarcusQuote, 700);
+}
+
+/* ── INTRIGUE SYSTEM (near-miss tension) ── */
+var _intrigueActive = false;
+var _intrigueTimer  = null;
+
+function startIntrigue() {
+  _intrigueActive = true;
+  var bar  = document.getElementById('tension-bar');
+  var fill = document.getElementById('tension-fill');
+  if (!bar || !fill) return;
+
+  bar.classList.add('active');
+  fill.classList.remove('go');
+  void fill.offsetWidth;
+  fill.classList.add('go');
+
+  setMsg('СЕЙЧАС БУДЕТ ЧТО-ТО ОГНЕННОЕ...', 'intrigue');
+}
+
+function stopIntrigue() {
+  _intrigueActive = false;
+  var bar  = document.getElementById('tension-bar');
+  var fill = document.getElementById('tension-fill');
+  if (bar)  bar.classList.remove('active');
+  if (fill) { fill.classList.remove('go'); fill.style.width = '0%'; }
+}
+
+/* ── API-READY FUNCTIONS (replace body with fetch() for backend) ── */
+
+// Генерация результата — изолирована для замены на API
+function API_generateSpinResult(bet, xp) {
+  // TODO: return fetch('/api/spin', {method:'POST', body:JSON.stringify({bet,xp})})
+  //       .then(r=>r.json())
+  return Promise.resolve(genSlotResult());
+}
+
+// Расчёт выигрыша — изолирован для замены на API
+function API_calculateWin(reels, bet) {
+  // TODO: return fetch('/api/calc_win', {method:'POST', body:JSON.stringify({reels,bet})})
+  //       .then(r=>r.json())
+  var key  = reels.join('');
+  var mult = PAYS[key] || 0;
+  if (!mult && (new Set(reels)).size <= 2) mult = 2;
+  var isBonus = key === '💎💎💎';
+  var isJack  = key === '🌙🌙🌙';
+  return Promise.resolve({ mult: mult, earned: bet * mult, isBonus: isBonus, isJack: isJack });
+}
+
+// Начисление прокрута — изолировано
+function API_recordSpin(bet) {
+  // TODO: return fetch('/api/record_spin', {method:'POST', body:JSON.stringify({bet})})
+  STATE.balance    -= bet;
+  STATE.spins      ++;
+  STATE.xp         += 5;
+  STATE.wagerGames  = Math.min(STATE.wagerGames + 1, 50);
+  return Promise.resolve(STATE);
+}
+
+// Начисление выигрыша — изолировано
+function API_applyWin(earned, mult) {
+  // TODO: return fetch('/api/apply_win', {method:'POST', body:JSON.stringify({earned,mult})})
+  STATE.balance   += earned;
+  STATE.totalWin  += earned;
+  STATE.xp        += earned;
+  if (earned > STATE.maxWin) STATE.maxWin = earned;
+  if (mult >= 15) STATE.jackpots++;
+  return Promise.resolve(STATE);
+}
+
+/* ── UPGRADED doSpin with Quantum Jump ── */
+async function doSpin() {
+  if (spinning) return;
+  if (STATE.balance < bet) { setMsg('НЕ ХВАТАЕТ AEON!', 'lose'); return; }
+
+  spinning = true;
+  document.getElementById('spin-btn').disabled = true;
+  document.getElementById('win-line').classList.remove('on');
+  setMsg('КВАНТОВЫЙ ПРЫЖОК...', '');
+  document.getElementById('s-win').textContent = '0';
+
+  // Record spin via API-ready function
+  await API_recordSpin(bet);
+  updateUI(); save();
+
+  // Start visual jump
+  startQuantumJump();
+
+  // Generate result via API-ready function
+  var reels = await API_generateSpinResult(bet, STATE.xp);
+
+  // Spin reels with sequential dramatic stops
+  // Reel 0 stops first, then 1, then 2 with extended delay if near-miss
+  await spinReelQ(0, reels[0], 0);
+
+  // Check after 2nd reel if near-miss → trigger intrigue
+  var midMatch = (reels[0] === reels[1]);
+  await spinReelQ(1, reels[1], 0);
+
+  if (midMatch) {
+    // Two matching — start intrigue tension
+    startIntrigue();
+    await spinReelQ(2, reels[2], 0, true); // extended spin
+    stopIntrigue();
+  } else {
+    await spinReelQ(2, reels[2], 0, false);
+  }
+
+  // Calculate win via API-ready function
+  var result = await API_calculateWin(reels, bet);
+
+  // End visual jump
+  endQuantumJump(result.earned > 0);
+
+  if (result.isBonus) {
+    setMsg('💎 БОНУСНАЯ ИГРА!', 'big');
+    spawnCoins(10);
+    setTimeout(function() { openBonusGame(bet); }, 900);
+  } else if (result.mult > 0) {
+    await API_applyWin(result.earned, result.mult);
+    document.getElementById('s-win').textContent = result.earned;
+    document.getElementById('s-total').textContent = STATE.totalWin;
+    document.getElementById('win-line').classList.add('on');
+
+    var scr = document.getElementById('slot-screen');
+    if (scr) { scr.classList.add('flash'); scr.addEventListener('animationend', function(){ scr.classList.remove('flash'); }, {once:true}); }
+
+    if (result.isJack) {
+      spawnCoins(20);
+      setTimeout(function(){ showJackpot(result.earned); }, 800);
+      setMsg('🎉 JACKPOT!', 'big');
+    } else if (result.mult >= 20) {
+      spawnCoins(14); setMsg('🌟 ЭПОХА УДАЧИ! +' + result.earned, 'big');
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+    } else if (result.mult >= 8) {
+      spawnCoins(8); setMsg('✨ ВЫИГРЫШ +' + result.earned + ' AEON', 'win');
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+    } else {
+      spawnCoins(4); setMsg('✨ +' + result.earned + ' AEON', 'win');
+    }
+  } else {
+    setMsg('НЕ ПОВЕЗЛО... ЕЩЁ РАЗ!', 'lose');
+    if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  }
+
+  if (STATE.balance <= 0) { STATE.balance = 300; setMsg('БАЛАНС ПОПОЛНЕН! 🚀', 'win'); }
+  updateUI(); save();
+  spinning = false;
+  document.getElementById('spin-btn').disabled = false;
+}
+
+/* ── Upgraded spinReel with quantum extended mode ── */
+function spinReelQ(idx, finalSym, delay, extended) {
+  return new Promise(function(res) {
+    var strip = document.getElementById('rs' + idx);
+    var H = 44;
+    var syms = [];
+    var spinCount = extended ? 22 : 15; // extended for intrigue
+    for (var i = 0; i < spinCount; i++) syms.push(randReel());
+    syms.push(randReel()); syms.push(finalSym); syms.push(randReel());
+
+    strip.innerHTML = '';
+    strip.style.transition = 'none';
+    strip.style.transform = 'translateY(0)';
+    syms.forEach(function(s) {
+      var c = document.createElement('div');
+      c.className = 'reel-cell'; c.textContent = s; strip.appendChild(c);
+    });
+
+    var endY = -(syms.length - 2) * H + H;
+    var dur = extended ? 4.5 : (0.85 + idx * 0.3); // 4.5s for intrigue reel
+
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      strip.style.transition = 'transform ' + dur + 's cubic-bezier(0.12,0.85,0.28,1)';
+      strip.style.transform = 'translateY(' + endY + 'px)';
+      setTimeout(res, dur * 1000 + 80);
+    }); });
+  });
+}
+
+
+
+
+/* ═══════════════════════════════════════════════════
+   COSMOS ENGINE v9 — Орбитальная карта + Гиперпрыжок
+═══════════════════════════════════════════════════ */
+
+/* ── КОНФИГ ИГРОВЫХ НОД ── */
+var GAME_NODES = [
+  {
+    id: 'slot',
+    icon: '🎰',
+    name: 'COSMIC SLOTS',
+    sub: 'Слот-машина',
+    desc: 'Три барабана с символами галактики. Испытай удачу в классическом космическом слоте. Квантовый прыжок случается каждый спин.',
+    bonuses: ['💎 Бонусная игра', '🌙 Джекпот ×50', '⚡ Эффект интриги', '🎆 Гиперпрыжок'],
+    color: '#ffd700', color2: '#ffaa00',
+    aura: 'rgba(255,215,0,0.15)', ring: 'rgba(255,215,0,0.4)',
+    locked: false
+  },
+  {
+    id: 'dice',
+    icon: '🎲',
+    name: 'КОСТИ СУДЬБЫ',
+    sub: 'Игра в кости',
+    desc: 'Два кубика — одна цель. Угадай сумму от 2 до 12 и получи множитель до ×30. Чем реже число — тем выше награда.',
+    bonuses: ['⚄ Число 2 или 12 = ×30', '🎯 Точное попадание', '🌌 Множитель до ×30'],
+    color: '#00e5ff', color2: '#0090aa',
+    aura: 'rgba(0,229,255,0.12)', ring: 'rgba(0,229,255,0.35)',
+    locked: false
+  },
+  {
+    id: 'mystery',
+    icon: '🔮',
+    name: '???',
+    sub: 'Скоро',
+    desc: 'Эта звёздная система ещё не открыта. Тайна ждёт своего часа...',
+    bonuses: ['🔒 Скоро'],
+    color: '#5050a0', color2: '#303060',
+    aura: 'rgba(100,80,200,0.08)', ring: 'rgba(100,80,200,0.2)',
+    locked: true
+  }
+];
+
+var _selectedNode = null;
+
+/* ── ПОЗИЦИИ НОД (треугольник с эффектом «глаза») ──
+   Левая нода, правая нода, верхняя нода
+   Соединяются двумя дугами → форма глаза ──        */
+function getNodePositions(W, H) {
+  var cx = W / 2;
+  var cy = H * 0.42;   // центр чуть выше середины
+  var rx = W * 0.28;   // горизонтальный радиус
+  var ry = H * 0.16;   // вертикальный радиус
+  return [
+    { x: cx - rx, y: cy },           // левая
+    { x: cx + rx, y: cy },           // правая
+    { x: cx,      y: cy - ry * 1.7 } // верхняя (вершина)
+  ];
+}
+
+/* ── SVG ЛИНИЯ «ГЛАЗА» ── */
+function drawEyeLine(W, H) {
+  var pos = getNodePositions(W, H);
+  var L = pos[0], R = pos[1], T = pos[2];
+  // Конвертируем в % для viewBox 100×100
+  function px(v, total) { return (v / total * 100).toFixed(2); }
+  var Lx = px(L.x,W), Ly = px(L.y,H);
+  var Rx = px(R.x,W), Ry = px(R.y,H);
+  var Tx = px(T.x,W), Ty = px(T.y,H);
+
+  // Верхняя дуга: от L через T до R
+  var topPath = 'M '+Lx+','+Ly+' Q '+Tx+','+Ty+' '+Rx+','+Ry;
+  // Нижняя дуга: от R до L (мягкий изгиб вниз)
+  var midY = (parseFloat(Ly) + 18).toFixed(2);
+  var botPath = 'M '+Rx+','+Ry+' Q '+Tx+','+midY+' '+Lx+','+Ly;
+
+  var tp = document.getElementById('eye-path-top');
+  var bp = document.getElementById('eye-path-bot');
+  if (tp) tp.setAttribute('d', topPath);
+  if (bp) bp.setAttribute('d', botPath);
+}
+
+/* ── РЕНДЕР НОД ТУМАННОСТЕЙ ── */
+function renderNebulae() {
+  var zone = document.getElementById('nebula-zone');
+  if (!zone) return;
+  zone.innerHTML = '';
+
+  var W = window.innerWidth;
+  var H = window.innerHeight;
+  var positions = getNodePositions(W, H);
+
+  drawEyeLine(W, H);
+
+  GAME_NODES.forEach(function(node, idx) {
+    var pos = positions[idx];
+    var el = document.createElement('div');
+    el.className = 'nebula-node' + (node.locked ? ' locked' : '');
+    el.style.left = pos.x + 'px';
+    el.style.top  = pos.y + 'px';
+    el.style.setProperty('--ncolor', node.color);
+
+    // Aura size depends on position
+    var auraSize = idx === 2 ? 70 : 85;
+
+    el.innerHTML =
+      '<div class="nebula-glow">' +
+        '<div class="nebula-aura" style="' +
+          'width:' + auraSize + 'px;height:' + auraSize + 'px;' +
+          'background:radial-gradient(circle,' + node.aura + ' 0%,transparent 70%);' +
+          'border:none;' +
+          'margin-left:-' + (auraSize/2) + 'px;margin-top:-' + (auraSize/2) + 'px;' +
+        '"></div>' +
+        '<div class="nebula-icon">' + node.icon + '</div>' +
+        (node.locked ? '<div class="nebula-lock-badge">ЗАКРЫТО</div>' : '') +
+      '</div>' +
+      '<div class="nebula-label">' + node.name + '<small>' + node.sub + '</small></div>';
+
+    if (!node.locked) {
+      el.addEventListener('click', function() { openGameCard(node); });
+      el.addEventListener('touchend', function(e) { e.preventDefault(); openGameCard(node); });
+    }
+    zone.appendChild(el);
+  });
+}
+
+/* ── ОТКРЫТЬ КАРТОЧКУ ИГРЫ ── */
+function openGameCard(node) {
+  _selectedNode = node;
+  var overlay = document.getElementById('game-card-overlay');
+  var card    = document.getElementById('game-card');
+
+  document.getElementById('gc-icon').textContent = node.icon;
+  document.getElementById('gc-name').textContent = node.name;
+  document.getElementById('gc-desc').textContent = node.desc;
+
+  var bonusesEl = document.getElementById('gc-bonuses');
+  bonusesEl.innerHTML = '';
+  node.bonuses.forEach(function(b) {
+    var tag = document.createElement('div');
+    tag.className = 'gc-bonus-tag';
+    tag.textContent = b;
+    bonusesEl.appendChild(tag);
+  });
+
+  card.style.setProperty('--card-color',  node.color);
+  card.style.setProperty('--card-color2', node.color2);
+
+  overlay.classList.add('open');
+
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+}
+
+function closeGameCard() {
+  document.getElementById('game-card-overlay').classList.remove('open');
+}
+
+/* ── ГИПЕРПРЫЖОК ── */
+var _hjCanvas, _hjCtx, _hjRAF, _hjStars = [], _hjActive = false;
+
+function initiateHyperjump() {
+  if (!_selectedNode) return;
+  closeGameCard();
+
+  var node = _selectedNode;
+  var hjScreen = document.getElementById('hyperjump-screen');
+  var hjBar    = document.getElementById('hj-speed-bar');
+
+  document.getElementById('hj-dest-icon').textContent = node.icon;
+  document.getElementById('hj-dest-name').textContent = node.name;
+  hjScreen.style.setProperty('--hj-color', node.color);
+
+  // Reset speed bar
+  hjBar.style.transition = 'none';
+  hjBar.style.width = '0%';
+  hjBar.classList.remove('go');
+
+  hjScreen.classList.add('active');
+
+  // Start hyperspace animation
+  startHyperspaceAnim(node.color);
+
+  // Speed bar fills over 3.5s
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      hjBar.style.transition = 'width 3.5s linear';
+      hjBar.classList.add('go');
+    });
+  });
+
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('heavy');
+
+  // After 4s — enter the game
+  setTimeout(function() {
+    stopHyperspaceAnim();
+    hjScreen.classList.remove('active');
+    enterGame(node.id);
+  }, 4000);
+}
+
+/* ── CANVAS HYPERSPACE (звёзды→линии) ── */
+function startHyperspaceAnim(accentColor) {
+  _hjCanvas = document.getElementById('hyperjump-canvas');
+  if (!_hjCanvas) return;
+  _hjCtx = _hjCanvas.getContext('2d');
+  _hjCanvas.width  = window.innerWidth;
+  _hjCanvas.height = window.innerHeight;
+  _hjActive = true;
+
+  var W = _hjCanvas.width, H = _hjCanvas.height;
+  var cx = W / 2, cy = H / 2;
+  var phase = 0; // 0=accel, 1=warp, 2=decel
+
+  // Spawn stars from center
+  _hjStars = [];
+  for (var i = 0; i < 280; i++) {
+    var angle = Math.random() * Math.PI * 2;
+    var dist  = Math.random() * 4 + 0.5;
+    _hjStars.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * dist,
+      vy: Math.sin(angle) * dist,
+      speed: dist,
+      life: Math.random(),
+      color: Math.random() > 0.85 ? accentColor : '#ffffff',
+      size: Math.random() * 1.5 + 0.5
+    });
+  }
+
+  var startTime = Date.now();
+
+  function frame() {
+    if (!_hjActive) return;
+    var elapsed = (Date.now() - startTime) / 1000; // seconds
+
+    // Speed multiplier: 0→1 over 1.5s, then hold at warp
+    var speedMult = Math.min(elapsed / 1.5, 1);
+    // Stretch factor: 1→40 (warp lines)
+    var stretch = 1 + speedMult * speedMult * 65;
+
+    _hjCtx.fillStyle = 'rgba(0,0,10,' + (0.18 + speedMult * 0.12) + ')';
+    _hjCtx.fillRect(0, 0, W, H);
+
+    _hjStars.forEach(function(s) {
+      s.x += s.vx * (1 + speedMult * 8);
+      s.y += s.vy * (1 + speedMult * 8);
+
+      // Wrap around edges
+      if (s.x < 0 || s.x > W || s.y < 0 || s.y > H) {
+        var angle = Math.random() * Math.PI * 2;
+        s.x = cx; s.y = cy;
+        s.vx = Math.cos(angle) * s.speed;
+        s.vy = Math.sin(angle) * s.speed;
+      }
+
+      var alpha = 0.4 + speedMult * 0.6;
+
+      if (speedMult > 0.3) {
+        // Draw as stretched line (warp effect)
+        var tailX = s.x - s.vx * stretch * speedMult;
+        var tailY = s.y - s.vy * stretch * speedMult;
+        var grad = _hjCtx.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0, 'rgba(0,0,0,0)');
+        grad.addColorStop(1, s.color === '#ffffff'
+          ? 'rgba(255,255,255,' + alpha + ')'
+          : 'rgba(176,114,255,' + alpha + ')');
+        _hjCtx.beginPath();
+        _hjCtx.strokeStyle = grad;
+        _hjCtx.lineWidth = s.size * (0.8 + speedMult * 1.5);
+        _hjCtx.moveTo(tailX, tailY);
+        _hjCtx.lineTo(s.x, s.y);
+        _hjCtx.stroke();
+      } else {
+        // Draw as point
+        _hjCtx.beginPath();
+        _hjCtx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+        _hjCtx.arc(s.x, s.y, s.size * 0.7, 0, Math.PI * 2);
+        _hjCtx.fill();
+      }
+    });
+
+    // Central flash at peak warp
+    if (speedMult > 0.8) {
+      var flashAlpha = (speedMult - 0.8) * 0.15;
+      var grad2 = _hjCtx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.4);
+      grad2.addColorStop(0, 'rgba(255,255,255,' + flashAlpha + ')');
+      grad2.addColorStop(1, 'rgba(0,0,0,0)');
+      _hjCtx.fillStyle = grad2;
+      _hjCtx.fillRect(0, 0, W, H);
+    }
+
+    _hjRAF = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function stopHyperspaceAnim() {
+  _hjActive = false;
+  if (_hjRAF) cancelAnimationFrame(_hjRAF);
+  if (_hjCtx) _hjCtx.clearRect(0, 0, _hjCanvas.width, _hjCanvas.height);
+}
+
+/* ── ВОЙТИ В ИГРУ ── */
+function enterGame(gameId) {
+  // Hide cosmos
+  document.getElementById('cosmos-screen').classList.add('hidden');
+
+  // Show main app
+  document.getElementById('app').style.display = 'flex';
+
+  // Navigate to correct game
+  showPage('slot');
+
+  // If dice game — switch to dice tab
+  if (gameId === 'dice') {
+    // slight delay for render
+    setTimeout(function() {
+      var dicePage = document.getElementById('game-dice');
+      var slotPage = document.getElementById('game-slot');
+      if (dicePage) { dicePage.classList.add('shown'); dicePage.style.display = 'flex'; }
+      if (slotPage) { slotPage.classList.remove('shown'); slotPage.style.display = 'none'; }
+      var dTab = document.getElementById('gtab-dice');
+      var sTab = document.getElementById('gtab-slot');
+      if (dTab) dTab.classList.add('active');
+      if (sTab) sTab.classList.remove('active');
+    }, 100);
+  }
+
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+}
+
+/* ── ВЕРНУТЬСЯ НА КАРТУ ── */
+function returnToCosmos() {
+  document.getElementById('app').style.display = 'none';
+  var cs = document.getElementById('cosmos-screen');
+  cs.classList.remove('hidden');
+  renderNebulae();
+  startCosmosStars();
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+}
+
+/* ── ФОНОВЫЕ ЗВЁЗДЫ НА COSMOS SCREEN ── */
+var _cosmosStars = [], _cosmosRAF, _cosmosActive = false;
+
+function startCosmosStars() {
+  var canvas = document.getElementById('cosmos-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  _cosmosActive = true;
+  _cosmosStars  = [];
+
+  // Dense starfield — three layers
+  for (var i = 0; i < 320; i++) {
+    _cosmosStars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.4 + 0.2,
+      a: Math.random(),
+      s: (Math.random() - 0.5) * 0.004,
+      // slow drift
+      vx: (Math.random() - 0.5) * 0.03,
+      vy: (Math.random() - 0.5) * 0.015,
+      layer: Math.floor(Math.random() * 3) // 0=far,1=mid,2=near
+    });
+  }
+
+  // Nebula dust clusters (blurred spots)
+  var clusters = [
+    { x: canvas.width*0.25, y: canvas.height*0.35, r: 80, color: 'rgba(120,60,180,0.06)' },
+    { x: canvas.width*0.75, y: canvas.height*0.35, r: 90, color: 'rgba(0,100,180,0.05)' },
+    { x: canvas.width*0.50, y: canvas.height*0.22, r: 70, color: 'rgba(180,130,60,0.05)' },
+  ];
+
+  function frame() {
+    if (!_cosmosActive) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Deep space gradient
+    var bg = ctx.createRadialGradient(
+      canvas.width/2, canvas.height*0.4, 0,
+      canvas.width/2, canvas.height*0.4, canvas.width*0.8
+    );
+    bg.addColorStop(0,   'rgba(8,4,28,1)');
+    bg.addColorStop(0.5, 'rgba(4,2,16,1)');
+    bg.addColorStop(1,   'rgba(0,0,8,1)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Nebula clusters
+    clusters.forEach(function(cl) {
+      var grad = ctx.createRadialGradient(cl.x, cl.y, 0, cl.x, cl.y, cl.r);
+      grad.addColorStop(0, cl.color);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(cl.x - cl.r, cl.y - cl.r, cl.r*2, cl.r*2);
+    });
+
+    // Stars
+    _cosmosStars.forEach(function(s) {
+      var speed = [0.4, 0.7, 1.0][s.layer];
+      s.x += s.vx * speed;
+      s.y += s.vy * speed;
+      s.a += s.s;
+      if (s.a <= 0 || s.a >= 1) s.s *= -1;
+      // Wrap
+      if (s.x < 0) s.x = canvas.width;
+      if (s.x > canvas.width) s.x = 0;
+      if (s.y < 0) s.y = canvas.height;
+      if (s.y > canvas.height) s.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r * speed * 0.8, 0, Math.PI * 2);
+      var starColors = [
+        'rgba(180,160,255,', 'rgba(200,200,255,', 'rgba(255,240,200,'
+      ];
+      ctx.fillStyle = starColors[s.layer] + s.a + ')';
+      ctx.fill();
+    });
+
+    _cosmosRAF = requestAnimationFrame(frame);
+  }
+  if (_cosmosRAF) cancelAnimationFrame(_cosmosRAF);
+  frame();
+}
+
+function stopCosmosStars() {
+  _cosmosActive = false;
+  if (_cosmosRAF) cancelAnimationFrame(_cosmosRAF);
+}
+
+/* ── ПОКАЗАТЬ COSMOS SCREEN ── */
+function showCosmosScreen() {
+  // Hide app
+  document.getElementById('app').style.display = 'none';
+  // Show cosmos
+  var cs = document.getElementById('cosmos-screen');
+  cs.classList.remove('hidden');
+  // Start starfield
+  startCosmosStars();
+  // Render game nodes
+  renderNebulae();
+  // Update coords pseudo-randomly
+  updateCoords();
+}
+
+function updateCoords() {
+  var el = document.getElementById('cosmos-coords');
+  if (!el) return;
+  var sectors = ['Α-7','Β-3','Γ-12','Δ-5','Ε-9'];
+  var s = sectors[Math.floor(Math.random() * sectors.length)];
+  var p = (2000 + Math.random() * 2000).toFixed(1);
+  el.innerHTML = 'СЕКТОР: ' + s + '<br>ПАРСЕК: ' + p + '<br>СТАТУС: ОРБИТА';
+}
+
+/* ── RESIZE HANDLER ── */
+window.addEventListener('resize', function() {
+  var cs = document.getElementById('cosmos-screen');
+  if (cs && !cs.classList.contains('hidden')) {
+    renderNebulae();
+    var canvas = document.getElementById('cosmos-canvas');
+    if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  }
+  var hjCanvas = document.getElementById('hyperjump-canvas');
+  if (hjCanvas) { hjCanvas.width = window.innerWidth; hjCanvas.height = window.innerHeight; }
+});
+
+/* ── PATCH REG SUBMIT to go to cosmos ── */
+function patchRegSubmit() {
+  var origSubmit = document.getElementById('reg-btn');
+  if (!origSubmit) return;
+  // Remove old listener by cloning
+  var newBtn = origSubmit.cloneNode(true);
+  origSubmit.parentNode.replaceChild(newBtn, origSubmit);
+  newBtn.addEventListener('click', function() {
+    var name = (document.getElementById('reg-name') || {}).value || (tgUser ? tgUser.first_name : 'Игрок');
+    var dob  = (document.getElementById('reg-dob')  || {}).value || '';
+    STATE.registered = true;
+    STATE.playerName = name.trim() || 'Игрок';
+    STATE.dob = dob;
+    save();
+    // Hide reg
+    document.getElementById('reg-screen').classList.add('hidden');
+    // Go to cosmos
+    showCosmosScreen();
+    if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+  });
+}
+
+/* ── ADD BACK BUTTONS TO GAME SCREENS ── */
+function injectCosmosBackBtns() {
+  // Find the .game-cnt or .game-content divs and prepend back button
+  var targets = [
+    document.querySelector('.game-cnt'),
+    document.querySelector('.game-content'),
+    document.getElementById('game-cnt')
+  ];
+  targets.forEach(function(t) {
+    if (!t) return;
+    if (t.querySelector('.back-to-cosmos')) return; // already added
+    var btn = document.createElement('button');
+    btn.className = 'back-to-cosmos';
+    btn.textContent = '← На орбитальную карту';
+    btn.addEventListener('click', returnToCosmos);
+    t.insertBefore(btn, t.firstChild);
+  });
+
+  // Also patch nav buttons to return to cosmos first
+  document.querySelectorAll('.nav-btn').forEach(function(nb) {
+    // These stay — they work within the app
+  });
+}
+
+/* ── OVERRIDE showPage to handle cosmos flow ── */
+var _origShowPage = window.showPage;
+window.showPage = function(id) {
+  if (id === 'cosmos') {
+    returnToCosmos();
+    return;
+  }
+  if (_origShowPage) _origShowPage(id);
+};
+
+/* ── INIT (called after everything else loads) ── */
+function initCosmosEngine() {
+  patchRegSubmit();
+  injectCosmosBackBtns();
+
+  // If already registered — go straight to cosmos
+  if (STATE.registered) {
+    document.getElementById('reg-screen').classList.add('hidden');
+    showCosmosScreen();
+  } else {
+    // Show reg screen, hide app
+    document.getElementById('app').style.display = 'none';
+  }
+}
+
+// Run after DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCosmosEngine);
+} else {
+  // Small delay to let existing init() run first
+  setTimeout(initCosmosEngine, 150);
+}
+
+
+
+
+/* ═══════════════════════════════════════════════════
+   AEON Universe v10 — Cabin + CosmosGames Engine
+═══════════════════════════════════════════════════ */
+
+/* ── ЗВЁЗДЫ ДЛЯ ИГРОВЫХ ЭКРАНОВ ── */
+function makeCosmosStarfield(canvasId, starCount, speed) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return null;
+  var ctx = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var stars = [];
+  for (var i = 0; i < (starCount || 200); i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      s: (Math.random() - 0.5) * 0.005,
+      vx:(Math.random()-0.5)*0.04*(speed||1),
+      vy:(Math.random()-0.5)*0.02*(speed||1)
+    });
+  }
+  var active = true, rafId;
+  function frame() {
+    if (!active) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    var bg = ctx.createRadialGradient(canvas.width/2,canvas.height/2,0,canvas.width/2,canvas.height/2,canvas.width);
+    bg.addColorStop(0,'rgba(4,2,18,1)');
+    bg.addColorStop(1,'rgba(0,0,8,1)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,canvas.width,canvas.height);
+    stars.forEach(function(s){
+      s.a+=s.s; if(s.a<=0||s.a>=1)s.s*=-1;
+      s.x+=s.vx; s.y+=s.vy;
+      if(s.x<0)s.x=canvas.width; if(s.x>canvas.width)s.x=0;
+      if(s.y<0)s.y=canvas.height; if(s.y>canvas.height)s.y=0;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(180,160,255,'+s.a+')'; ctx.fill();
+    });
+    rafId = requestAnimationFrame(frame);
+  }
+  frame();
+  return { stop: function(){ active=false; if(rafId)cancelAnimationFrame(rafId); } };
+}
+
+/* ── КАЮТА ── */
+var _cabinStarfield = null;
+
+window.openCabin = function openCabin() {
+  renderCabinData();
+  document.getElementById('cabin-screen').classList.add('show');
+  // Звёзды в иллюминаторе двери
+  startDoorStars();
+  // Фоновый звёздный полотно
+  _cabinStarfield = makeCosmosStarfield('cabin-bg-canvas', 150, 0.5);
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+}
+
+window.closeCabin = function closeCabin() {
+  document.getElementById('cabin-screen').classList.remove('show');
+  if (_cabinStarfield) { _cabinStarfield.stop(); _cabinStarfield = null; }
+}
+
+function renderCabinData() {
+  var name  = STATE.playerName || (tgUser ? tgUser.first_name : 'Космонавт') || 'Космонавт';
+  var uid   = tgUser ? '#'+String(tgUser.id).slice(-6) : '#'+Math.floor(Math.random()*900000+100000);
+  var lv    = getLevel ? getLevel() : {name:'Новичок', icon:'🌱'};
+  var nxt   = getNextLevel ? getNextLevel() : null;
+  var pct   = nxt ? Math.min(100,((STATE.xp-(lv.min||0))/((nxt.min||500)-(lv.min||0))*100)) : 100;
+  var wPct  = Math.min(100,(STATE.wagerGames/50)*100);
+
+  el('cabin-name').textContent  = name;
+  el('cabin-uid').textContent   = uid;
+  el('cabin-rank').textContent  = (lv.icon||'🌱') + ' ' + lv.name;
+  el('cabin-spins').textContent = STATE.spins || 0;
+  el('cabin-jacks').textContent = STATE.jackpots || 0;
+  el('cabin-maxwin').textContent= STATE.maxWin || 0;
+  el('cabin-xp-lbl').textContent= (STATE.xp||0) + (nxt ? ' / '+nxt.min : '');
+  el('cabin-xp-fill').style.width = pct.toFixed(1)+'%';
+  el('cabin-balance').textContent = STATE.balance || 0;
+  el('cabin-wager-val').textContent = Math.min(STATE.wagerGames,50)+'/50';
+  el('cabin-wager-fill').style.width = wPct.toFixed(1)+'%';
+
+  var refId = uid.replace('#','');
+  el('cabin-ref-link').textContent = 'https://t.me/feries_casinoBot?start=REF'+refId;
+
+  // Leaderboard
+  renderCabinLeaders();
+}
+
+function renderCabinLeaders() {
+  var MOCK=[
+    {n:'AeonKing',av:'👑',score:98400},
+    {n:'StarSeeker',av:'⭐',score:74200},
+    {n:'MoonKeeper',av:'🌙',score:61000},
+    {n:'CosmicAce',av:'🚀',score:43800},
+    {n:'NebulaBoss',av:'🪐',score:31200},
+  ];
+  var list = el('cabin-leaders-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var medals = ['🥇','🥈','🥉'];
+  MOCK.forEach(function(p,i){
+    var row = document.createElement('div');
+    row.className = 'cl-row';
+    row.innerHTML = '<div class="cl-rank '+(i<3?'g':'')+'">'+( i<3?medals[i]:(i+1) )+'</div>'+
+      '<div class="cl-av">'+p.av+'</div>'+
+      '<div class="cl-name">'+p.n+'</div>'+
+      '<div class="cl-score">'+p.score.toLocaleString()+'</div>';
+    list.appendChild(row);
+  });
+}
+
+/* Звёзды в иллюминаторе (маленький canvas) */
+function startDoorStars() {
+  var c = document.getElementById('cabin-door-canvas');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  c.width = c.offsetWidth || 200; c.height = c.offsetHeight || 280;
+  var stars = [];
+  for (var i=0;i<60;i++) stars.push({
+    x:Math.random()*c.width, y:Math.random()*c.height,
+    r:Math.random()*1.2+0.2, a:Math.random(), s:(Math.random()-0.5)*0.006
+  });
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle='rgba(0,0,10,0.15)'; ctx.fillRect(0,0,c.width,c.height);
+    stars.forEach(function(s){
+      s.a+=s.s; if(s.a<=0||s.a>=1)s.s*=-1;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(160,200,255,'+s.a+')'; ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function el(id){ return document.getElementById(id); }
+
+/* ── ПАТЧ enterGame — открываем новые экраны ── */
+function enterGame(gameId) {
+  // Hide cosmos map
+  document.getElementById('cosmos-screen').classList.add('hidden');
+
+  if (gameId === 'slot') {
+    openSlotCosmos();
+  } else if (gameId === 'dice') {
+    openDiceCosmos();
+  }
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+}
+
+window.returnToCosmosFromGame = function returnToCosmosFromGame() {
+  // Close all game screens
+  el('slot-cosmos-screen').classList.remove('show');
+  el('dice-cosmos-screen').classList.remove('show');
+  if (_slotStarfield)  { _slotStarfield.stop();  _slotStarfield = null; }
+  if (_diceStarfield)  { _diceStarfield.stop();  _diceStarfield = null; }
+  // Back to cosmos
+  showCosmosScreen();
+}
+
+/* ── СЛОТ В КОСМОСЕ ── */
+var _slotStarfield = null;
+
+function openSlotCosmos() {
+  var screen = el('slot-cosmos-screen');
+  screen.classList.add('show');
+  _slotStarfield = makeCosmosStarfield('slot-cosmos-canvas', 260, 0.7);
+
+  // Монтируем слот-машину — берём из DOM и вставляем
+  var mount = el('slot-cosmos-mount');
+  if (mount && mount.children.length === 0) {
+    var slotEl = document.querySelector('.machine-wrap');
+    if (slotEl) {
+      mount.appendChild(slotEl.cloneNode(true));
+      // Переподвешиваем кнопки на клоне
+      bindSlotButtons(mount);
+    }
+  }
+}
+
+function bindSlotButtons(container) {
+  // Кнопка SPIN
+  var spinBtn = container.querySelector('#spin-btn');
+  if (spinBtn) {
+    var newBtn = spinBtn.cloneNode(true);
+    spinBtn.parentNode.replaceChild(newBtn, spinBtn);
+    newBtn.addEventListener('click', doSpin);
+  }
+  // Bet кнопки
+  var bdDn = container.querySelector('#bet-dn');
+  var bdUp = container.querySelector('#bet-up');
+  var bdMx = container.querySelector('#bet-max');
+  if (bdDn) bdDn.addEventListener('click',function(){ betIdx=Math.max(0,betIdx-1); bet=BETS[betIdx]; updateUI(); });
+  if (bdUp) bdUp.addEventListener('click',function(){ betIdx=Math.min(BETS.length-1,betIdx+1); bet=BETS[betIdx]; updateUI(); });
+  if (bdMx) bdMx.addEventListener('click',function(){ betIdx=BETS.length-1; bet=BETS[betIdx]; updateUI(); });
+}
+
+/* ── КОСТИ В КОСМОСЕ — НОВАЯ МЕХАНИКА ── */
+var _diceStarfield = null;
+var _dbTarget = 7;
+var _dbBetIdx = 1;
+var _dbBet = 10;
+var _dbRolling = false;
+var DB_BETS = [5,10,25,50,100,200];
+var DB_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+/* Выплаты: по сумме + бонус дублей */
+var DB_PAYS = {2:25, 3:12, 4:8, 5:6, 6:5, 7:3, 8:5, 9:6, 10:8, 11:12, 12:25};
+var DB_DOUBLE_BONUS = {
+  '1+1': 2.5,  // дубль 1: ×2.5 на базу
+  '2+2': 3,    // дубль 2: ×3
+  '3+3': 3.5,  // дубль 3: ×3.5
+  '4+4': 4,    // дубль 4: ×4
+  '5+5': 5,    // дубль 5: ×5
+  '6+6': 8     // дубль 6: КУШИ ×8
+};
+
+function openDiceCosmos() {
+  var screen = el('dice-cosmos-screen');
+  screen.classList.add('show');
+  _diceStarfield = makeCosmosStarfield('dice-cosmos-canvas', 260, 0.7);
+  buildDiceNumberGrid();
+  updateDiceUI();
+}
+
+function buildDiceNumberGrid() {
+  var grid = el('db-number-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  // Числа 2–12 + дубли выделяем
+  var doubles = {2:true, 4:true, 6:true, 8:true, 10:true, 12:true}; // чётные могут быть дублями
+  var doubleLabels = {2:'1+1',4:'2+2',6:'3+3',8:'4+4',10:'5+5',12:'6+6'};
+  for (var n=2; n<=12; n++) {
+    (function(num){
+      var btn = document.createElement('div');
+      btn.className = 'db-num-btn' + (num===_dbTarget?' sel':'') + (doubles[num]?' double-highlight':'');
+      var mult = DB_PAYS[num];
+      btn.innerHTML = '<span>'+num+'</span><span class="dbn-multi">×'+mult+(doubles[num]?'+🎁':'')+'</span>';
+      btn.addEventListener('click', function(){
+        _dbTarget = num;
+        document.querySelectorAll('.db-num-btn').forEach(function(b){ b.classList.remove('sel'); });
+        btn.classList.add('sel');
+        el('db-target-disp').textContent = num;
+        el('db-target-disp').className = 'db-res-val';
+        setDiceMsg('СТАВКА НА '+num+'  ×'+DB_PAYS[num]+(doubles[num]?' + ДУБЛЬ-БОНУС':''), '');
+      });
+      grid.appendChild(btn);
+    })(n);
+  }
+  el('db-target-disp').textContent = _dbTarget;
+}
+
+function updateDiceUI() {
+  var v = el('db-bet-val');
+  if (v) v.textContent = _dbBet;
+}
+
+function setDiceMsg(txt, cls) {
+  var e = el('db-msg');
+  if (!e) return;
+  e.textContent = txt;
+  e.className = 'db-msg ' + (cls||'');
+}
+
+function animateDiceBones(f1, f2) {
+  return new Promise(function(res){
+    var d0 = el('db-die0'), d1 = el('db-die1');
+    d0.classList.add('rolling'); d1.classList.add('rolling');
+    d0.classList.remove('win-die','double-die');
+    d1.classList.remove('win-die','double-die');
+    var n=0, iv=setInterval(function(){
+      d0.textContent = DB_FACES[Math.floor(Math.random()*6)];
+      d1.textContent = DB_FACES[Math.floor(Math.random()*6)];
+      if(++n>=18){
+        clearInterval(iv);
+        d0.classList.remove('rolling'); d1.classList.remove('rolling');
+        d0.textContent = DB_FACES[f1-1];
+        d1.textContent = DB_FACES[f2-1];
+        res();
+      }
+    }, 70);
+  });
+}
+
+async function rollDiceCosmos() {
+  if (_dbRolling) return;
+  if (STATE.balance < _dbBet) { setDiceMsg('НЕ ХВАТАЕТ AEON!','lose'); return; }
+  _dbRolling = true;
+  var rollBtn = el('db-roll-btn');
+  if (rollBtn) rollBtn.disabled = true;
+  setDiceMsg('БРОСАЕМ КОСТИ...','');
+
+  STATE.balance -= _dbBet;
+  STATE.spins++;
+  STATE.xp += 3;
+  STATE.wagerGames = Math.min(STATE.wagerGames+1, 50);
+  updateUI();
+
+  // API-ready: generate dice result
+  var d1 = Math.ceil(Math.random()*6);
+  var d2 = Math.ceil(Math.random()*6);
+  var sum = d1+d2;
+  var isDouble = (d1 === d2);
+  var doubleKey = d1+'+'+d2;
+
+  await animateDiceBones(d1, d2);
+
+  // Show result
+  var resEl = el('db-result-disp');
+  resEl.textContent = sum;
+
+  var baseMult = DB_PAYS[sum] || 1;
+  var doubleMult = isDouble ? (DB_DOUBLE_BONUS[doubleKey] || 2) : 1;
+  var totalMult = (sum === _dbTarget) ? baseMult * doubleMult : (isDouble && sum===_dbTarget ? baseMult*doubleMult : 0);
+
+  if (sum === _dbTarget) {
+    totalMult = baseMult * doubleMult;
+    var earned = Math.floor(_dbBet * totalMult);
+    STATE.balance += earned;
+    STATE.totalWin += earned;
+    STATE.xp += earned;
+    if (earned > STATE.maxWin) STATE.maxWin = earned;
+
+    el('db-win-disp').textContent = earned;
+    resEl.className = 'db-res-val win';
+
+    var d0El = el('db-die0'), d1El = el('db-die1');
+
+    if (isDouble) {
+      d0El.classList.add('double-die'); d1El.classList.add('double-die');
+      if (d1===6) {
+        setDiceMsg('👑 ДУБЛЬ 6! КУШИ! +'+earned+' AEON', 'big');
+        spawnCoins(18);
+        if (tg&&tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      } else {
+        setDiceMsg('🎲 ДУБЛЬ '+d1+'! +'+earned+' AEON (×'+totalMult.toFixed(1)+')', 'big');
+        spawnCoins(10);
+        if (tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('heavy');
+      }
+    } else {
+      d0El.classList.add('win-die'); d1El.classList.add('win-die');
+      setDiceMsg('✨ УГАДАЛ! +'+earned+' AEON', 'win');
+      spawnCoins(6);
+      if (tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+    }
+
+    if (STATE.jackpots !== undefined && totalMult >= 8) STATE.jackpots++;
+  } else {
+    el('db-win-disp').textContent = 0;
+    resEl.className = 'db-res-val lose';
+    if (isDouble) {
+      setDiceMsg('Дубль '+d1+' (сумма '+sum+') — не то число!','lose');
+    } else {
+      setDiceMsg('Выпало '+sum+'. Не угадал!','lose');
+    }
+    if (tg&&tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  }
+
+  if (STATE.balance <= 0) { STATE.balance = 300; setDiceMsg('БАЛАНС ПОПОЛНЕН! 🚀','win'); }
+  updateUI();
+  save();
+  _dbRolling = false;
+  if (rollBtn) rollBtn.disabled = false;
+}
+
+/* Привязка кнопок кубиков */
+function bindDiceButtons() {
+  var rollBtn = el('db-roll-btn');
+  if (rollBtn && !rollBtn._bound) {
+    rollBtn.addEventListener('click', rollDiceCosmos);
+    rollBtn._bound = true;
+  }
+  var dnBtn = el('db-bet-dn'), upBtn = el('db-bet-up'), mxBtn = el('db-bet-max');
+  if (dnBtn && !dnBtn._bound) {
+    dnBtn.addEventListener('click', function(){ _dbBetIdx=Math.max(0,_dbBetIdx-1); _dbBet=DB_BETS[_dbBetIdx]; updateDiceUI(); });
+    dnBtn._bound = true;
+  }
+  if (upBtn && !upBtn._bound) {
+    upBtn.addEventListener('click', function(){ _dbBetIdx=Math.min(DB_BETS.length-1,_dbBetIdx+1); _dbBet=DB_BETS[_dbBetIdx]; updateDiceUI(); });
+    upBtn._bound = true;
+  }
+  if (mxBtn && !mxBtn._bound) {
+    mxBtn.addEventListener('click', function(){ _dbBetIdx=DB_BETS.length-1; _dbBet=DB_BETS[_dbBetIdx]; updateDiceUI(); });
+    mxBtn._bound = true;
+  }
+}
+
+/* ── ПАТЧ returnToCosmos — через новую функцию ── */
+window.returnToCosmos = function() {
+  // Close game screens
+  if (el('slot-cosmos-screen')) el('slot-cosmos-screen').classList.remove('show');
+  if (el('dice-cosmos-screen')) el('dice-cosmos-screen').classList.remove('show');
+  if (el('cabin-screen'))       el('cabin-screen').classList.remove('show');
+  if (_slotStarfield)  { _slotStarfield.stop();  _slotStarfield = null; }
+  if (_diceStarfield)  { _diceStarfield.stop();  _diceStarfield = null; }
+  // Hide old app
+  if (el('app')) el('app').style.display = 'none';
+  showCosmosScreen();
+};
+
+/* ── ПАТЧ: скрыть старые страницы профиль/рейтинг/кошелёк из app ── */
+function hideOldPages() {
+  ['page-profile','page-leaders','page-wallet'].forEach(function(id){
+    var p = el(id);
+    if (p) p.style.display = 'none';
+  });
+}
+
+/* ── ОБНОВЛЁННЫЙ initCosmosEngine ── */
+var _origInitCosmos = window.initCosmosEngine;
+window.initCosmosEngine = function() {
+  // Bind dice buttons
+  bindDiceButtons();
+  // Hide old pages
+  hideOldPages();
+  // Run original init
+  if (_origInitCosmos) _origInitCosmos();
+};
+
+/* ── copyRef / shareRef доступны из каюты ── */
+window.copyRef = function() {
+  var txt = (el('cabin-ref-link')||{textContent:''}).textContent
+         || (el('ref-link')||{textContent:''}).textContent;
+  try { navigator.clipboard.writeText(txt); } catch(e) {
+    var ta=document.createElement('textarea'); ta.value=txt;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+};
+window.shareRef = function() {
+  var txt = '🌌 Играй в AEON Universe — космическое казино!\n'
+    + ((el('cabin-ref-link')||{textContent:''}).textContent || 'https://t.me/feries_casinoBot');
+  if (tg && tg.shareToStory) tg.shareToStory('',{text:txt});
+  else if (navigator.share) navigator.share({text:txt});
+  else window.copyRef();
+};
+
+/* ── spawnCoins (если не определена глобально) ── */
+if (typeof spawnCoins === 'undefined') {
+  window.spawnCoins = function(n) {
+    for (var i=0;i<n;i++) {
+      var e=document.createElement('div'); e.className='coin-p';
+      e.innerHTML='<svg width="18" height="18" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a0e04" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width="0.9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/><circle cx="16" cy="16" r="0.7" fill="#07071a"/></svg>';
+      e.style.left=(30+Math.random()*40)+'vw';
+      e.style.top='40vh';
+      e.style.animationDelay=(Math.random()*0.4)+'s';
+      document.body.appendChild(e);
+      (function(el){ el.addEventListener('animationend',function(){ el.remove(); }); })(e);
+    }
+  };
+}
+
 </script>
 </body>
 </html>
