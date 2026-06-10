@@ -244,7 +244,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #merge-screen{background:var(--bg);z-index:20;overflow:hidden;}
 #merge-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
 .merge-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
-  padding:calc(var(--sat)+6px) 0 6px;}
+  padding:calc(var(--sat)+6px) 0 0;overflow:hidden;}
 .merge-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:0 14px 8px;flex-shrink:0;}
 .mg-back{background:rgba(255,255,255,.05);border:.5px solid rgba(200,169,110,.2);
@@ -261,24 +261,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .meb-fill{height:100%;background:linear-gradient(90deg,#4010a0,var(--purple));
   border-radius:3px;transition:width .35s;}
 /* Сетка 5x5 */
-.merge-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:0 10px;}
+.merge-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:0 8px;min-height:0;overflow:hidden;}
 .merge-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:100%;max-width:380px;}
-.mg-cell{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.03);
+.mg-cell{aspect-ratio:1;border-radius:8px;background:rgba(255,255,255,.03);
   border:.5px solid rgba(168,85,247,.12);display:flex;flex-direction:column;
   align-items:center;justify-content:center;cursor:pointer;transition:all .18s;
-  position:relative;overflow:hidden;}
+  position:relative;overflow:hidden;min-width:0;min-height:0;}
 .mg-cell:active{transform:scale(.93);}
 .mg-cell.selected{border-color:var(--purple);background:rgba(168,85,247,.12);
   box-shadow:0 0 12px rgba(168,85,247,.3);}
 .mg-cell.has-item{background:rgba(168,85,247,.06);border-color:rgba(168,85,247,.2);}
 .mg-cell.locked{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.05);cursor:not-allowed;}
 .mg-cell.locked::after{content:'🔒';position:absolute;font-size:16px;}
-.mg-item-icon{font-size:24px;line-height:1;}
+.mg-item-icon{font-size:clamp(16px,4.5vw,24px);line-height:1;}
 .mg-item-lvl{font-size:6px;color:rgba(200,169,110,.5);margin-top:2px;letter-spacing:.5px;}
 .mg-cell.merging{animation:mgMerge .4s ease-out;}
 @keyframes mgMerge{0%{transform:scale(1.3);opacity:.5}100%{transform:scale(1);opacity:1}}
 /* Нижняя панель merge */
-.merge-bottom{flex-shrink:0;padding:8px 14px calc(var(--sab)+6px);}
+.merge-bottom{flex-shrink:0;padding:6px 14px calc(var(--sab)+8px);background:rgba(4,2,15,.9);backdrop-filter:blur(10px);border-top:.5px solid rgba(168,85,247,.15);}
 .merge-btns{display:flex;gap:8px;margin-bottom:8px;}
 .mg-gen-btn{flex:1;height:46px;border-radius:12px;border:none;cursor:pointer;
   font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;
@@ -858,7 +858,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   </div>
   <div class="hpanels">
     <!-- Пилот -->
-    <div class="hpanel active" id="hp-pilot">
+    <div class="hpanel active" id="hp-pilot" style="padding-bottom:80px;">
       <div class="hc">
         <div class="hc-t">👨‍🚀 ПИЛОТ</div>
         <div class="pilot-row">
@@ -894,6 +894,81 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div class="hc-t" style="color:rgba(255,215,0,.62);">🏆 ДОСТИЖЕНИЯ</div>
         <div style="display:flex;flex-direction:column;gap:5px;" id="ach-list"></div>
       </div>
+      <!-- AEON Монета — перенесена сюда -->
+      <div class="hc" id="aeon-coin-card" style="border-color:rgba(200,144,26,.3);background:linear-gradient(135deg,rgba(200,144,26,.06),rgba(10,4,0,.5));">
+        <div class="hc-t" style="color:var(--aeon2);">🪙 МОНЕТА AEON</div>
+        <!-- Мистическая эмблема -->
+        <div style="display:flex;justify-content:center;margin-bottom:14px;">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <defs>
+              <radialGradient id="coinAura" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="rgba(255,215,0,.25)"/>
+                <stop offset="100%" stop-color="rgba(200,144,26,0)"/>
+              </radialGradient>
+              <filter id="coinGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <!-- Внешний ореол -->
+            <circle cx="60" cy="60" r="56" fill="url(#coinAura)"/>
+            <!-- Внешний круг — Зороастрийское колесо -->
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(200,144,26,.35)" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(200,144,26,.2)" stroke-width=".8"/>
+            <!-- Зороастрийские лучи (Фраваши) -->
+            <g stroke="rgba(255,215,0,.4)" stroke-width="1.2">
+              <line x1="60" y1="8" x2="60" y2="20"/>
+              <line x1="60" y1="100" x2="60" y2="112"/>
+              <line x1="8" y1="60" x2="20" y2="60"/>
+              <line x1="100" y1="60" x2="112" y2="60"/>
+              <line x1="23" y1="23" x2="31" y2="31"/>
+              <line x1="89" y1="89" x2="97" y2="97"/>
+              <line x1="97" y1="23" x2="89" y2="31"/>
+              <line x1="31" y1="89" x2="23" y2="97"/>
+            </g>
+            <!-- Треугольник масонов (Дельта) -->
+            <polygon points="60,28 82,72 38,72" fill="none" stroke="rgba(255,215,0,.5)" stroke-width="1.5"/>
+            <polygon points="60,92 38,48 82,48" fill="none" stroke="rgba(255,215,0,.3)" stroke-width="1"/>
+            <!-- Центральный Глаз Всезнания -->
+            <ellipse cx="60" cy="60" rx="20" ry="13" fill="rgba(10,4,0,.8)" stroke="rgba(200,144,26,.6)" stroke-width="1.5"/>
+            <!-- Радужка -->
+            <ellipse cx="60" cy="60" rx="13" ry="9" fill="rgba(200,144,26,.15)" stroke="rgba(200,144,26,.4)" stroke-width="1"/>
+            <!-- Зрачок -->
+            <circle cx="60" cy="60" r="5" fill="rgba(200,144,26,.3)" filter="url(#coinGlow)"/>
+            <circle cx="60" cy="60" r="2.5" fill="#ffd700"/>
+            <!-- Свет в глазу -->
+            <circle cx="63" cy="57" r="1" fill="rgba(255,255,255,.6)"/>
+            <!-- Лучи от глаза -->
+            <g stroke="rgba(255,215,0,.25)" stroke-width=".8">
+              <line x1="60" y1="47" x2="60" y2="30"/>
+              <line x1="60" y1="73" x2="60" y2="90"/>
+              <line x1="47" y1="60" x2="30" y2="60"/>
+              <line x1="73" y1="60" x2="90" y2="60"/>
+            </g>
+            <!-- Надпись AEON по кругу -->
+            <path id="textCircle" d="M 60,60 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" fill="none"/>
+            <text font-size="7" font-family="Orbitron,monospace" fill="rgba(200,144,26,.55)" letter-spacing="4">
+              <textPath href="#textCircle">✦ AEON · UNIVERSE · OF · AGES · ✦ · </textPath>
+            </text>
+          </svg>
+        </div>
+        <div style="font-family:Cinzel,serif;font-size:10.5px;color:rgba(200,169,110,.52);line-height:1.75;margin-bottom:12px;text-align:center;">
+          Рождённая из столкновения первых галактик.<br>
+          Хранит память о первом мгновении существования.<br>
+          <span style="color:rgba(200,144,26,.35);font-size:9px;">
+          Первая криптовалюта рождённая из смысла, а не из жадности.
+          </span>
+        </div>
+        <div class="aeon-stats">
+          <div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">ЭМИССИЯ</div></div>
+          <div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">БЛОКЧЕЙН</div></div>
+          <div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">ЭПОХА</div></div>
+        </div>
+        <div class="aeon-roadmap" style="margin-top:12px;">
+          <div class="arm-title">🗺️ ДОРОЖНАЯ КАРТА</div>
+          <div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">Запуск AEON Universe — внутриигровая валюта</div></div>
+          <div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">10,000 пилотов — Community Token</div></div>
+          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">Листинг TON DEX — реальная торговля</div></div>
+          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">CEX листинг — мировые биржи</div></div>
+        </div>
+      </div>
       <!-- Реферал -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
         <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 РЕФЕРАЛ</div>
@@ -910,28 +985,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div class="hc-t">🎒 АРТЕФАКТЫ</div>
         <div class="bp-grid" id="bp-grid"></div>
       </div>
-      <!-- AEON Монета -->
-      <div class="hc" style="border-color:rgba(200,144,26,.25);">
-        <div class="hc-t" style="color:var(--aeon2);">🪙 МОНЕТА AEON</div>
-        <div class="aeon-coin-hero">
-          <div class="aeon-coin-icon">🪙</div>
-          <div class="aeon-coin-info">
-            <div class="aeon-coin-name">AEON</div>
-            <div class="aeon-coin-tag">Universe of Ages Token</div>
-          </div>
-        </div>
-        <div class="aeon-lore">В древних звёздных архивах сказано: когда первые галактики столкнулись в хаосе рождения Вселенной, из их недр вырвалась энергия чистого времени. Эта энергия кристаллизовалась в монеты AEON — артефакты вечности, хранящие память о первом мгновении существования.<br><br><span style="color:rgba(200,144,26,.38);font-size:9px;">Никто не знает сколько монет существует. Говорят, каждый синтез рождает новую — из самой ткани пространства-времени. Это первая криптовалюта рождённая из смысла, а не из жадности.</span></div>
-        <div class="aeon-stats">
-          <div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">ЭМИССИЯ</div></div>
-          <div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">БЛОКЧЕЙН</div></div>
-          <div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">ЭПОХА</div></div>
-        </div>
-        <div class="aeon-roadmap">
-          <div class="arm-title">🗺️ ДОРОЖНАЯ КАРТА</div>
-          <div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">Запуск AEON Universe — внутриигровая валюта</div></div>
-          <div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">10,000 активных пилотов — Community Token</div></div>
-          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">Листинг на TON DEX — реальная торговля</div></div>
-          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">CEX листинг — мировые биржи</div></div>
+      <!-- Артефакты инфо -->
+      <div class="hc" style="border-color:rgba(168,85,247,.15);">
+        <div class="hc-t" style="color:rgba(168,85,247,.6);">📖 КАК ПОЛУЧИТЬ АРТЕФАКТЫ</div>
+        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(255,255,255,.3);line-height:1.7;">
+          Артефакты выпадают при синтезе высших уровней,
+          за достижения и особые события вселенной.
+          Каждый хранит частицу истории.
         </div>
       </div>
     </div>
@@ -1194,11 +1254,35 @@ function makeStars(id,n,spd){
 }
 
 /* ── ENERGY REGEN ── */
+// Восстановление энергии каждую минуту
 setInterval(function(){
   var lv=getLv(); S.maxEnergy=lv.eLimit||100;
-  if(S.energy<S.maxEnergy){S.energy=Math.min(S.maxEnergy,S.energy+1);save();updateUI();}
-  if(S.mergeEnergy<S.maxMergeEnergy){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+1);save();updateUI();}
-}, 5*60*1000);
+  var changed=false;
+  if(S.energy<S.maxEnergy){S.energy=Math.min(S.maxEnergy,S.energy+1);changed=true;}
+  if(S.mergeEnergy<S.maxMergeEnergy){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+1);changed=true;}
+  if(changed){save();updateUI();updateEnergyTimer();}
+}, 60*1000);
+
+// Таймер до восстановления
+var energyTimerInterval=null;
+function startEnergyTimer(){
+  if(energyTimerInterval)clearInterval(energyTimerInterval);
+  energyTimerInterval=setInterval(function(){updateEnergyTimer();},1000);
+}
+function updateEnergyTimer(){
+  var lv=getLv();S.maxEnergy=lv.eLimit||100;
+  var ed=$('en-d');
+  if(S.energy>=S.maxEnergy){
+    if(ed)ed.textContent=S.energy+'/'+S.maxEnergy;
+    return;
+  }
+  // Показываем таймер
+  if(!energyTimerStart)energyTimerStart=Date.now();
+  var elapsed=(Date.now()-energyTimerStart)/1000;
+  var secsLeft=Math.max(0,60-Math.floor(elapsed%60));
+  if(ed)ed.textContent=S.energy+'/'+S.maxEnergy+' ('+secsLeft+'с)';
+}
+var energyTimerStart=Date.now();
 
 /* ══ INTRO ══ */
 var iSFs=[];
@@ -1304,6 +1388,12 @@ function initMain(){
   var sd=$('streak-d'); if(sd)sd.textContent=S.streakDays||1;
   updateUI();checkAchs();
   initShipTap();
+  startEnergyTimer();
+  // Применяем ауру если куплена
+  if(S.shipAura==='golden'){
+    var sw=$('ship-w');
+    if(sw)sw.style.filter='drop-shadow(0 0 20px rgba(255,215,0,.8)) drop-shadow(0 0 40px rgba(255,180,0,.4))';
+  }
 }
 
 function checkStreak(){
@@ -1512,6 +1602,8 @@ window.doHyperjump=function(){
 };
 
 function enterGame(id){
+  // Скрываем нижнее меню в играх
+  var bn=$('bnav');if(bn)bn.classList.remove('show');
   if(id==='merge'){showScreen('merge-screen');hudShow(true);if(sFs.merge)sFs.merge.stop();sFs.merge=makeStars('merge-canvas',180,.4);initMerge();}
   else if(id==='runes'){showScreen('runes-screen');initRunes();}
   else if(id==='oracle'){showScreen('oracle-screen');initOracle();}
@@ -1521,7 +1613,9 @@ function enterGame(id){
 window.returnToMain=function(){
   hudShow(false);
   Object.keys(sFs).forEach(function(k){if(sFs[k])sFs[k].stop();});
-  sFs={};goMain();
+  sFs={};
+  var bn=$('bnav');if(bn)bn.classList.add('show');
+  goMain();
 };
 
 /* ══ MERGE ENGINE ══ */
@@ -1543,11 +1637,13 @@ function initMerge(){
 }
 
 function genOrders(){
-  S.orders=[
+  // Генерируем свежие заказы каждый раз
+  var baseOrders=[
     {req:2,count:2,reward:150,desc:'2 Обломка'},
     {req:3,count:1,reward:300,desc:'1 Кристалл'},
     {req:4,count:1,reward:600,desc:'1 Энерго-ячейка'},
   ];
+  S.orders=baseOrders.slice();
   save();
 }
 
@@ -1590,7 +1686,9 @@ function handleCellClick(idx){
   if(item1&&item2&&item1===item2){
     // Проверяем энергию материи
     if(S.mergeEnergy<MERGE_COST){
-      var info2=$('mg-info');if(info2)info2.textContent='Мало энергии материи! Подожди или купи в магазине.';
+      var info2=$('mg-info');
+      var minLeft=Math.ceil((MERGE_COST-S.mergeEnergy)*5);
+      if(info2)info2.textContent='⚡ Мало энергии материи! Восстановится через ~'+minLeft+' мин.';
       selCell=-1;renderMergeGrid();return;
     }
     var nextItem=item1+1;
@@ -1668,13 +1766,55 @@ function checkOrders(itemId){
 function renderOrders(){
   var list=$('mo-list');if(!list)return;
   list.innerHTML='';
-  (S.orders||[]).forEach(function(order){
+  var orders=S.orders||[];
+  if(orders.length===0){
+    // Генерируем если пусто
+    genOrders();orders=S.orders||[];
+  }
+  orders.forEach(function(order){
     var def=MITEMS.find(function(m){return m.id===order.req;});
     if(!def)return;
     var el=document.createElement('div');el.className='mo-item';
-    el.innerHTML='<div class="mo-req">'+def.icon+'</div><div class="mo-info"><div class="mo-reward">+'+order.reward+' 🪙</div><div class="mo-desc">'+order.desc+'</div></div>';
+    el.innerHTML='<div class="mo-req">'+def.icon+'</div>'+
+      '<div class="mo-info"><div class="mo-reward">+'+order.reward+' 🪙</div>'+
+      '<div class="mo-desc">'+order.desc+'</div></div>'+
+      '<button class="mo-btn" onclick="submitOrder('+order.req+')">Сдать</button>';
     list.appendChild(el);
   });
+}
+
+function submitOrder(reqId){
+  var order=(S.orders||[]).find(function(o){return o.req===reqId;});
+  if(!order)return;
+  // Проверяем наличие предметов
+  var count=0;
+  for(var i=0;i<25;i++){if(S.mergeGrid[i]===reqId)count++;}
+  if(count<order.count){
+    var info=$('mg-info');
+    if(info)info.textContent='Нужно: '+order.count+'x '+MITEMS.find(function(m){return m.id===reqId;}).name+'. Есть: '+count;
+    return;
+  }
+  // Забираем предметы
+  var removed=0;
+  for(var j=0;j<25;j++){
+    if(S.mergeGrid[j]===reqId&&removed<order.count){S.mergeGrid[j]=null;removed++;}
+  }
+  S.bal+=order.reward;S.xp+=50;
+  save();
+  bonusNotif('📋','ЗАКАЗ ВЫПОЛНЕН!',order.reward);spawnCoins(8);
+  // Удаляем заказ и генерируем новый
+  S.orders=S.orders.filter(function(o){return o.req!==reqId;});
+  if(S.orders.length<2){
+    var newOrders=[
+      {req:2,count:3,reward:200,desc:'3 Обломка'},
+      {req:3,count:2,reward:500,desc:'2 Кристалла'},
+      {req:4,count:2,reward:900,desc:'2 Энерго-ячейки'},
+    ];
+    newOrders.forEach(function(no){
+      if(!S.orders.find(function(o){return o.req===no.req;}))S.orders.push(no);
+    });
+  }
+  save();renderOrders();renderMergeGrid();updateUI();checkAchs();
 }
 
 /* ══ RUNES ENGINE ══ */
@@ -1878,7 +2018,11 @@ window.buyItem=function(id,price){
   S.bal-=price;
   if(id==='energy')S.energy=Math.min(S.maxEnergy,S.energy+50);
   if(id==='merge_energy')S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+30);
-  if(id==='aura'){S.shipAura='golden';}
+  if(id==='aura'){
+    S.shipAura='golden';
+    var sw=$('ship-w');
+    if(sw)sw.style.filter='drop-shadow(0 0 20px rgba(255,215,0,.8)) drop-shadow(0 0 40px rgba(255,180,0,.4))';
+  }
   save();updateUI();bonusNotif('✅','КУПЛЕНО',0);
   var sb=$('sh-bal');if(sb)sb.textContent=S.bal;
 };
