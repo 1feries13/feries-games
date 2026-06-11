@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>AEON Universe</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,6 +16,7 @@
   --bg:#00000a;
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:'Orbitron',monospace;}
+.screen{height:var(--tg-height,100vh) !important;max-height:var(--tg-height,100vh) !important;}
 .screen{position:fixed;inset:0;display:none;flex-direction:column;z-index:10;}
 .screen.active{display:flex;}
 
@@ -558,6 +559,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   border-radius:18px;padding:5px 13px;font-size:7.5px;color:rgba(200,169,110,.5);
   cursor:pointer;letter-spacing:1px;align-self:flex-start;margin-left:14px;margin-bottom:8px;}
 @keyframes coinFly{to{transform:translateY(-70px) scale(.4);opacity:0;}}
+
+@keyframes coinSpin3D{
+  0%{transform:rotateY(0deg);}
+  49%{transform:rotateY(89deg);opacity:1;}
+  50%{transform:rotateY(90deg);opacity:.3;}
+  51%{transform:rotateY(91deg);opacity:1;}
+  100%{transform:rotateY(360deg);}
+}
+
 </style>
 </head>
 <body>
@@ -738,6 +748,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div class="c-disp"><span class="c-ico">🪙</span><span class="c-val" id="main-c">500</span><span class="c-lbl">AEON</span></div>
         <div class="sep"></div>
         <div class="c-disp"><span class="c-ico">⚡</span><span class="c-val ev" id="main-e">100</span><span class="c-lbl">ЭНЕРГИЯ</span></div>
+        <div class="sep"></div>
+        <div class="c-disp" onclick="showUpgradeInfo()" style="cursor:pointer;">
+          <span class="c-ico">🛸</span>
+          <span style="font-size:10px;font-weight:700;color:rgba(200,169,110,.7);">Ур.<span id="main-ship-lv">1</span></span>
+        </div>
+      </div>
+      <div id="upgrade-hint" style="display:none;margin-top:6px;text-align:center;">
+        <button onclick="tryShipUpgrade()" style="padding:8px 20px;border-radius:10px;border:.5px solid rgba(200,169,110,.3);background:linear-gradient(135deg,rgba(200,144,26,.15),rgba(200,144,26,.05));color:var(--aeon2);font-family:Orbitron,monospace;font-size:9px;cursor:pointer;letter-spacing:1px;">
+          ⬆️ УЛУЧШИТЬ КОРАБЛЬ
+        </button>
       </div>
     </div>
   </div>
@@ -769,6 +789,84 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <path id="eye-b" fill="none" stroke="url(#eyeG)" stroke-width=".4"/>
       </svg>
       <div id="nzone"></div>
+    </div>
+    <!-- Кодекс Выжившего -->
+    <div style="position:absolute;bottom:calc(var(--sab)+8px);left:50%;transform:translateX(-50%);z-index:10;">
+      <button onclick="openCodex()" style="display:flex;align-items:center;gap:6px;
+        background:rgba(200,144,26,.1);border:1px solid rgba(200,144,26,.3);
+        border-radius:20px;padding:7px 18px;color:var(--aeon2);
+        font-family:Orbitron,monospace;font-size:9px;font-weight:700;
+        letter-spacing:1.5px;cursor:pointer;backdrop-filter:blur(10px);">
+        📜 КОДЕКС ВЫЖИВШЕГО
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ КОДЕКС ══ -->
+<div id="codex-ov" style="position:fixed;inset:0;z-index:80;background:rgba(0,0,10,.85);
+  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px);">
+  <div id="codex-sheet" style="width:min(420px,100vw);max-height:82vh;overflow-y:auto;
+    background:linear-gradient(160deg,#0e0a02,#06040e,#0e0a02);
+    border:1.5px solid rgba(200,144,26,.35);border-bottom:none;
+    border-radius:24px 24px 0 0;padding:20px 18px calc(20px + var(--sab));
+    transform:translateY(110%);transition:transform .45s cubic-bezier(.34,1.3,.64,1);">
+    <!-- Шапка -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:16px;font-weight:900;color:var(--aeon2);letter-spacing:2px;">📜 КОДЕКС ВЫЖИВШЕГО</div>
+        <div style="font-family:Cinzel,serif;font-size:9px;color:rgba(200,144,26,.45);margin-top:2px;">Инструкция по прохождению</div>
+      </div>
+      <button onclick="closeCodex()" style="width:28px;height:28px;border-radius:50%;
+        background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.12);
+        color:rgba(255,255,255,.45);font-size:13px;cursor:pointer;display:flex;
+        align-items:center;justify-content:center;">✕</button>
+    </div>
+    <!-- Осколки -->
+    <div style="background:rgba(200,144,26,.07);border:.5px solid rgba(200,144,26,.25);
+      border-radius:12px;padding:12px;margin-bottom:14px;">
+      <div style="font-size:9px;color:var(--aeon2);letter-spacing:2px;margin-bottom:8px;">🔮 ОСКОЛКИ КАМНЯ НАЧАЛА</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">💠</span>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);">Осколок Света</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.5);">Ур.3 — найти в игре Астероиды</div>
+            <div style="font-size:8px;color:var(--green);">Бонус: ×10 монет за тап навсегда</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">🌑</span>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);">Осколок Тени</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.35);">Ур.6 — создать Эссенцию Творца</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);">Бонус: ???</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">⚡</span>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);">Осколок Воли</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.35);">Ур.9 — финал игры</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);">Бонус: ???</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Уровни -->
+    <div style="font-size:9px;color:rgba(200,144,26,.45);letter-spacing:2px;margin-bottom:10px;">🚀 УРОВНИ КОРАБЛЯ</div>
+    <div id="codex-levels" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <!-- Доп инфо -->
+    <div style="margin-top:14px;background:rgba(168,85,247,.06);border:.5px solid rgba(168,85,247,.18);
+      border-radius:12px;padding:12px;">
+      <div style="font-size:9px;color:rgba(168,85,247,.6);letter-spacing:2px;margin-bottom:8px;">⚡ ЭНЕРГИЯ И СИНТЕЗ</div>
+      <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(255,255,255,.35);line-height:1.7;">
+        1 тап = -1 энергия + 1 монета<br>
+        Комбо (10 тапов) = ×2 монеты пока не остановишься<br>
+        Энергия +1 каждую минуту автоматически<br>
+        Синтез предметов = -5 энергии материи<br>
+        Энергия 0 = корабль тускнеет, тапы не работают
+      </div>
     </div>
   </div>
 </div>
@@ -894,81 +992,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div class="hc-t" style="color:rgba(255,215,0,.62);">🏆 ДОСТИЖЕНИЯ</div>
         <div style="display:flex;flex-direction:column;gap:5px;" id="ach-list"></div>
       </div>
-      <!-- AEON Монета — перенесена сюда -->
-      <div class="hc" id="aeon-coin-card" style="border-color:rgba(200,144,26,.3);background:linear-gradient(135deg,rgba(200,144,26,.06),rgba(10,4,0,.5));">
-        <div class="hc-t" style="color:var(--aeon2);">🪙 МОНЕТА AEON</div>
-        <!-- Мистическая эмблема -->
-        <div style="display:flex;justify-content:center;margin-bottom:14px;">
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="coinAura" cx="50%" cy="50%">
-                <stop offset="0%" stop-color="rgba(255,215,0,.25)"/>
-                <stop offset="100%" stop-color="rgba(200,144,26,0)"/>
-              </radialGradient>
-              <filter id="coinGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-            <!-- Внешний ореол -->
-            <circle cx="60" cy="60" r="56" fill="url(#coinAura)"/>
-            <!-- Внешний круг — Зороастрийское колесо -->
-            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(200,144,26,.35)" stroke-width="1.5"/>
-            <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(200,144,26,.2)" stroke-width=".8"/>
-            <!-- Зороастрийские лучи (Фраваши) -->
-            <g stroke="rgba(255,215,0,.4)" stroke-width="1.2">
-              <line x1="60" y1="8" x2="60" y2="20"/>
-              <line x1="60" y1="100" x2="60" y2="112"/>
-              <line x1="8" y1="60" x2="20" y2="60"/>
-              <line x1="100" y1="60" x2="112" y2="60"/>
-              <line x1="23" y1="23" x2="31" y2="31"/>
-              <line x1="89" y1="89" x2="97" y2="97"/>
-              <line x1="97" y1="23" x2="89" y2="31"/>
-              <line x1="31" y1="89" x2="23" y2="97"/>
-            </g>
-            <!-- Треугольник масонов (Дельта) -->
-            <polygon points="60,28 82,72 38,72" fill="none" stroke="rgba(255,215,0,.5)" stroke-width="1.5"/>
-            <polygon points="60,92 38,48 82,48" fill="none" stroke="rgba(255,215,0,.3)" stroke-width="1"/>
-            <!-- Центральный Глаз Всезнания -->
-            <ellipse cx="60" cy="60" rx="20" ry="13" fill="rgba(10,4,0,.8)" stroke="rgba(200,144,26,.6)" stroke-width="1.5"/>
-            <!-- Радужка -->
-            <ellipse cx="60" cy="60" rx="13" ry="9" fill="rgba(200,144,26,.15)" stroke="rgba(200,144,26,.4)" stroke-width="1"/>
-            <!-- Зрачок -->
-            <circle cx="60" cy="60" r="5" fill="rgba(200,144,26,.3)" filter="url(#coinGlow)"/>
-            <circle cx="60" cy="60" r="2.5" fill="#ffd700"/>
-            <!-- Свет в глазу -->
-            <circle cx="63" cy="57" r="1" fill="rgba(255,255,255,.6)"/>
-            <!-- Лучи от глаза -->
-            <g stroke="rgba(255,215,0,.25)" stroke-width=".8">
-              <line x1="60" y1="47" x2="60" y2="30"/>
-              <line x1="60" y1="73" x2="60" y2="90"/>
-              <line x1="47" y1="60" x2="30" y2="60"/>
-              <line x1="73" y1="60" x2="90" y2="60"/>
-            </g>
-            <!-- Надпись AEON по кругу -->
-            <path id="textCircle" d="M 60,60 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" fill="none"/>
-            <text font-size="7" font-family="Orbitron,monospace" fill="rgba(200,144,26,.55)" letter-spacing="4">
-              <textPath href="#textCircle">✦ AEON · UNIVERSE · OF · AGES · ✦ · </textPath>
-            </text>
-          </svg>
-        </div>
-        <div style="font-family:Cinzel,serif;font-size:10.5px;color:rgba(200,169,110,.52);line-height:1.75;margin-bottom:12px;text-align:center;">
-          Рождённая из столкновения первых галактик.<br>
-          Хранит память о первом мгновении существования.<br>
-          <span style="color:rgba(200,144,26,.35);font-size:9px;">
-          Первая криптовалюта рождённая из смысла, а не из жадности.
-          </span>
-        </div>
-        <div class="aeon-stats">
-          <div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">ЭМИССИЯ</div></div>
-          <div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">БЛОКЧЕЙН</div></div>
-          <div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">ЭПОХА</div></div>
-        </div>
-        <div class="aeon-roadmap" style="margin-top:12px;">
-          <div class="arm-title">🗺️ ДОРОЖНАЯ КАРТА</div>
-          <div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">Запуск AEON Universe — внутриигровая валюта</div></div>
-          <div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">10,000 пилотов — Community Token</div></div>
-          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">Листинг TON DEX — реальная торговля</div></div>
-          <div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">CEX листинг — мировые биржи</div></div>
-        </div>
-      </div>
       <!-- Реферал -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
         <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 РЕФЕРАЛ</div>
@@ -996,13 +1019,37 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       </div>
     </div>
     <!-- Кошелёк -->
-    <div class="hpanel" id="hp-wallet">
+    <div class="hpanel" id="hp-wallet" style="padding-bottom:80px;">
       <div class="wal-bal"><div class="wb-lbl">БАЛАНС AEON</div><div class="wb-amt" id="p-bal">500</div></div>
-      <div class="wal-info">
-        <div class="wi-title">💎 TON ПОПОЛНЕНИЕ</div>
-        <div class="wi-text">1 TON = 500 AEON монет<br>Минимальный депозит: 0.5 TON<br>Вывод открывается после 100 синтезов и депозита<br><br>Реферал: +10% от депозита друга зачисляется тебе</div>
-      </div>
       <button class="dep-btn" onclick="depositTON()">⬇️ ПОПОЛНИТЬ ЧЕРЕЗ TON</button>
+      <!-- Пакеты TON -->
+      <div class="hc" style="border-color:rgba(0,100,255,.22);margin-top:0;">
+        <div class="hc-t" style="color:rgba(100,180,255,.7);">💎 ПАКЕТЫ TON</div>
+        <div style="display:flex;flex-direction:column;gap:7px;" id="ton-packages">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.06);border:.5px solid rgba(0,100,255,.18);border-radius:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.8);">Стартер</div><div style="font-size:9px;color:rgba(255,255,255,.3);">1 TON = 1,000 AEON</div></div>
+            <button class="si-btn" onclick="buyTON(1,1000)">1 TON</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.07);border:.5px solid rgba(0,100,255,.22);border-radius:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.9);">Пилот <span style="font-size:8px;color:var(--green);">+20%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">5 TON = 6,000 AEON</div></div>
+            <button class="si-btn" onclick="buyTON(5,6000)">5 TON</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.08);border:.5px solid rgba(0,150,255,.28);border-radius:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:rgba(150,200,255,.9);">Капитан <span style="font-size:8px;color:var(--green);">+50%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">10 TON = 15,000 AEON</div></div>
+            <button class="si-btn" onclick="buyTON(10,15000)">10 TON</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(200,169,110,.07);border:.5px solid rgba(200,169,110,.25);border-radius:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--aeon2);">Адмирал <span style="font-size:8px;color:var(--green);">+100%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">25 TON = 50,000 AEON</div></div>
+            <button class="si-btn" onclick="buyTON(25,50000)">25 TON</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(168,85,247,.08));border:.5px solid rgba(200,169,110,.35);border-radius:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--gold);">Легенда <span style="font-size:8px;color:var(--green);">+140%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">50 TON = 120,000 AEON</div></div>
+            <button class="si-btn" onclick="buyTON(50,120000)">50 TON</button>
+          </div>
+        </div>
+      </div>
+      <!-- AEON монета с вращением -->
+      <div id="aeon-coin-wallet"></div>
     </div>
   </div>
 </div>
@@ -1037,7 +1084,16 @@ window.addEventListener('unhandledrejection', function(e){ e.preventDefault(); }
 
 const API = 'https://web-production-0c777.up.railway.app';
 const tg  = window.Telegram && window.Telegram.WebApp || null;
-if (tg) { tg.expand(); tg.ready(); }
+if (tg) {
+  tg.expand();
+  tg.ready();
+  // Адаптация под Mini App viewport
+  tg.onEvent('viewportChanged', function() {
+    document.documentElement.style.setProperty('--tg-height', tg.viewportHeight + 'px');
+  });
+  document.documentElement.style.setProperty('--tg-height', (tg.viewportHeight || window.innerHeight) + 'px');
+  document.documentElement.style.setProperty('--tg-stable-height', (tg.viewportStableHeight || window.innerHeight) + 'px');
+}
 const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user || null;
 
 /* ── STATE ── */
@@ -1389,6 +1445,12 @@ function initMain(){
   updateUI();checkAchs();
   initShipTap();
   startEnergyTimer();
+  // Обновляем уровень корабля
+  var sl=document.getElementById('main-ship-lv');
+  if(sl)sl.textContent=S.shipLevel||1;
+  // Обновляем maxEnergy по уровню
+  var shipDef=getShipLvDef?getShipLvDef(S.shipLevel||1):null;
+  if(shipDef)S.maxEnergy=shipDef.energyLimit;
   // Применяем ауру если куплена
   if(S.shipAura==='golden'){
     var sw=$('ship-w');
@@ -1447,26 +1509,42 @@ function initShipTap(){
 function doTap(e){
   if(S.energy<1){bonusNotif('⚡','ЭНЕРГИЯ НА ИСХОДЕ',0);return;}
   S.energy=Math.max(0,S.energy-1);
-  var coins=10,xp=5;
+  var tapBonus=S.shards&&S.shards[1]?10:1; // Осколок 1 = x10 навсегда
+  var coins=tapBonus,xp=5;
   comboCount++;
   var cw=$('combo-w'),cf=$('combo-f'),cn=$('combo-n');
   if(cw)cw.classList.add('show');
   if(cn)cn.textContent=comboCount;
   if(cf)cf.style.width=(comboCount/10*100)+'%';
-  if(comboTimer)clearTimeout(comboTimer);
-  comboTimer=setTimeout(function(){
-    comboCount=0;if(cw)cw.classList.remove('show');if(cf)cf.style.width='0%';if(cn)cn.textContent='0';
-  },1500);
+  if(!comboActive){
+    if(comboTimer)clearTimeout(comboTimer);
+    comboTimer=setTimeout(function(){
+      if(!comboActive){comboCount=0;if(cw)cw.classList.remove('show');if(cf)cf.style.width='0%';if(cn)cn.textContent='0';}
+    },1500);
+  }
   var isCombo=false;
-  if(comboCount>=10){
-    coins=20;xp=10;isCombo=true;comboCount=0;
-    if(cw)cw.classList.remove('show');if(cf)cf.style.width='0%';if(cn)cn.textContent='0';
+  if(comboCount>=10&&!comboActive){
+    // Активируем комбо-режим
+    comboActive=true;
     var sw=$('ship-w');if(sw){sw.classList.add('shake');setTimeout(function(){sw.classList.remove('shake');},400);}
     if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('heavy');
+    bonusNotif('⚡','КОМБО АКТИВИРОВАНО!',0);
     showPhrase(true);
-  }else{
+  }
+  if(comboActive){
+    coins=tapBonus*2;xp=10;isCombo=true; // комбо = x2 от текущего бонуса
+    // Сбрасываем таймер угасания комбо
+    if(comboDecayTimer)clearTimeout(comboDecayTimer);
+    comboDecayTimer=setTimeout(function(){
+      // Остановился — комбо угасает
+      comboActive=false;comboCount=0;
+      if(cw)cw.classList.remove('show');
+      if(cf)cf.style.width='0%';
+      if(cn)cn.textContent='0';
+    },2000);
+  } else {
     if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
-    showPhrase(false);
+    if(comboCount<10)showPhrase(false);
   }
   S.bal+=coins;S.xp+=xp;S.taps++;
   save();updateUI();showCoinPop(coins,isCombo,e);checkAchs();
@@ -1620,6 +1698,8 @@ window.returnToMain=function(){
 
 /* ══ MERGE ENGINE ══ */
 var selCell=-1;
+var comboActive=false;
+var comboDecayTimer=null;
 
 function initMerge(){
   if(!S.mergeGrid||S.mergeGrid.length!==25){
@@ -2009,6 +2089,7 @@ window.htab=function(name,el){
   document.querySelectorAll('.hpanel').forEach(function(p){p.classList.remove('active');});
   el.classList.add('active');
   var panel=document.getElementById('hp-'+name);if(panel)panel.classList.add('active');
+  if(name==='wallet')renderAEONWallet();
 };
 
 /* ── SHOP ── */
@@ -2036,15 +2117,301 @@ window.shareRef=function(){
   var uid=($('p-uid')||{textContent:''}).textContent;
   var refId=uid.replace('#','');
   var link='https://t.me/feries_casinoBot?start=REF'+refId;
-  var txt='🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня\nи стань лучшим собирателем галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n«Путь домой начинается внутри.»\n\n⚡ Ссылка:\n'+link+'\n\nКомандир, твой флот ждёт! 🚀';
-  if(tg&&tg.shareToStory)tg.shareToStory('',{text:txt});
-  else if(navigator.share)navigator.share({title:'AEON Universe',text:txt,url:link});
-  else{try{navigator.clipboard.writeText(txt);}catch(e){}alert('Ссылка скопирована!');}
+  var txt='🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня\nи стань легендой галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n«Путь домой начинается внутри.»\n\n⚡ '+link;
+  // Telegram-специфичный способ — передаёт текст напрямую
+  if(tg&&tg.switchInlineQuery){
+    // Это открывает inline поиск с текстом
+  }
+  // Лучший способ для Telegram Mini App
+  if(tg&&tg.openTelegramLink){
+    var encodedText=encodeURIComponent(txt);
+    tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня и стань легендой галактики!\n\n«Путь домой начинается внутри.»'));
+  } else if(navigator.share){
+    navigator.share({title:'AEON Universe — Космическая Игра',text:txt,url:link});
+  } else {
+    try{navigator.clipboard.writeText(txt);}catch(e){}
+    alert('Текст с ссылкой скопирован!');
+  }
 };
-window.depositTON=function(){alert('TON депозит — скоро!\n1 TON = 500 AEON монет');};
+window.depositTON=function(){
+  if(tg&&tg.openTelegramLink){
+    tg.openTelegramLink('https://t.me/feries_casinoBot?start=deposit');
+  } else {
+    alert('TON депозит — скоро!\nОткрой бота @feries_casinoBot для пополнения.');
+  }
+};
+window.buyTON=function(tons,aeonAmount){
+  bonusNotif('💎','TON ДЕПОЗИТ СКОРО',0);
+  // TODO: подключить реальный TON платёж
+  if(tg&&tg.openTelegramLink){
+    tg.openTelegramLink('https://t.me/feries_casinoBot?start=deposit_'+tons);
+  } else {
+    alert('Пополнение '+tons+' TON = '+aeonAmount.toLocaleString()+' AEON\nОткрой @feries_casinoBot');
+  }
+};
 
 /* ── RESIZE ── */
 window.addEventListener('resize',function(){if($('cosmos-screen')&&$('cosmos-screen').classList.contains('active'))renderMap();});
+
+
+/* ══ SHIP LEVELS ══ */
+var SHIP_LEVELS = [
+  {lv:1, name:'Обломок',       cost:0,      mergeReq:0, streakReq:0,  energyLimit:100},
+  {lv:2, name:'Шаттл',         cost:5000,   mergeReq:2, streakReq:0,  energyLimit:120},
+  {lv:3, name:'Разведчик',     cost:15000,  mergeReq:3, streakReq:0,  energyLimit:150},
+  {lv:4, name:'Крейсер',       cost:50000,  mergeReq:4, streakReq:7,  energyLimit:200},
+  {lv:5, name:'Линкор',        cost:150000, mergeReq:5, streakReq:14, energyLimit:260},
+  {lv:6, name:'Дредноут',      cost:500000, mergeReq:6, streakReq:21, energyLimit:320},
+  {lv:7, name:'Звёздный Страж',cost:1500000,mergeReq:0, streakReq:30, energyLimit:380},
+  {lv:8, name:'Архонт',        cost:5000000,mergeReq:0, streakReq:45, energyLimit:440},
+  {lv:9, name:'Корабль Творца', cost:0,     mergeReq:0, streakReq:0,  energyLimit:500},
+];
+
+function getShipLvDef(lv){return SHIP_LEVELS.find(function(l){return l.lv===lv;})||SHIP_LEVELS[0];}
+function getNextShipLv(){return SHIP_LEVELS.find(function(l){return l.lv===(S.shipLevel||1)+1;});}
+
+function checkShipUpgrade(){
+  var next=getNextShipLv();if(!next)return;
+  var lv=S.shipLevel||1;
+  var errors=[];
+  // Монеты
+  if(S.bal<next.cost)errors.push('Нужно '+next.cost.toLocaleString()+' AEON (есть '+S.bal.toLocaleString()+')');
+  // Синтез предмета
+  if(next.mergeReq>0){
+    var maxMerge=0;
+    for(var i=0;i<25;i++){if((S.mergeGrid[i]||0)>=next.mergeReq&&(S.mergeGrid[i]||0)>maxMerge)maxMerge=S.mergeGrid[i]||0;}
+    if(maxMerge<next.mergeReq){
+      var mdef=MITEMS.find(function(m){return m.id===next.mergeReq;});
+      errors.push('Нужно создать: '+(mdef?mdef.name:'предмет ур.'+next.mergeReq));
+    }
+  }
+  // Стрик
+  if(next.streakReq>0&&(S.streakDays||1)<next.streakReq)
+    errors.push('Нужно '+(next.streakReq-S.streakDays)+' дней стрика');
+  return {canUpgrade:errors.length===0,errors:errors,next:next};
+}
+
+function tryShipUpgrade(){
+  var result=checkShipUpgrade();
+  if(!result)return;
+  if(!result.canUpgrade){
+    bonusNotif('🚫','НЕ ХВАТАЕТ',0);
+    setTimeout(function(){
+      var info=result.errors.join('\n');
+      alert('Для перехода на уровень '+(S.shipLevel+1)+':\n'+info);
+    },400);
+    return;
+  }
+  // Апгрейд!
+  var next=result.next;
+  S.bal-=next.cost;
+  S.shipLevel=(S.shipLevel||1)+1;
+  save();
+  // Уровень 3 — открываем Астероиды (осколок там)
+  if(S.shipLevel===3){
+    bonusNotif('🛸','АСТЕРОИДЫ ОТКРЫТЫ!',0);
+  }
+  // Обновляем maxEnergy
+  var def=getShipLvDef(S.shipLevel);
+  S.maxEnergy=def.energyLimit;
+  save();updateUI();
+  bonusNotif('🚀','УРОВЕНЬ '+S.shipLevel+'!',0);
+  if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+}
+
+
+function renderAEONWallet(){
+  var el=document.getElementById('aeon-coin-wallet');if(!el)return;
+  el.innerHTML='<div class="hc" style="border-color:rgba(200,144,26,.3);background:linear-gradient(135deg,rgba(200,144,26,.06),rgba(10,4,0,.5));margin-top:0;">'+
+    '<div class="hc-t" style="color:var(--aeon2);">🪙 МОНЕТА AEON</div>'+
+    '<div style="display:flex;justify-content:center;margin-bottom:14px;">'+
+    '<div style="width:120px;height:120px;animation:coinSpin3D 6s linear infinite;transform-style:preserve-3d;">'+
+    '<svg width="120" height="120" viewBox="0 0 120 120">'+
+    '<defs>'+
+    '<radialGradient id="ca" cx="50%" cy="50%"><stop offset="0%" stop-color="rgba(255,215,0,.25)"/><stop offset="100%" stop-color="rgba(200,144,26,0)"/></radialGradient>'+
+    '<filter id="cg"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
+    '</defs>'+
+    '<circle cx="60" cy="60" r="56" fill="url(#ca)"/>'+
+    '<circle cx="60" cy="60" r="52" fill="none" stroke="rgba(200,144,26,.35)" stroke-width="1.5"/>'+
+    '<circle cx="60" cy="60" r="46" fill="none" stroke="rgba(200,144,26,.2)" stroke-width=".8"/>'+
+    '<g stroke="rgba(255,215,0,.4)" stroke-width="1.2">'+
+    '<line x1="60" y1="8" x2="60" y2="20"/><line x1="60" y1="100" x2="60" y2="112"/>'+
+    '<line x1="8" y1="60" x2="20" y2="60"/><line x1="100" y1="60" x2="112" y2="60"/>'+
+    '<line x1="23" y1="23" x2="31" y2="31"/><line x1="89" y1="89" x2="97" y2="97"/>'+
+    '<line x1="97" y1="23" x2="89" y2="31"/><line x1="31" y1="89" x2="23" y2="97"/>'+
+    '</g>'+
+    '<polygon points="60,28 82,72 38,72" fill="none" stroke="rgba(255,215,0,.5)" stroke-width="1.5"/>'+
+    '<polygon points="60,92 38,48 82,48" fill="none" stroke="rgba(255,215,0,.3)" stroke-width="1"/>'+
+    '<ellipse cx="60" cy="60" rx="20" ry="13" fill="rgba(10,4,0,.8)" stroke="rgba(200,144,26,.6)" stroke-width="1.5"/>'+
+    '<ellipse cx="60" cy="60" rx="13" ry="9" fill="rgba(200,144,26,.15)" stroke="rgba(200,144,26,.4)" stroke-width="1"/>'+
+    '<circle cx="60" cy="60" r="5" fill="rgba(200,144,26,.3)" filter="url(#cg)"/>'+
+    '<circle cx="60" cy="60" r="2.5" fill="#ffd700"/>'+
+    '<circle cx="63" cy="57" r="1" fill="rgba(255,255,255,.6)"/>'+
+    '<path id="tc" d="M 60,60 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" fill="none"/>'+
+    '<text font-size="7" font-family="Orbitron,monospace" fill="rgba(200,144,26,.55)" letter-spacing="4">'+
+    '<textPath href="#tc">✦ AEON · UNIVERSE · OF · AGES · ✦ · </textPath></text>'+
+    '</svg></div></div>'+
+    '<div style="font-family:Cinzel,serif;font-size:10.5px;color:rgba(200,169,110,.52);line-height:1.75;margin-bottom:12px;text-align:center;">'+
+    'Рождённая из столкновения первых галактик.<br>Первая криптовалюта рождённая из смысла.<br>'+
+    '<span style="color:rgba(200,144,26,.35);font-size:9px;">Хранит память о первом мгновении существования.</span></div>'+
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;">'+
+    '<div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">ЭМИССИЯ</div></div>'+
+    '<div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">БЛОКЧЕЙН</div></div>'+
+    '<div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">ЭПОХА</div></div></div>'+
+    '<div class="aeon-roadmap">'+
+    '<div class="arm-title">🗺️ ДОРОЖНАЯ КАРТА</div>'+
+    '<div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">Запуск — внутриигровая валюта</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">10,000 пилотов — Community Token</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">Листинг TON DEX</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">CEX листинг — мировые биржи</div></div>'+
+    '</div></div>';
+}
+
+
+window.showUpgradeInfo=function(){
+  var hint=document.getElementById('upgrade-hint');
+  if(hint)hint.style.display=hint.style.display==='none'?'block':'none';
+  var result=checkShipUpgrade();
+  if(result){
+    var sl=document.getElementById('main-ship-lv');
+    if(sl)sl.textContent=S.shipLevel||1;
+  }
+};
+
+
+/* ══ КОДЕКС ВЫЖИВШЕГО ══ */
+window.openCodex=function(){
+  var ov=document.getElementById('codex-ov');
+  var sh=document.getElementById('codex-sheet');
+  if(!ov||!sh)return;
+  ov.style.display='flex';
+  setTimeout(function(){sh.style.transform='translateY(0)';},10);
+  renderCodexLevels();
+  if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
+};
+
+window.closeCodex=function(){
+  var ov=document.getElementById('codex-ov');
+  var sh=document.getElementById('codex-sheet');
+  if(!ov||!sh)return;
+  sh.style.transform='translateY(110%)';
+  setTimeout(function(){ov.style.display='none';},450);
+};
+
+function renderCodexLevels(){
+  var el=document.getElementById('codex-levels');if(!el)return;
+  el.innerHTML='';
+  var CODEX_LEVELS=[
+    {from:1,to:2,cost:'5,000',mergeReq:'Обломок (ур.2)',streak:0,unlock:'',color:'rgba(200,169,110,.15)'},
+    {from:2,to:3,cost:'15,000',mergeReq:'Кристалл (ур.3)',streak:0,unlock:'🛸 Астероиды + 💠 Осколок Света',color:'rgba(0,255,159,.08)'},
+    {from:3,to:4,cost:'50,000',mergeReq:'Энерго-ячейка (ур.4)',streak:7,unlock:'',color:'rgba(200,169,110,.12)'},
+    {from:4,to:5,cost:'150,000',mergeReq:'Антиматерия (ур.5)',streak:14,unlock:'',color:'rgba(200,169,110,.12)'},
+    {from:5,to:6,cost:'500,000',mergeReq:'Эссенция Творца (ур.6)',streak:21,unlock:'🌑 Осколок Тени',color:'rgba(168,85,247,.1)'},
+    {from:6,to:7,cost:'1,500,000',mergeReq:'',streak:30,unlock:'',color:'rgba(200,169,110,.12)'},
+    {from:7,to:8,cost:'5,000,000',mergeReq:'',streak:45,unlock:'',color:'rgba(200,169,110,.12)'},
+    {from:8,to:9,cost:'???',mergeReq:'Все 3 Осколка',streak:0,unlock:'⚡ Осколок Воли — финал',color:'rgba(255,215,0,.1)'},
+  ];
+  var curLv=S.shipLevel||1;
+  CODEX_LEVELS.forEach(function(row){
+    var isCurrent=curLv===row.from;
+    var isDone=curLv>row.to-1;
+    var div=document.createElement('div');
+    div.style.cssText='padding:10px 12px;border-radius:10px;background:'+row.color+';'+
+      'border:.5px solid rgba(200,144,26,'+(isCurrent?'.4':'.12')+');'+
+      'opacity:'+(isDone?.55:1)+';';
+    var badge=isDone?'✅':isCurrent?'⭐':'🔒';
+    var html='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'+
+      '<span style="font-size:14px;">'+badge+'</span>'+
+      '<span style="font-size:11px;font-weight:700;color:'+(isCurrent?'var(--aeon2)':isDone?'rgba(200,169,110,.5)':'rgba(255,255,255,.6)')+';">'+
+      'Ур.'+row.from+' → Ур.'+row.to+'</span>'+
+      (isCurrent?'<span style="font-size:7px;background:rgba(200,144,26,.2);border-radius:6px;padding:1px 6px;color:var(--aeon2);">СЕЙЧАС</span>':'')+
+      '</div>'+
+      '<div style="display:flex;flex-direction:column;gap:3px;padding-left:22px;">';
+    html+='<div style="font-size:8.5px;color:rgba(255,255,255,.4);">🪙 '+row.cost+' AEON</div>';
+    if(row.mergeReq)html+='<div style="font-size:8.5px;color:rgba(168,85,247,.6);">🧪 '+row.mergeReq+'</div>';
+    if(row.streak)html+='<div style="font-size:8.5px;color:rgba(255,140,0,.6);">🔥 '+row.streak+' дней подряд</div>';
+    if(row.unlock)html+='<div style="font-size:8.5px;color:var(--green);">🔓 '+row.unlock+'</div>';
+    html+='</div>';
+    div.innerHTML=html;
+    el.appendChild(div);
+  });
+}
+
+// Закрытие по клику на фон
+document.addEventListener('click',function(e){
+  var ov=document.getElementById('codex-ov');
+  if(e.target===ov)window.closeCodex();
+});
+
+
+/* ══ АНИМАЦИЯ ПОЛУЧЕНИЯ ОСКОЛКА ══ */
+function triggerShardFound(shardNum){
+  if(S.shards&&S.shards[shardNum])return; // уже найден
+  if(!S.shards)S.shards={};
+  S.shards[shardNum]=true;
+  save();
+
+  // Звук (haptic)
+  if(tg&&tg.HapticFeedback){
+    tg.HapticFeedback.notificationOccurred('success');
+    setTimeout(function(){tg.HapticFeedback.impactOccurred('heavy');},300);
+    setTimeout(function(){tg.HapticFeedback.impactOccurred('heavy');},600);
+  }
+
+  // Создаём оверлей
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:999;background:rgba(0,0,10,.0);'+
+    'display:flex;align-items:center;justify-content:center;flex-direction:column;'+
+    'transition:background 1s;';
+  document.body.appendChild(ov);
+
+  // Вспышка
+  setTimeout(function(){ov.style.background='rgba(200,169,110,.3)';},100);
+  setTimeout(function(){ov.style.background='rgba(255,255,255,.5)';},400);
+  setTimeout(function(){ov.style.background='rgba(200,169,110,.15)';},800);
+
+  var shardIcons=['','💠','🌑','⚡'];
+  var shardNames=['','Осколок Света','Осколок Тени','Осколок Воли'];
+  var shardBonuses=['','+×10 монет за тап навсегда','???','???'];
+
+  // Карточка
+  var card=document.createElement('div');
+  card.style.cssText='background:linear-gradient(160deg,#0e0a02,#06040e);'+
+    'border:2px solid var(--gold);border-radius:20px;padding:28px 32px;'+
+    'text-align:center;max-width:300px;box-shadow:0 0 60px rgba(255,215,0,.4);'+
+    'transform:scale(0);transition:transform .6s cubic-bezier(.34,1.56,.64,1);';
+
+  card.innerHTML=
+    '<div style="font-size:64px;margin-bottom:12px;animation:shardPulse 1.5s ease-in-out infinite;">'+shardIcons[shardNum]+'</div>'+
+    '<div style="font-family:Cinzel,serif;font-size:10px;color:var(--gold);letter-spacing:4px;margin-bottom:8px;">ОСКОЛОК НАЙДЕН</div>'+
+    '<div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:1px;">'+shardNames[shardNum]+'</div>'+
+    '<div style="font-family:Cinzel,serif;font-size:11px;color:rgba(200,169,110,.65);line-height:1.6;margin-bottom:16px;">'+
+    'Один из трёх Осколков Камня Начала.<br>Хранит память о первом рассвете.</div>'+
+    '<div style="background:rgba(0,255,159,.1);border:.5px solid rgba(0,255,159,.3);'+
+    'border-radius:10px;padding:8px 16px;font-size:11px;color:var(--green);margin-bottom:20px;">'+
+    '⚡ '+shardBonuses[shardNum]+'</div>'+
+    '<button id="shard-accept" style="padding:12px 32px;'+
+    'border-radius:22px;border:1.5px solid var(--gold);background:rgba(200,144,26,.15);'+
+    'color:var(--gold);font-family:Orbitron,monospace;font-size:11px;font-weight:700;'+
+    'cursor:pointer;letter-spacing:1px;">✦ ПРИНЯТЬ ДАР</button>';
+
+  ov.appendChild(card);
+  var acceptBtn=card.querySelector('#shard-accept');
+  if(acceptBtn)acceptBtn.addEventListener('click',function(){ov.remove();});
+
+  setTimeout(function(){card.style.transform='scale(1)';},200);
+
+  // Монеты
+  spawnCoins(30);
+
+  // Обновляем профиль
+  setTimeout(function(){renderShards&&renderShards();},1000);
+}
+
+// CSS анимация пульса осколка
+var shardStyle=document.createElement('style');
+shardStyle.textContent='@keyframes shardPulse{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.15) rotate(5deg)}}';
+document.head.appendChild(shardStyle);
 
 /* ── INIT ── */
 function startApp(){ initIntro(); }
