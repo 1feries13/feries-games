@@ -100,7 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #main-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .main-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .main-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat)+10px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 8px;}
 .main-logo{font-size:13px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .main-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .streak-badge{display:flex;align-items:center;gap:4px;background:rgba(255,100,0,.1);
@@ -145,7 +145,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   100%{transform:translateY(-65px) scale(.6);opacity:0}}
 
 /* ── НИЖНЯЯ ПАНЕЛЬ ── */
-.main-bottom{flex-shrink:0;padding:8px 14px calc(var(--sab)+8px);}
+.main-bottom{flex-shrink:0;padding:8px 14px calc(var(--sab) + var(--tg-bottom,0px) + 70px);}
 .res-bars{display:flex;gap:8px;margin-bottom:8px;}
 .res-bar{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 10px;}
 .res-bar-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
@@ -1716,7 +1716,15 @@ function doTap(e){
     if(comboCount<10)showPhrase(false);
   }
   S.bal+=coins;S.xp+=xp;S.taps++;
-  save();updateUI();showCoinPop(coins,isCombo,e);checkAchs();
+  if(SERVER_OK){
+    // Оптимистично показываем, на сервер шлём пачкой (он подтвердит истину)
+    localStorage.setItem(SK,JSON.stringify(S));
+    queueServerTap(isCombo);
+    updateUI();
+  }else{
+    save();
+  }
+  updateUI();showCoinPop(coins,isCombo,e);checkAchs();
 }
 
 function showPhrase(isCombo){
@@ -3072,7 +3080,7 @@ function dbg(msg){
   var line=document.createElement('div');line.textContent='› '+msg;
   d.insertBefore(line,d.firstChild);
 }
-var DEBUG=true; /* временно: диагностика связи с сервером v4-DIAG */
+var DEBUG=false;
 
 function loadProfile(done){
   var initData=getInitData();
@@ -3139,6 +3147,50 @@ function syncToServer(){
   },4000);
 }
 
+function applyTgSafeArea(){
+  try{
+    var top=0,bottom=0;
+    if(tg.contentSafeAreaInset){top=tg.contentSafeAreaInset.top||0;bottom=tg.contentSafeAreaInset.bottom||0;}
+    if(tg.safeAreaInset){top+=tg.safeAreaInset.top||0;bottom+=tg.safeAreaInset.bottom||0;}
+    document.documentElement.style.setProperty('--tg-top',top+'px');
+    document.documentElement.style.setProperty('--tg-bottom',bottom+'px');
+  }catch(e){}
+}
+
+/* ── Батч-отправка тапов на сервер ── */
+var _pendingTaps=0, _pendingCombo=false, _tapFlushTimer=null;
+function queueServerTap(isCombo){
+  if(!SERVER_OK)return;
+  _pendingTaps++;
+  if(isCombo)_pendingCombo=true;
+  if(_tapFlushTimer)return;
+  _tapFlushTimer=setTimeout(flushTaps,1500);
+}
+function flushTaps(){
+  _tapFlushTimer=null;
+  if(!SERVER_OK||_pendingTaps<=0)return;
+  var n=_pendingTaps, combo=_pendingCombo;
+  _pendingTaps=0; _pendingCombo=false;
+  var initData=getInitData(); if(!initData)return;
+  fetch(API+'/api/tap',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'tma '+initData},
+    body:JSON.stringify({taps:n,combo:combo})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok){
+      // Сервер — истина: подравниваем баланс и энергию под серверные
+      S.bal=d.balance;
+      S.energy=d.energy;
+      if(d.maxEnergy)S.maxEnergy=d.maxEnergy;
+      if(typeof d.taps==='number')S.taps=d.taps;
+      localStorage.setItem(SK,JSON.stringify(S));
+      updateUI();
+    }
+  }).catch(function(){});
+}
+// Досылаем при сворачивании/закрытии
+document.addEventListener('visibilitychange',function(){if(document.hidden)flushTaps();});
+window.addEventListener('pagehide',flushTaps);
 /* ── INIT ── */
 function bootWhenTelegramReady(attempt){
   attempt=attempt||0;
@@ -3146,6 +3198,7 @@ function bootWhenTelegramReady(attempt){
     tg=window.Telegram.WebApp;
     tgU=tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
     try{tg.expand();tg.ready();}catch(e){}
+    try{applyTgSafeArea();if(tg.onEvent){tg.onEvent('safeAreaChanged',applyTgSafeArea);tg.onEvent('contentSafeAreaChanged',applyTgSafeArea);tg.onEvent('viewportChanged',applyTgSafeArea);}}catch(e){}
     startApp();
   }else if(attempt<30){
     setTimeout(function(){bootWhenTelegramReady(attempt+1);},100);
@@ -3156,16 +3209,7 @@ function bootWhenTelegramReady(attempt){
 }
 
 function startApp(){
-  dbg('=== AEON DIAG v4-DIAG ===');
-  dbg('tg существует: '+(tg?'ДА':'НЕТ'));
-  if(tg){
-    dbg('tg.version: '+(tg.version||'?'));
-    dbg('platform: '+(tg.platform||'?'));
-    dbg('initData пустой?: '+(tg.initData?('нет, длина '+tg.initData.length):'ДА ПУСТОЙ'));
-    dbg('initDataUnsafe.user: '+(tg.initDataUnsafe&&tg.initDataUnsafe.user?JSON.stringify(tg.initDataUnsafe.user).slice(0,120):'НЕТ'));
-  }
-  loadProfile(function(ok){
-    dbg(ok?'СЕРВЕР: связь установлена ✓':'СЕРВЕР: работаем локально');
+  loadProfile(function(){
     initIntro();
   });
 }
