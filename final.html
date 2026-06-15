@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>AEON Universe</title>
@@ -1240,7 +1241,7 @@ window.onerror = function(){ return true; };
 window.addEventListener('unhandledrejection', function(e){ e.preventDefault(); });
 
 const API = 'https://web-production-0c777.up.railway.app';
-const tg  = window.Telegram && window.Telegram.WebApp || null;
+var tg  = window.Telegram && window.Telegram.WebApp || null;
 if (tg) {
   tg.expand();
   tg.ready();
@@ -1251,7 +1252,7 @@ if (tg) {
   document.documentElement.style.setProperty('--tg-height', (tg.viewportHeight || window.innerHeight) + 'px');
   document.documentElement.style.setProperty('--tg-stable-height', (tg.viewportStableHeight || window.innerHeight) + 'px');
 }
-const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user || null;
+var tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user || null;
 
 /* ── STATE ── */
 const SK = 'aeon_v4';
@@ -3139,6 +3140,21 @@ function syncToServer(){
 }
 
 /* ── INIT ── */
+function bootWhenTelegramReady(attempt){
+  attempt=attempt||0;
+  if(window.Telegram&&window.Telegram.WebApp){
+    tg=window.Telegram.WebApp;
+    tgU=tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
+    try{tg.expand();tg.ready();}catch(e){}
+    startApp();
+  }else if(attempt<30){
+    setTimeout(function(){bootWhenTelegramReady(attempt+1);},100);
+  }else{
+    // SDK так и не появился — запускаемся локально
+    startApp();
+  }
+}
+
 function startApp(){
   dbg('=== AEON DIAG v4-DIAG ===');
   dbg('tg существует: '+(tg?'ДА':'НЕТ'));
@@ -3153,8 +3169,8 @@ function startApp(){
     initIntro();
   });
 }
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',startApp);}
-else{startApp();}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){bootWhenTelegramReady(0);});}
+else{bootWhenTelegramReady(0);}
 
 </script>
 </body>
