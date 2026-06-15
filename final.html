@@ -3071,7 +3071,7 @@ function dbg(msg){
   var line=document.createElement('div');line.textContent='› '+msg;
   d.insertBefore(line,d.firstChild);
 }
-var DEBUG=(location.search.indexOf('debug')>=0);
+var DEBUG=true; /* временно: диагностика связи с сервером v4-DIAG */
 
 function loadProfile(done){
   var initData=getInitData();
@@ -3140,7 +3140,16 @@ function syncToServer(){
 
 /* ── INIT ── */
 function startApp(){
-  loadProfile(function(){
+  dbg('=== AEON DIAG v4-DIAG ===');
+  dbg('tg существует: '+(tg?'ДА':'НЕТ'));
+  if(tg){
+    dbg('tg.version: '+(tg.version||'?'));
+    dbg('platform: '+(tg.platform||'?'));
+    dbg('initData пустой?: '+(tg.initData?('нет, длина '+tg.initData.length):'ДА ПУСТОЙ'));
+    dbg('initDataUnsafe.user: '+(tg.initDataUnsafe&&tg.initDataUnsafe.user?JSON.stringify(tg.initDataUnsafe.user).slice(0,120):'НЕТ'));
+  }
+  loadProfile(function(ok){
+    dbg(ok?'СЕРВЕР: связь установлена ✓':'СЕРВЕР: работаем локально');
     initIntro();
   });
 }
