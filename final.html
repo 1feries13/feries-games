@@ -3058,32 +3058,61 @@ function refByFromStart(){
   return 0;
 }
 
+function dbg(msg){
+  // Временная отладка на экране (?debug в URL или всегда при ошибке)
+  var d=document.getElementById('dbg-box');
+  if(!d){
+    d=document.createElement('div');d.id='dbg-box';
+    d.style.cssText='position:fixed;left:6px;right:6px;bottom:6px;z-index:99999;max-height:40vh;overflow:auto;background:rgba(0,0,0,.9);border:1px solid #0f0;border-radius:8px;padding:8px;font:10px/1.4 monospace;color:#0f0;white-space:pre-wrap;';
+    document.body.appendChild(d);
+    var x=document.createElement('div');x.textContent='[×] закрыть отладку';x.style.cssText='color:#f55;cursor:pointer;margin-top:6px;';
+    x.onclick=function(){d.remove();};d.appendChild(x);
+  }
+  var line=document.createElement('div');line.textContent='› '+msg;
+  d.insertBefore(line,d.firstChild);
+}
+var DEBUG=(location.search.indexOf('debug')>=0);
+
 function loadProfile(done){
   var initData=getInitData();
+  if(DEBUG)dbg('initData length: '+(initData?initData.length:0));
   if(!initData){
-    // Не в Telegram (браузер/превью) — локальный режим
+    if(DEBUG)dbg('НЕ в Telegram — локальный режим');
     SERVER_OK=false;
     if(done)done(false);
     return;
   }
+  var finished=false;
+  var timer=setTimeout(function(){
+    if(finished)return;finished=true;
+    if(DEBUG)dbg('ТАЙМАУТ сервера (8с) — локальный режим');
+    SERVER_OK=false;if(done)done(false);
+  },8000);
   fetch(API+'/api/load',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'tma '+initData},
     body:JSON.stringify({ref_by:refByFromStart()})
-  }).then(function(r){return r.json();}).then(function(d){
+  }).then(function(r){
+    if(DEBUG)dbg('HTTP статус: '+r.status);
+    return r.json();
+  }).then(function(d){
+    if(finished)return;finished=true;clearTimeout(timer);
+    if(DEBUG)dbg('ответ: '+JSON.stringify(d).slice(0,200));
     if(d&&d.ok&&d.profile){
-      // Сервер — источник правды: вливаем серверный профиль в S
       var p=d.profile;
       for(var k in p){ if(p.hasOwnProperty(k)) S[k]=p[k]; }
       SERVER_OK=true;
       localStorage.setItem(SK, JSON.stringify(S));
+      if(DEBUG)dbg('✓ профиль загружен, баланс='+S.bal);
     }else{
       SERVER_OK=false;
+      if(DEBUG)dbg('✗ сервер вернул ok=false');
     }
     if(done)done(SERVER_OK);
-  }).catch(function(){
-    SERVER_OK=false;
-    if(done)done(false);
+  }).catch(function(err){
+    if(finished)return;finished=true;clearTimeout(timer);
+    if(DEBUG)dbg('ОШИБКА fetch: '+(err&&err.message?err.message:err));
+    SERVER_OK=false;if(done)done(false);
   });
 }
 
