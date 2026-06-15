@@ -1149,7 +1149,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <!-- Реферал -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
         <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 РЕФЕРАЛ</div>
-        <div class="ref-box" id="p-ref">https://t.me/feries_casinoBot</div>
+        <div class="ref-box" id="p-ref">https://t.me/aeon_game_Bot</div>
         <div class="ref-btns">
           <button class="ref-btn" onclick="copyRef()">📋 Копировать</button>
           <button class="ref-btn" onclick="shareRef()">📤 Поделиться</button>
@@ -1269,7 +1269,7 @@ const DEF = {
 };
 var S = Object.assign({}, DEF, JSON.parse(localStorage.getItem(SK)||'{}'));
 var _offlineGapMs=(S.lastSeen?Math.max(0,Date.now()-S.lastSeen):0);
-function save(){ S.lastSeen=Date.now(); localStorage.setItem(SK, JSON.stringify(S)); }
+function save(){ S.lastSeen=Date.now(); localStorage.setItem(SK, JSON.stringify(S)); if(typeof syncToServer==='function')syncToServer(); }
 function $(id){ return document.getElementById(id); }
 
 /* ── LEVELS ── */
@@ -2235,7 +2235,7 @@ function renderProfile(){
   ].forEach(function(pair){var e=$(pair[0]);if(e)e.textContent=pair[1];});
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
   var refId=uid.replace('#','');
-  var rl=$('p-ref');if(rl)rl.textContent='https://t.me/feries_casinoBot?start=REF'+refId;
+  var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot?start=REF'+refId;
   renderDaily();renderAchs();renderBackpack();renderShards();
 }
 
@@ -2325,7 +2325,7 @@ window.copyRef=function(){
 window.shareRef=function(){
   var uid=($('p-uid')||{textContent:''}).textContent;
   var refId=uid.replace('#','');
-  var link='https://t.me/feries_casinoBot?start=REF'+refId;
+  var link='https://t.me/aeon_game_Bot?start=REF'+refId;
   var txt='🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня\nи стань легендой галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n«Путь домой начинается внутри.»\n\n⚡ '+link;
   // Telegram-специфичный способ — передаёт текст напрямую
   if(tg&&tg.switchInlineQuery){
@@ -2344,18 +2344,18 @@ window.shareRef=function(){
 };
 window.depositTON=function(){
   if(tg&&tg.openTelegramLink){
-    tg.openTelegramLink('https://t.me/feries_casinoBot?start=deposit');
+    tg.openTelegramLink('https://t.me/aeon_game_Bot?start=deposit');
   } else {
-    alert('TON депозит — скоро!\nОткрой бота @feries_casinoBot для пополнения.');
+    alert('TON депозит — скоро!\nОткрой бота @aeon_game_Bot для пополнения.');
   }
 };
 window.buyTON=function(tons,aeonAmount){
   bonusNotif('💎','TON ДЕПОЗИТ СКОРО',0);
   // TODO: подключить реальный TON платёж
   if(tg&&tg.openTelegramLink){
-    tg.openTelegramLink('https://t.me/feries_casinoBot?start=deposit_'+tons);
+    tg.openTelegramLink('https://t.me/aeon_game_Bot?start=deposit_'+tons);
   } else {
-    alert('Пополнение '+tons+' TON = '+aeonAmount.toLocaleString()+' AEON\nОткрой @feries_casinoBot');
+    alert('Пополнение '+tons+' TON = '+aeonAmount.toLocaleString()+' AEON\nОткрой @aeon_game_Bot');
   }
 };
 
@@ -3040,8 +3040,81 @@ window.dailyCodeInfo=function(){
   if(info)info.textContent='🧪 Алхимический Код: угадай комбинацию дня — приз 50 000 🪙. Заработает с бэкендом!';
 };
 
+/* ══ СЕРВЕРНЫЙ СЛОЙ (анти-чит) ══ */
+var SERVER_OK=false;        // удалось ли связаться с сервером
+var _saveTimer=null;
+
+function getInitData(){
+  return (tg && tg.initData) ? tg.initData : '';
+}
+
+function refByFromStart(){
+  // start_param приходит от ссылки t.me/aeon_game_Bot?start=REF12345
+  var sp = tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+  if(sp && sp.indexOf('REF')===0){
+    var n=parseInt(sp.slice(3),10);
+    if(!isNaN(n))return n;
+  }
+  return 0;
+}
+
+function loadProfile(done){
+  var initData=getInitData();
+  if(!initData){
+    // Не в Telegram (браузер/превью) — локальный режим
+    SERVER_OK=false;
+    if(done)done(false);
+    return;
+  }
+  fetch(API+'/api/load',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'tma '+initData},
+    body:JSON.stringify({ref_by:refByFromStart()})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok&&d.profile){
+      // Сервер — источник правды: вливаем серверный профиль в S
+      var p=d.profile;
+      for(var k in p){ if(p.hasOwnProperty(k)) S[k]=p[k]; }
+      SERVER_OK=true;
+      localStorage.setItem(SK, JSON.stringify(S));
+    }else{
+      SERVER_OK=false;
+    }
+    if(done)done(SERVER_OK);
+  }).catch(function(){
+    SERVER_OK=false;
+    if(done)done(false);
+  });
+}
+
+function syncToServer(){
+  // Дебаунс: отправляем снимок профиля не чаще раза в 4с
+  if(!SERVER_OK)return;
+  if(_saveTimer)clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(function(){
+    var initData=getInitData();
+    if(!initData)return;
+    fetch(API+'/api/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'tma '+initData},
+      body:JSON.stringify({
+        balance:S.bal, energy:S.energy, mergeEnergy:S.mergeEnergy, xp:S.xp,
+        shipLevel:S.shipLevel, taps:S.taps, merges:S.merges, maxWin:S.maxWin,
+        totalWin:S.totalWin, streakDays:S.streakDays,
+        modEngine:S.modEngine, modTank:S.modTank, modScanner:S.modScanner,
+        shipAura:S.shipAura, shards:S.shards, artifacts:S.artifacts,
+        mergeGrid:S.mergeGrid, achievements:S.achievements
+      })
+    }).catch(function(){});
+  },4000);
+}
+
 /* ── INIT ── */
-function startApp(){ initIntro(); }
+function startApp(){
+  loadProfile(function(){
+    initIntro();
+  });
+}
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',startApp);}
 else{startApp();}
 
