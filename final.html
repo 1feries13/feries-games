@@ -77,7 +77,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   font-family:'Orbitron',monospace;font-size:11px;font-weight:700;
   letter-spacing:2px;cursor:pointer;transition:all .2s;backdrop-filter:blur(10px);}
 .intro-btn:active{transform:scale(.95);}
-.intro-skip{position:absolute;top:calc(var(--sat)+14px);right:16px;z-index:10;
+.intro-skip{position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 14px);right:16px;z-index:10;
   font-size:9px;color:rgba(255,255,255,.28);cursor:pointer;letter-spacing:1px;
   padding:6px 10px;border:none;background:none;}
 
@@ -182,7 +182,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #cosmos-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .cosmos-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .cosmos-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat)+10px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 8px;}
 .cosmos-logo{font-size:12px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .cosmos-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .cosmos-bal{display:flex;align-items:center;gap:5px;background:rgba(200,169,110,.09);
@@ -250,9 +250,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #merge-screen{background:var(--bg);z-index:20;overflow:hidden;}
 #merge-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
 .merge-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
-  padding:calc(var(--sat)+6px) 0 0;overflow:hidden;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 6px) 0 0;overflow:hidden;}
 .merge-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:0 14px 8px;flex-shrink:0;}
+  padding:6px 14px 8px;flex-shrink:0;}
 .mg-back{background:rgba(255,255,255,.05);border:.5px solid rgba(200,169,110,.2);
   border-radius:18px;padding:5px 12px;font-size:7.5px;color:rgba(200,169,110,.5);cursor:pointer;}
 .mg-title{font-size:12px;font-weight:900;color:rgba(168,85,247,.85);letter-spacing:2px;}
@@ -311,7 +311,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ RUNIC SCREEN ══ */
 #runes-screen{background:radial-gradient(ellipse at center,#08012a 0%,#00000a 100%);
   z-index:20;align-items:center;justify-content:center;padding:20px;}
-.runes-back{position:absolute;top:calc(var(--sat)+12px);left:14px;
+.runes-back{position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 12px);left:14px;
   background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);
   border-radius:18px;padding:5px 12px;color:rgba(200,180,255,.5);
   font-size:7.5px;cursor:pointer;}
@@ -344,7 +344,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ ORACLE SCREEN ══ */
 #oracle-screen{background:radial-gradient(ellipse at center,#05001a 0%,#00000a 100%);
   z-index:20;align-items:center;justify-content:center;padding:24px;}
-.oracle-back{position:absolute;top:calc(var(--sat)+12px);left:14px;
+.oracle-back{position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 12px);left:14px;
   background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);
   border-radius:18px;padding:5px 12px;color:rgba(200,180,255,.5);font-size:7.5px;cursor:pointer;}
 .oracle-title{font-family:'Cinzel',serif;font-size:11px;color:rgba(180,120,255,.5);
@@ -373,7 +373,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ HOME SCREEN ══ */
 #home-screen{background:linear-gradient(160deg,#060418,#02010e,#070318);z-index:20;overflow-y:auto;}
 .home-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat)+12px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 12px) 16px 12px;
   background:linear-gradient(180deg,rgba(120,60,240,.13),transparent);
   border-bottom:.5px solid rgba(120,60,240,.16);}
 .home-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -512,7 +512,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ SHOP SCREEN ══ */
 #shop-screen{background:linear-gradient(160deg,#080210,#040110,#060218);z-index:20;overflow-y:auto;}
 .shop-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat)+12px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 12px) 16px 12px;
   background:linear-gradient(180deg,rgba(255,100,50,.08),transparent);
   border-bottom:.5px solid rgba(255,100,50,.15);}
 .shop-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -554,7 +554,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   animation:bnIn .5s cubic-bezier(.34,1.56,.64,1) forwards;}
 @keyframes bnIn{to{transform:translate(-50%,-50%) scale(1);}}
 @keyframes bnOut{to{transform:translate(-50%,-50%) scale(.8);opacity:0;}}
-#ghud{position:fixed;top:calc(var(--sat)+8px);right:14px;z-index:25;display:none;
+#ghud{position:fixed;top:calc(var(--sat) + var(--tg-top,0px) + 8px);right:14px;z-index:25;display:none;
   align-items:center;gap:4px;background:rgba(200,169,110,.08);
   border:.5px solid rgba(200,169,110,.3);border-radius:18px;padding:4px 11px;pointer-events:none;}
 #ghud.show{display:flex;}
@@ -677,6 +677,37 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 @keyframes npcBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 .mo-npc-name{font-size:5.5px;color:rgba(200,160,255,.5);letter-spacing:.5px;}
 
+
+/* ══ INTRO SLIDE 3 — СОЛНЦЕ ══ */
+#slide-3{background:radial-gradient(ellipse at 50% 38%,#1a1405 0%,#0a0802 45%,#00000a 100%);}
+.sun-scene{position:absolute;top:0;left:0;right:0;height:55%;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;}
+.sun-core{position:absolute;width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,#fff 0%,#ffe9a0 30%,#ffb347 65%,#ff8c2e 100%);
+  box-shadow:0 0 60px 20px rgba(255,180,80,.55),0 0 120px 60px rgba(255,140,40,.25);
+  animation:sunPulse 5s ease-in-out infinite;}
+@keyframes sunPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px 20px rgba(255,180,80,.55),0 0 120px 60px rgba(255,140,40,.25);}
+  50%{transform:scale(1.08);box-shadow:0 0 80px 30px rgba(255,200,100,.7),0 0 160px 80px rgba(255,150,50,.32);}}
+.sun-glow{position:absolute;width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,180,80,.22) 0%,rgba(255,140,40,.08) 40%,transparent 70%);
+  animation:sunPulse 6s ease-in-out infinite;}
+.sun-rays{position:absolute;width:520px;height:520px;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(255,190,90,.10) 12deg,transparent 24deg,
+    rgba(255,190,90,.08) 40deg,transparent 56deg,rgba(255,190,90,.11) 75deg,transparent 92deg,
+    rgba(255,190,90,.07) 115deg,transparent 135deg,rgba(255,190,90,.10) 160deg,transparent 180deg,
+    rgba(255,190,90,.08) 210deg,transparent 235deg,rgba(255,190,90,.11) 270deg,transparent 295deg,
+    rgba(255,190,90,.07) 320deg,transparent 345deg);
+  border-radius:50%;animation:raysSpin 40s linear infinite;}
+@keyframes raysSpin{to{transform:rotate(360deg);}}
+.sun-particles span{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffd98a;
+  box-shadow:0 0 8px #ffc04a;animation:sunFloat 7s ease-in-out infinite;}
+.sun-particles span:nth-child(1){top:20%;left:30%;animation-delay:0s;}
+.sun-particles span:nth-child(2){top:35%;left:65%;animation-delay:1.2s;}
+.sun-particles span:nth-child(3){top:55%;left:25%;animation-delay:2.4s;}
+.sun-particles span:nth-child(4){top:60%;left:72%;animation-delay:3.1s;}
+.sun-particles span:nth-child(5){top:28%;left:50%;animation-delay:4.3s;}
+.sun-particles span:nth-child(6){top:48%;left:48%;animation-delay:5.5s;}
+@keyframes sunFloat{0%,100%{opacity:.2;transform:translateY(0) scale(.7);}50%{opacity:.9;transform:translateY(-20px) scale(1.2);}}
+
 </style>
 </head>
 <body>
@@ -715,19 +746,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   </div>
   <!-- Слайд 3: Путь -->
   <div class="intro-slide" id="slide-3">
-    <div class="star-birth">
-      <div class="star-core"></div>
-      <div class="ray" style="--angle:0deg;width:80px;"></div>
-      <div class="ray" style="--angle:45deg;width:60px;animation-delay:.3s;"></div>
-      <div class="ray" style="--angle:90deg;width:80px;animation-delay:.6s;"></div>
-      <div class="ray" style="--angle:135deg;width:60px;animation-delay:.9s;"></div>
-      <div class="ray" style="--angle:180deg;width:80px;animation-delay:1.2s;"></div>
-      <div class="ray" style="--angle:225deg;width:60px;animation-delay:1.5s;"></div>
-      <div class="ray" style="--angle:270deg;width:80px;animation-delay:1.8s;"></div>
-      <div class="ray" style="--angle:315deg;width:60px;animation-delay:2.1s;"></div>
+    <div class="sun-scene">
+      <div class="sun-rays"></div>
+      <div class="sun-glow"></div>
+      <div class="sun-core"></div>
+      <div class="sun-particles"><span></span><span></span><span></span><span></span><span></span><span></span></div>
     </div>
     <div class="intro-content">
-      <div class="intro-icon-wrap" style="font-size:64px;">✨</div>
+      <div class="intro-icon-wrap" style="height:40px;"></div>
       <div class="intro-title">Твой Путь<br>Начинается Сейчас</div>
       <div class="intro-text">Ты — один из выживших. Найди три Осколка Камня Начала. Пройди путь от страха к свету. Стань тем кем ты был всегда.</div>
       <div class="intro-dots"><div class="intro-dot"></div><div class="intro-dot"></div><div class="intro-dot active"></div></div>
@@ -1074,7 +1100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 <!-- ══ ASTEROIDS ══ -->
 <div class="screen" id="ast-screen" style="background:#00000a;z-index:20;">
   <canvas id="ast-canvas" style="position:absolute;inset:0;touch-action:none;"></canvas>
-  <button onclick="astExit()" style="position:absolute;top:calc(var(--sat)+10px);left:14px;z-index:5;
+  <button onclick="astExit()" style="position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 10px);left:14px;z-index:5;
     background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;
     padding:6px 14px;color:rgba(200,169,110,.6);font-family:Orbitron,monospace;font-size:8px;
     letter-spacing:1px;cursor:pointer;">← Выйти</button>
@@ -1370,13 +1396,21 @@ var MAP_NODES = [
 
 /* ── ORACLE DATA ── */
 var PROPHECIES = [
-  {text:'«Путь к свету начинается с одного шага в темноте.»', boost:'+200 монет', action:function(){S.bal+=200;}},
-  {text:'«Тот кто знает себя — непобедим.»', boost:'+50 энергии', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
-  {text:'«Разрушение — это начало нового творения.»', boost:'+30 энергии материи', action:function(){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+30);}},
-  {text:'«Вселенная щедра к тем кто щедр к себе.»', boost:'+300 монет', action:function(){S.bal+=300;}},
-  {text:'«Твоя сила не в оружии — в осознанности.»', boost:'+100 XP', action:function(){S.xp+=100;}},
-  {text:'«Звёзды не гаснут. Они просто уходят внутрь.»', boost:'Редкий артефакт', action:function(){addArtifact('void_crystal');}},
-  {text:'«Камень ищет того кто готов его нести.»', boost:'+500 монет', action:function(){S.bal+=500;}},
+  {text:'«У тебя всё получится. Вселенная уже ведёт тебя к этому.»', boost:'+300 монет', action:function(){S.bal+=300;}},
+  {text:'«Всё, во что ты искренне веришь — обязательно сбудется.»', boost:'+250 монет', action:function(){S.bal+=250;}},
+  {text:'«Ты сильнее, чем думаешь. Сегодня ты это почувствуешь.»', boost:'+50 энергии', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
+  {text:'«Лучшее впереди. Доверься пути — он не ошибается.»', boost:'+300 монет', action:function(){S.bal+=300;}},
+  {text:'«Сегодня удача на твоей стороне. Используй её.»', boost:'+100 XP', action:function(){S.xp+=100;}},
+  {text:'«Твоё сердце знает дорогу. Просто иди вперёд.»', boost:'+50 энергии материи', action:function(){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+50);}},
+  {text:'«Ты заслуживаешь всего хорошего. И оно уже близко.»', boost:'+400 монет', action:function(){S.bal+=400;}},
+  {text:'«Каждый твой шаг приближает тебя к мечте.»', boost:'Редкий артефакт', action:function(){addArtifact('void_crystal');}},
+  {text:'«Спокойствие внутри рождает победы снаружи.»', boost:'+50 энергии', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
+  {text:'«Ты не один. Свет всегда рядом, даже в темноте.»', boost:'+200 XP', action:function(){S.xp+=200;}},
+  {text:'«Твоя доброта вернётся к тебе многократно.»', boost:'+350 монет', action:function(){S.bal+=350;}},
+  {text:'«Сегодня — идеальный день, чтобы поверить в себя.»', boost:'+500 монет', action:function(){S.bal+=500;}},
+  {text:'«Ты рождён для великого. И вселенная это помнит.»', boost:'Редкий артефакт', action:function(){addArtifact('star_shard');}},
+  {text:'«Отпусти страх — и увидишь, как открываются двери.»', boost:'+150 XP', action:function(){S.xp+=150;}},
+  {text:'«Мир добрее, чем кажется. И он на твоей стороне.»', boost:'+300 монет', action:function(){S.bal+=300;}},
 ];
 
 /* ── RUNE SYMBOLS ── */
