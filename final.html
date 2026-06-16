@@ -100,7 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #main-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .main-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .main-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 48px) 16px 8px;}
 .main-logo{font-size:13px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .main-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .streak-badge{display:flex;align-items:center;gap:4px;background:rgba(255,100,0,.1);
@@ -182,7 +182,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #cosmos-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .cosmos-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .cosmos-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 48px) 16px 8px;}
 .cosmos-logo{font-size:12px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .cosmos-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .cosmos-bal{display:flex;align-items:center;gap:5px;background:rgba(200,169,110,.09);
@@ -373,7 +373,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ HOME SCREEN ══ */
 #home-screen{background:linear-gradient(160deg,#060418,#02010e,#070318);z-index:20;overflow-y:auto;}
 .home-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 12px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 50px) 16px 12px;
   background:linear-gradient(180deg,rgba(120,60,240,.13),transparent);
   border-bottom:.5px solid rgba(120,60,240,.16);}
 .home-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -512,7 +512,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* ══ SHOP SCREEN ══ */
 #shop-screen{background:linear-gradient(160deg,#080210,#040110,#060218);z-index:20;overflow-y:auto;}
 .shop-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 12px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 50px) 16px 12px;
   background:linear-gradient(180deg,rgba(255,100,50,.08),transparent);
   border-bottom:.5px solid rgba(255,100,50,.15);}
 .shop-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -1005,7 +1005,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <div class="gc-nm" id="gc-nm"></div>
   <div class="gc-ds" id="gc-ds"></div>
   <div class="gc-cost" id="gc-cost">⚡ <span id="gc-ev">20</span> энергии</div>
-  <button class="gc-go" onclick="doHyperjump()">🚀 Совершить гиперпрыжок</button>
+  <div id="gc-lock" style="display:none;text-align:center;padding:14px;color:rgba(255,120,120,.85);font-family:Orbitron,monospace;font-size:11px;letter-spacing:1px;background:rgba(255,58,92,.08);border:.5px solid rgba(255,58,92,.25);border-radius:12px;">🔒 Локация закрыта</div>
+  <button class="gc-go" id="gc-go" onclick="doHyperjump()">🚀 Совершить гиперпрыжок</button>
 </div></div>
 
 <!-- ══ HYPERJUMP ══ -->
@@ -1176,12 +1177,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       </div>
       <!-- Реферал -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
-        <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 РЕФЕРАЛ</div>
+        <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 КВАНТОВАЯ СВЯЗЬ</div>
+        <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(200,180,255,.5);line-height:1.6;margin-bottom:10px;">
+          Приглашай друзей через звёздный мост. За старт — по 500 монет обоим. Когда друг дойдёт до 2 уровня — тебе +2000 и 5% с его добычи навсегда.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
+          <div class="ac-stat" style="background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);">
+            <div class="ac-val" id="ref-total" style="color:rgba(200,160,255,.9);">0</div>
+            <div class="ac-lbl">ДРУЗЕЙ</div></div>
+          <div class="ac-stat" style="background:rgba(0,255,159,.06);border-color:rgba(0,255,159,.18);">
+            <div class="ac-val" id="ref-active" style="color:var(--green);">0</div>
+            <div class="ac-lbl">АКТИВНЫХ</div></div>
+          <div class="ac-stat" style="background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);">
+            <div class="ac-val" id="ref-earned" style="color:var(--aeon2);">0</div>
+            <div class="ac-lbl">КЭШБЭК 🪙</div></div>
+        </div>
         <div class="ref-box" id="p-ref">https://t.me/aeon_game_Bot</div>
         <div class="ref-btns">
           <button class="ref-btn" onclick="copyRef()">📋 Копировать</button>
           <button class="ref-btn" onclick="shareRef()">📤 Поделиться</button>
         </div>
+        <div id="ref-friends" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
       </div>
     </div>
     <!-- Рюкзак -->
@@ -1245,8 +1261,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   </div>
   <div class="shop-body">
     <div class="shop-sec">⚡ ЭНЕРГИЯ</div>
-    <div class="shop-item"><div class="si-ico">⚡</div><div class="si-info"><div class="si-name">Заряд Энергии</div><div class="si-desc">+50 энергии корабля. Тапай больше, зарабатывай больше.</div></div><div class="si-price"><div class="si-tag">500 🪙</div><button class="si-btn" onclick="buyItem('energy',500)">КУПИТЬ</button></div></div>
-    <div class="shop-item"><div class="si-ico">🔮</div><div class="si-info"><div class="si-name">Энергия Материи</div><div class="si-desc">+30 энергии для Ангара Синтеза. Создавай больше предметов.</div></div><div class="si-price"><div class="si-tag">300 🪙</div><button class="si-btn" onclick="buyItem('merge_energy',300)">КУПИТЬ</button></div></div>
+    <div class="shop-item"><div class="si-ico">⚡</div><div class="si-info"><div class="si-name">Заправка Энергии</div><div class="si-desc">Полный бак энергии корабля. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-tap-energy">800 🪙</div><button class="si-btn" onclick="buyEnergyServer('tap')">ЗАПРАВИТЬ</button></div></div>
+    <div class="shop-item"><div class="si-ico">🔮</div><div class="si-info"><div class="si-name">Энергия Материи</div><div class="si-desc">Полный бак энергии синтеза. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-merge-energy">500 🪙</div><button class="si-btn" onclick="buyEnergyServer('merge')">ЗАПРАВИТЬ</button></div></div>
     <div class="shop-sec">🔧 МОДУЛИ КОРАБЛЯ</div>
     <div id="shop-modules" style="display:flex;flex-direction:column;gap:11px;"></div>
     <div class="shop-sec">🛸 СКИНЫ КОРАБЛЯ</div>
@@ -1804,7 +1820,7 @@ function showCoinPop(coins,isCombo,e){
 }
 
 /* ══ COSMOS ══ */
-var cosmosSF=null,selNode=null;
+var cosmosSF=null,selNode=null,selNodeLocked=false;
 
 window.goCosmos=function(){
   showScreen('cosmos-screen');setNav('bn-map');
@@ -1839,10 +1855,11 @@ function renderMap(){
       '<div class="mnode-icon mnode-float" style="animation-delay:'+(i*.8)+'s;">'+node.icon+'</div>'+
       (isLocked?'<div class="lock-b">'+(node.minLv?('УР.'+node.minLv):'СКОРО')+'</div>':'')+
       '</div><div class="mnode-name">'+node.name+'<small>'+node.sub+'</small></div>';
-    if(!isLocked){
-      el.addEventListener('click',function(){openCard(node);});
-      el.addEventListener('touchend',function(e){e.preventDefault();openCard(node);});
-    }
+    (function(nd,locked){
+      function handler(e){if(e&&e.preventDefault)e.preventDefault();openCard(nd,locked);}
+      el.addEventListener('click',handler);
+      el.addEventListener('touchend',handler);
+    })(node,isLocked);
     zone.appendChild(el);
   });
   // Кодекс Выжившего — в центре карты
@@ -1856,14 +1873,26 @@ function renderMap(){
   zone.appendChild(codex);
 }
 
-function openCard(node){
+function openCard(node,locked){
   selNode=node;
+  selNodeLocked=!!locked;
   var gc=$('gc'); gc.style.setProperty('--gc',node.color); gc.style.setProperty('--gc2',node.color2);
   var gi=$('gc-ico');if(gi)gi.textContent=node.icon;
   var gn=$('gc-nm');if(gn)gn.textContent=node.name;
   var gd=$('gc-ds');if(gd)gd.textContent=node.desc;
-  var gcost=$('gc-cost');if(gcost)gcost.style.display=node.cost>0?'inline-flex':'none';
-  var gev=$('gc-ev');if(gev)gev.textContent=node.cost;
+  var gcost=$('gc-cost');
+  var goBtn=$('gc-go');
+  var lockMsg=$('gc-lock');
+  if(selNodeLocked){
+    if(gcost)gcost.style.display='none';
+    if(goBtn)goBtn.style.display='none';
+    if(lockMsg){lockMsg.style.display='block';lockMsg.textContent='🔒 Откроется на '+node.minLv+' уровне корабля';}
+  }else{
+    if(gcost)gcost.style.display=node.cost>0?'inline-flex':'none';
+    var gev=$('gc-ev');if(gev)gev.textContent=node.cost;
+    if(goBtn)goBtn.style.display='block';
+    if(lockMsg)lockMsg.style.display='none';
+  }
   var go=$('gc-ov');if(go)go.classList.add('open');
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
 }
@@ -2301,7 +2330,7 @@ function renderProfile(){
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
   var refId=uid.replace('#','');
   var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot?start=REF'+refId;
-  renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();
+  renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();loadReferrals();
 }
 
 function renderDaily(){
@@ -2369,7 +2398,10 @@ window.htab=function(name,el){
 };
 
 /* ── SHOP ── */
-window.goShop=function(){showScreen('shop-screen');setNav('bn-shop');var sb=$('sh-bal');if(sb)sb.textContent=S.bal;renderShopModules();};
+window.goShop=function(){showScreen('shop-screen');setNav('bn-shop');var sb=$('sh-bal');if(sb)sb.textContent=S.bal;renderShopModules();
+  var pt=$('price-tap-energy');if(pt)pt.textContent=tapEnergyPrice()+' 🪙';
+  var pm=$('price-merge-energy');if(pm)pm.textContent=mergeEnergyPrice()+' 🪙';
+};
 window.buyItem=function(id,price){
   if((id==='aura_silver'&&S.shipAura==='silver')||(id==='aura_gold'&&S.shipAura==='golden')){bonusNotif('✨','УЖЕ КУПЛЕНО',0);return;}
   if(S.bal<price){bonusNotif('🪙','МАЛО МОНЕТ',0);return;}
@@ -3247,6 +3279,67 @@ function flushTaps(){
 // Досылаем при сворачивании/закрытии
 document.addEventListener('visibilitychange',function(){if(document.hidden)flushTaps();});
 window.addEventListener('pagehide',flushTaps);
+
+/* ══ КВАНТОВАЯ СВЯЗЬ (рефералы) ══ */
+function loadReferrals(){
+  if(!SERVER_OK)return;
+  var initData=getInitData();if(!initData)return;
+  fetch(API+'/api/referrals',{
+    headers:{'Authorization':'tma '+initData}
+  }).then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.ok)return;
+    var t=$('ref-total');if(t)t.textContent=d.total||0;
+    var a=$('ref-active');if(a)a.textContent=d.active||0;
+    var e=$('ref-earned');if(e)e.textContent=d.earned||0;
+    var box=$('ref-friends');if(!box)return;
+    box.innerHTML='';
+    if(!d.friends||d.friends.length===0){
+      box.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(168,85,247,.35);padding:8px;font-family:Cinzel,serif;">Пока никого. Позови первого пилота!</div>';
+      return;
+    }
+    d.friends.forEach(function(f){
+      var el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,.03);border:.5px solid rgba(168,85,247,.14);border-radius:9px;';
+      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;">'+
+        '<span style="font-size:15px;">'+(f.active?'🟢':'⚪')+'</span>'+
+        '<span style="font-size:10px;color:rgba(220,210,255,.8);">'+f.name+'</span></div>'+
+        '<div style="display:flex;align-items:center;gap:6px;">'+
+        '<span style="font-size:8px;color:rgba(168,85,247,.6);">Ур.'+f.level+'</span>'+
+        (f.active?'<span style="font-size:7px;color:var(--green);background:rgba(0,255,159,.1);border-radius:5px;padding:1px 5px;">+5%</span>':'<span style="font-size:7px;color:rgba(255,180,80,.6);">до ур.2</span>')+
+        '</div>';
+      box.appendChild(el);
+    });
+  }).catch(function(){});
+}
+
+/* ══ СЕРВЕРНАЯ ПОКУПКА ЭНЕРГИИ ══ */
+function buyEnergyServer(kind){
+  if(!SERVER_OK){bonusNotif('⚠️','НУЖЕН ИНТЕРНЕТ',0);return;}
+  var initData=getInitData();if(!initData)return;
+  fetch(API+'/api/buy_energy',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'tma '+initData},
+    body:JSON.stringify({kind:kind})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(!d){return;}
+    if(!d.ok){
+      if(d.reason==='limit')bonusNotif('🚫','ЛИМИТ '+d.limit+'/ДЕНЬ',0);
+      else if(d.reason==='no_money')bonusNotif('🪙','НУЖНО '+d.price+' МОНЕТ',0);
+      return;
+    }
+    S.bal=d.balance;
+    if(d.kind==='tap'){S.energy=d.energy;}
+    else{S.mergeEnergy=d.mergeEnergy;}
+    localStorage.setItem(SK,JSON.stringify(S));
+    updateUI();
+    bonusNotif('⚡','БАК ПОЛОН! ('+d.used+'/'+d.limit+')',0);
+    if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+  }).catch(function(){});
+}
+
+function tapEnergyPrice(){return 800+400*((S.shipLevel||1)-1);}
+function mergeEnergyPrice(){return 500+300*((S.shipLevel||1)-1);}
+
 /* ── INIT ── */
 function bootWhenTelegramReady(attempt){
   attempt=attempt||0;
