@@ -190,7 +190,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .cosmos-bal-val{font-size:13px;font-weight:700;color:var(--aeon2);}
 .cosmos-zone{flex:1;position:relative;}
 #nzone{position:absolute;inset:0;z-index:3;}
-#eye-svg{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:.15;}
+#eye-svg{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:.42;}
 .mnode{position:absolute;transform:translate(-50%,-50%);
   display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;z-index:5;}
 .mnode-icon{font-size:36px;filter:drop-shadow(0 0 14px var(--nc,#fff));}
@@ -920,8 +920,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <div class="cosmos-zone">
       <svg id="eye-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs><linearGradient id="eyeG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="rgba(200,169,110,0)"/><stop offset="50%" stop-color="rgba(0,229,255,.7)"/><stop offset="100%" stop-color="rgba(200,169,110,0)"/></linearGradient></defs>
-        <path id="eye-t" fill="none" stroke="url(#eyeG)" stroke-width=".4"/>
-        <path id="eye-b" fill="none" stroke="url(#eyeG)" stroke-width=".4"/>
+        <path id="eye-t" fill="none" stroke="url(#eyeG)" stroke-width=".7"/>
+        <path id="eye-b" fill="none" stroke="url(#eyeG)" stroke-width=".7"/>
       </svg>
       <div id="nzone"></div>
     </div>
@@ -1158,6 +1158,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <div class="hc" style="border-color:rgba(255,215,0,.18);">
         <div class="hc-t" style="color:rgba(255,215,0,.65);">🔥 ЕЖЕДНЕВНЫЙ БОНУС</div>
         <div class="daily-row" id="daily-row"></div>
+        <button id="daily-claim" onclick="claimDaily()" style="width:100%;margin-top:10px;height:42px;border-radius:12px;border:none;cursor:pointer;font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:.5px;background:linear-gradient(135deg,#c8901a,#ffd700);color:#1a1000;">🎁 Забрать награду</button>
       </div>
       <!-- Осколки -->
       <div class="hc" style="border-color:rgba(200,169,110,.2);">
@@ -1657,23 +1658,43 @@ function initMain(){
   claimOffline();
 }
 
+function dailyBonusAmount(){
+  var d=S.streakDays||1, b=50;
+  if(d>=3)b=100; if(d>=7)b=300; if(d>=14)b=500; if(d>=30)b=1000;
+  return b;
+}
 function checkStreak(){
   var today=new Date().toDateString();
-  if(S.lastLogin===today)return;
-  var yesterday=new Date(Date.now()-86400000).toDateString();
-  if(S.lastLogin===yesterday){S.streakDays=(S.streakDays||1)+1;}
-  else if(S.lastLogin&&S.lastLogin!==today){S.streakDays=1;}
-  S.lastLogin=today;
-  // Ежедневный бонус
-  var bonus=50;
-  if(S.streakDays>=3)bonus=100;
-  if(S.streakDays>=7)bonus=300;
-  if(S.streakDays>=14)bonus=500;
-  if(S.streakDays>=30)bonus=1000;
-  S.bal+=bonus;
-  save();
-  setTimeout(function(){bonusNotif('🔥','ДЕНЬ '+S.streakDays,bonus);},800);
+  if(S.lastLogin!==today){
+    var yesterday=new Date(Date.now()-86400000).toDateString();
+    if(S.lastLogin===yesterday){S.streakDays=(S.streakDays||1)+1;}
+    else if(S.lastLogin&&S.lastLogin!==today){S.streakDays=1;}
+    S.lastLogin=today;
+    S.dailyClaimed=false; // новый день — награду можно забрать
+    save();
+  }
+  updateDailyBtn();
 }
+function updateDailyBtn(){
+  var btn=$('daily-claim');if(!btn)return;
+  if(S.dailyClaimed){
+    btn.disabled=true;
+    btn.textContent='✅ Награда забрана. Возвращайся завтра';
+    btn.style.opacity='.55';
+  }else{
+    btn.disabled=false;
+    btn.style.opacity='1';
+    btn.textContent='🎁 Забрать +'+dailyBonusAmount()+' 🪙 (день '+(S.streakDays||1)+')';
+  }
+}
+window.claimDaily=function(){
+  if(S.dailyClaimed)return;
+  var bonus=dailyBonusAmount();
+  S.bal+=bonus; S.dailyClaimed=true; save();
+  bonusNotif('🔥','ДЕНЬ '+(S.streakDays||1),bonus);
+  spawnCoins(10); updateUI(); updateDailyBtn(); renderDaily();
+  if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+};
 
 window.goMain=function(){
   document.querySelectorAll('.screen').forEach(function(s){if(s.id!=='main-screen')s.classList.remove('active');});
@@ -1793,7 +1814,7 @@ window.goCosmos=function(){
 };
 
 function getPPos(W,H){
-  var cx=W/2,cy=H*.32,rx=W*.3,ry=H*.15;
+  var cx=W/2,cy=H*.27,rx=W*.3,ry=H*.145;
   return [{x:cx-rx,y:cy},{x:cx+rx,y:cy},{x:cx,y:cy-ry*1.7},{x:cx,y:cy+ry*1.7}];
 }
 
@@ -1825,7 +1846,7 @@ function renderMap(){
     zone.appendChild(el);
   });
   // Кодекс Выжившего — в центре карты
-  var cx=W/2,cy=H*.43;
+  var cx=W/2,cy=H*.27+8;
   var codex=document.createElement('div');
   codex.className='home-node';
   codex.style.cssText='left:'+cx+'px;top:'+cy+'px;';
@@ -2279,7 +2300,7 @@ function renderProfile(){
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
   var refId=uid.replace('#','');
   var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot?start=REF'+refId;
-  renderDaily();renderAchs();renderBackpack();renderShards();
+  renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();
 }
 
 function renderDaily(){
