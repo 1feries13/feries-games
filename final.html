@@ -1866,8 +1866,8 @@ window.goCosmos=function(){
 };
 
 function getPPos(W,H){
-  var cx=W/2,cy=H*.27,rx=W*.3,ry=H*.145;
-  return [{x:cx-rx,y:cy},{x:cx+rx,y:cy},{x:cx,y:cy-ry*1.7},{x:cx,y:cy+ry*1.7}];
+  var cx=W/2,cy=H*.42,rx=W*.3,ry=H*.145;
+  return [{x:cx-rx,y:cy},{x:cx+rx,y:cy},{x:cx,y:cy-ry*1.35},{x:cx,y:cy+ry*1.35}];
 }
 
 function renderMap(){
@@ -1899,7 +1899,7 @@ function renderMap(){
     zone.appendChild(el);
   });
   // Кодекс Выжившего — в центре карты
-  var cx=W/2,cy=H*.27+8;
+  var cx=W/2,cy=H*.42+8;
   var codex=document.createElement('div');
   codex.className='home-node';
   codex.style.cssText='left:'+cx+'px;top:'+cy+'px;';
