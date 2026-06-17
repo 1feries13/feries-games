@@ -912,9 +912,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <div class="cosmos-ui">
     <div class="cosmos-hdr">
       <div class="cosmos-logo">✦ AEON<span>Навигационная система</span></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+      <button onclick="openLeaderboard()" style="display:flex;align-items:center;gap:4px;background:rgba(200,169,110,.1);border:.5px solid rgba(200,169,110,.3);border-radius:16px;padding:5px 11px;cursor:pointer;color:var(--aeon2);font-family:Orbitron,monospace;font-size:10px;">🏆</button>
       <div class="cosmos-bal">
         <svg width="12" height="12" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a0e04" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width=".9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/></svg>
         <span class="cosmos-bal-val" id="cos-bal">500</span>
+      </div>
       </div>
     </div>
     <div class="cosmos-zone">
@@ -1121,6 +1124,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         background:linear-gradient(135deg,var(--aeon),var(--aeon2));color:#07071a;
         font-family:Orbitron,monospace;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer;">✦ ЗАБРАТЬ</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ LEADERBOARD ══ -->
+<div class="screen" id="lb-screen" style="background:linear-gradient(160deg,#0a0618,#040210,#080418);z-index:30;overflow-y:auto;">
+  <div style="padding:calc(var(--sat) + var(--tg-top,0px) + 14px) 16px 80px;">
+    <button onclick="goCosmos()" style="background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;padding:7px 15px;color:rgba(200,169,110,.7);font-family:Orbitron,monospace;font-size:9px;letter-spacing:1px;cursor:pointer;margin-bottom:16px;">← Назад</button>
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-family:Cinzel,serif;font-size:11px;color:rgba(200,169,110,.5);letter-spacing:3px;">─── РЕЙТИНГ ГАЛАКТИКИ ───</div>
+    </div>
+    <!-- Счётчик игроков -->
+    <div style="text-align:center;background:radial-gradient(ellipse at center,rgba(200,144,26,.12),transparent 70%);border:1px solid rgba(200,169,110,.25);border-radius:18px;padding:20px;margin-bottom:20px;">
+      <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:6px;">ПИЛОТОВ ВО ВСЕЛЕННОЙ</div>
+      <div id="lb-total" style="font-family:Orbitron,monospace;font-size:40px;font-weight:900;color:var(--aeon2);text-shadow:0 0 24px rgba(200,144,26,.4);">—</div>
+      <div id="lb-myrank" style="font-size:10px;color:rgba(200,180,255,.6);margin-top:6px;"></div>
+    </div>
+    <!-- Топ-10 -->
+    <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:10px;">⭐ ТОП-10 ПО ОПЫТУ</div>
+    <div id="lb-list" style="display:flex;flex-direction:column;gap:7px;"></div>
   </div>
 </div>
 
@@ -3394,6 +3416,47 @@ function renderUpgradeBlock(){
     btn.style.background='rgba(255,255,255,.06)';btn.style.color='rgba(255,255,255,.4)';
     btn.textContent='🔒 Условия не выполнены';
   }
+}
+
+/* ══ РЕЙТИНГ ГАЛАКТИКИ ══ */
+window.openLeaderboard=function(){
+  showScreen('lb-screen');
+  loadLeaderboard();
+};
+function loadLeaderboard(){
+  var initData=getInitData();
+  var headers={};
+  if(initData)headers['Authorization']='tma '+initData;
+  fetch(API+'/api/leaderboard',{headers:headers})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d||!d.ok)return;
+      var t=$('lb-total');if(t)t.textContent=(d.total||0).toLocaleString('ru-RU');
+      var mr=$('lb-myrank');
+      if(mr){
+        if(d.myRank)mr.textContent='Твоё место: #'+d.myRank+' · '+(d.myXp||0).toLocaleString('ru-RU')+' ✨';
+        else mr.textContent='';
+      }
+      var list=$('lb-list');if(!list)return;
+      list.innerHTML='';
+      if(!d.top||d.top.length===0){
+        list.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(200,169,110,.35);padding:14px;font-family:Cinzel,serif;">Будь первым в рейтинге!</div>';
+        return;
+      }
+      var medals={1:'🥇',2:'🥈',3:'🥉'};
+      d.top.forEach(function(p){
+        var el=document.createElement('div');
+        var hl=p.me?'background:rgba(200,144,26,.14);border-color:rgba(200,169,110,.5);':'background:rgba(255,255,255,.03);border-color:rgba(168,85,247,.12);';
+        el.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border:.5px solid;border-radius:11px;'+hl;
+        var rankBadge=medals[p.rank]||('#'+p.rank);
+        el.innerHTML='<div style="display:flex;align-items:center;gap:10px;">'+
+          '<span style="font-size:14px;min-width:26px;text-align:center;">'+rankBadge+'</span>'+
+          '<div><div style="font-size:11px;color:'+(p.me?'var(--aeon2)':'rgba(220,210,255,.85)')+';font-weight:'+(p.me?'700':'400')+';">'+p.name+(p.me?' (ты)':'')+'</div>'+
+          '<div style="font-size:8px;color:rgba(168,85,247,.55);">Ур.'+p.level+'</div></div></div>'+
+          '<div style="font-family:Orbitron,monospace;font-size:12px;color:var(--aeon2);">'+(p.xp||0).toLocaleString('ru-RU')+' ✨</div>';
+        list.appendChild(el);
+      });
+    }).catch(function(){});
 }
 /* ── INIT ── */
 function bootWhenTelegramReady(attempt){
