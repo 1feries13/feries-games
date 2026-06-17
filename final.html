@@ -17,7 +17,7 @@
   --bg:#00000a;
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:'Orbitron',monospace;}
-.screen{height:var(--tg-height,100vh) !important;max-height:var(--tg-height,100vh) !important;}
+.screen{height:var(--tg-height,100vh);max-height:var(--tg-height,100vh);}
 .screen{position:fixed;inset:0;display:none;flex-direction:column;z-index:10;}
 .screen.active{display:flex;}
 
@@ -100,7 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #main-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .main-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .main-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 48px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 16px 8px;}
 .main-logo{font-size:13px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .main-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .streak-badge{display:flex;align-items:center;gap:4px;background:rgba(255,100,0,.1);
@@ -182,7 +182,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #cosmos-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .cosmos-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;}
 .cosmos-hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 48px) 16px 8px;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 16px 8px;}
 .cosmos-logo{font-size:12px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
 .cosmos-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
 .cosmos-bal{display:flex;align-items:center;gap:5px;background:rgba(200,169,110,.09);
@@ -250,7 +250,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #merge-screen{background:var(--bg);z-index:20;overflow:hidden;}
 #merge-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
 .merge-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 52px) 0 0;overflow:hidden;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 0 0;overflow:hidden;}
 .merge-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:6px 14px 8px;flex-shrink:0;}
 .mg-back{background:rgba(255,255,255,.05);border:.5px solid rgba(200,169,110,.2);
@@ -371,9 +371,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   letter-spacing:1px;text-align:center;}
 
 /* ══ HOME SCREEN ══ */
-#home-screen{background:linear-gradient(160deg,#060418,#02010e,#070318);z-index:20;overflow-y:auto;}
+#home-screen{background:linear-gradient(160deg,#060418,#02010e,#070318);z-index:20;overflow:hidden;}
 .home-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 50px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 12px;
   background:linear-gradient(180deg,rgba(120,60,240,.13),transparent);
   border-bottom:.5px solid rgba(120,60,240,.16);}
 .home-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -510,9 +510,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   background:rgba(168,85,247,.05);color:var(--purple);font-size:7.5px;cursor:pointer;}
 
 /* ══ SHOP SCREEN ══ */
-#shop-screen{background:linear-gradient(160deg,#080210,#040110,#060218);z-index:20;overflow-y:auto;}
+#shop-screen{background:linear-gradient(160deg,#080210,#040110,#060218);z-index:20;overflow:hidden;}
 .shop-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 50px) 16px 12px;
+  padding:calc(var(--sat) + var(--tg-top,0px) + 10px) 16px 12px;
   background:linear-gradient(180deg,rgba(255,100,50,.08),transparent);
   border-bottom:.5px solid rgba(255,100,50,.15);}
 .shop-back{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.09);
@@ -522,7 +522,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .shop-bal{display:flex;align-items:center;gap:4px;background:rgba(200,169,110,.07);
   border:.5px solid rgba(200,169,110,.2);border-radius:14px;padding:3px 9px;
   font-size:10px;font-weight:700;color:var(--aeon2);}
-.shop-body{padding:14px;display:flex;flex-direction:column;gap:11px;}
+.shop-body{padding:14px;display:flex;flex-direction:column;gap:11px;flex:1;overflow-y:auto;}
 .shop-sec{font-size:8.5px;color:rgba(255,150,80,.5);letter-spacing:2px;}
 .shop-item{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.025);
   border:.5px solid rgba(255,150,50,.13);border-radius:13px;padding:12px;}
@@ -3237,9 +3237,10 @@ function syncToServer(){
 
 function applyTgSafeArea(){
   try{
+    // Только высота плашки Telegram с кнопками (contentSafeArea).
+    // Статусбар телефона уже покрыт --sat (CSS env safe-area), не дублируем.
     var top=0,bottom=0;
     if(tg.contentSafeAreaInset){top=tg.contentSafeAreaInset.top||0;bottom=tg.contentSafeAreaInset.bottom||0;}
-    if(tg.safeAreaInset){top+=tg.safeAreaInset.top||0;bottom+=tg.safeAreaInset.bottom||0;}
     document.documentElement.style.setProperty('--tg-top',top+'px');
     document.documentElement.style.setProperty('--tg-bottom',bottom+'px');
   }catch(e){}
@@ -3315,6 +3316,9 @@ function loadReferrals(){
 /* ══ СЕРВЕРНАЯ ПОКУПКА ЭНЕРГИИ ══ */
 function buyEnergyServer(kind){
   if(!SERVER_OK){bonusNotif('⚠️','НУЖЕН ИНТЕРНЕТ',0);return;}
+  // Мгновенная защита: бак уже полный — не тратим деньги
+  if(kind==='tap' && S.energy>=S.maxEnergy){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);return;}
+  if(kind==='merge' && S.mergeEnergy>=S.maxMergeEnergy){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);return;}
   var initData=getInitData();if(!initData)return;
   fetch(API+'/api/buy_energy',{
     method:'POST',
@@ -3325,6 +3329,10 @@ function buyEnergyServer(kind){
     if(!d.ok){
       if(d.reason==='limit')bonusNotif('🚫','ЛИМИТ '+d.limit+'/ДЕНЬ',0);
       else if(d.reason==='no_money')bonusNotif('🪙','НУЖНО '+d.price+' МОНЕТ',0);
+      else if(d.reason==='full'){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);
+        if(typeof d.energy==='number')S.energy=d.energy;
+        if(typeof d.mergeEnergy==='number')S.mergeEnergy=d.mergeEnergy;
+        updateUI();}
       return;
     }
     S.bal=d.balance;
