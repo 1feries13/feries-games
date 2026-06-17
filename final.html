@@ -1875,11 +1875,18 @@ function renderMap(){
   zone.innerHTML='';
   var W=window.innerWidth,H=window.innerHeight;
   var pos=getPPos(W,H);
-  // Eye line
-  var L=pos[0],R=pos[1];
+  // Eye line — привязан к актуальным позициям узлов
+  var L=pos[0],R=pos[1],TOP=pos[2],BOT=pos[3];
   var et=$('eye-t'),eb=$('eye-b');
-  if(et)et.setAttribute('d','M '+(L.x/W*100).toFixed(1)+','+(L.y/H*100).toFixed(1)+' Q '+(W/2/W*100).toFixed(1)+','+((H*.43-H*.17*2)/H*100).toFixed(1)+' '+(R.x/W*100).toFixed(1)+','+(R.y/H*100).toFixed(1));
-  if(eb)eb.setAttribute('d','M '+(R.x/W*100).toFixed(1)+','+(R.y/H*100).toFixed(1)+' Q '+(W/2/W*100).toFixed(1)+','+(H*.43/H*100+12).toFixed(1)+' '+(L.x/W*100).toFixed(1)+','+(L.y/H*100).toFixed(1));
+  var cxP=(W/2/W*100).toFixed(1);
+  var Lx=(L.x/W*100).toFixed(1), Ly=(L.y/H*100).toFixed(1);
+  var Rx=(R.x/W*100).toFixed(1), Ry=(R.y/H*100).toFixed(1);
+  // Верхняя дуга глаза проходит через Оракул (верхний узел)
+  var topY=(TOP.y/H*100).toFixed(1);
+  // Нижняя дуга — чуть ниже боковых узлов (к центру/Кодексу)
+  var botY=((L.y+H*0.12)/H*100).toFixed(1);
+  if(et)et.setAttribute('d','M '+Lx+','+Ly+' Q '+cxP+','+topY+' '+Rx+','+Ry);
+  if(eb)eb.setAttribute('d','M '+Rx+','+Ry+' Q '+cxP+','+botY+' '+Lx+','+Ly);
   MAP_NODES.forEach(function(node,i){
     var p=pos[i];
     var isLocked=node.locked||(node.minLv&&(S.shipLevel||1)<node.minLv);
