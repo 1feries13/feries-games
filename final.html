@@ -1155,6 +1155,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <div class="stb"><div class="stv" id="p-max">0</div><div class="stl">РЕКОРД</div></div>
         </div>
       </div>
+      <!-- Улучшение корабля -->
+      <div class="hc" style="border-color:rgba(200,169,110,.22);">
+        <div class="hc-t" style="color:var(--aeon2);">🚀 УЛУЧШЕНИЕ КОРАБЛЯ</div>
+        <div id="upg-info" style="font-family:Cinzel,serif;font-size:10px;color:rgba(200,180,140,.6);line-height:1.7;margin-bottom:10px;"></div>
+        <button id="upg-btn" onclick="tryShipUpgrade()" style="width:100%;height:44px;border-radius:12px;border:none;cursor:pointer;font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:.5px;">Улучшить</button>
+      </div>
       <!-- Ежедневный бонус -->
       <div class="hc" style="border-color:rgba(255,215,0,.18);">
         <div class="hc-t" style="color:rgba(255,215,0,.65);">🔥 ЕЖЕДНЕВНЫЙ БОНУС</div>
@@ -1448,6 +1454,7 @@ function setNav(id){
   var b=$(id); if(b)b.classList.add('active');
 }
 function updateUI(){
+  S.maxMergeEnergy=computeMaxMergeEnergy();
   var lv=getLv(), nxt=getNextLv();
   S.maxEnergy=computeMaxEnergy();
   var ePct=Math.min(100,(S.energy/S.maxEnergy)*100);
@@ -1538,6 +1545,9 @@ function regenPeriod(){return Math.max(20,60-5*(S.modEngine||0));}
 function computeMaxEnergy(){
   var d=(typeof getShipLvDef==='function')?getShipLvDef(S.shipLevel||1):null;
   return (d?d.energyLimit:100)+10*(S.modTank||0);
+}
+function computeMaxMergeEnergy(){
+  return 50 + 5*((S.shipLevel||1)-1);
 }
 setInterval(function(){
   _regenAcc++;
@@ -1787,6 +1797,10 @@ function doTap(e){
     if(comboCount<10)showPhrase(false);
   }
   S.bal+=coins;S.xp+=xp;S.taps++;
+  // Визуальный отклик корабля на тап
+  var shw=$('ship-w');
+  if(shw){shw.style.transition='transform .08s';shw.style.transform='scale(.94)';
+    setTimeout(function(){shw.style.transform='scale(1)';},90);}
   if(SERVER_OK){
     // Оптимистично показываем, на сервер шлём пачкой (он подтвердит истину)
     localStorage.setItem(SK,JSON.stringify(S));
@@ -2330,7 +2344,7 @@ function renderProfile(){
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
   var refId=uid.replace('#','');
   var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot?start=REF'+refId;
-  renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();loadReferrals();
+  renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();loadReferrals();renderUpgradeBlock();
 }
 
 function renderDaily(){
@@ -2522,6 +2536,7 @@ function tryShipUpgrade(){
   S.maxEnergy=computeMaxEnergy();
   save();updateUI();
   bonusNotif('🚀','УРОВЕНЬ '+S.shipLevel+'!',0);
+  renderUpgradeBlock();
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 }
 
@@ -3348,6 +3363,38 @@ function buyEnergyServer(kind){
 function tapEnergyPrice(){return 800+400*((S.shipLevel||1)-1);}
 function mergeEnergyPrice(){return 500+300*((S.shipLevel||1)-1);}
 
+
+function renderUpgradeBlock(){
+  var info=$('upg-info'), btn=$('upg-btn');
+  if(!info||!btn)return;
+  var next=getNextShipLv();
+  if(!next){
+    info.textContent='Достигнут максимальный уровень корабля. Ты прошёл весь путь.';
+    btn.style.display='none';return;
+  }
+  btn.style.display='block';
+  var r=checkShipUpgrade();
+  var lines='Следующий: '+next.name+' (Ур.'+next.lv+')<br>';
+  lines+='• '+next.cost.toLocaleString()+' 🪙 '+(S.bal>=next.cost?'✅':'❌')+'<br>';
+  if(next.mergeReq>0){
+    var has=false;for(var i=0;i<25;i++){if((S.mergeGrid[i]||0)>=next.mergeReq){has=true;break;}}
+    var mdef=MITEMS.find(function(m){return m.id===next.mergeReq;});
+    lines+='• Создать '+(mdef?mdef.name:'предмет ур.'+next.mergeReq)+' '+(has?'✅':'❌')+'<br>';
+  }
+  if(next.streakReq>0){
+    lines+='• Стрик '+next.streakReq+' дней '+((S.streakDays||1)>=next.streakReq?'✅':'❌ (есть '+(S.streakDays||1)+')')+'<br>';
+  }
+  info.innerHTML=lines;
+  if(r&&r.canUpgrade){
+    btn.disabled=false;btn.style.opacity='1';
+    btn.style.background='linear-gradient(135deg,#c8901a,#ffd700)';btn.style.color='#1a1000';
+    btn.textContent='🚀 Улучшить до Ур.'+next.lv;
+  }else{
+    btn.disabled=true;btn.style.opacity='.5';
+    btn.style.background='rgba(255,255,255,.06)';btn.style.color='rgba(255,255,255,.4)';
+    btn.textContent='🔒 Условия не выполнены';
+  }
+}
 /* ── INIT ── */
 function bootWhenTelegramReady(attempt){
   attempt=attempt||0;
