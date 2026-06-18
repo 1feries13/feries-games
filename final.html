@@ -708,6 +708,34 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .sun-particles span:nth-child(6){top:48%;left:48%;animation-delay:5.5s;}
 @keyframes sunFloat{0%,100%{opacity:.2;transform:translateY(0) scale(.7);}50%{opacity:.9;transform:translateY(-20px) scale(1.2);}}
 
+
+.lb-float-btn{animation:lbFloat 3.5s ease-in-out infinite;box-shadow:0 0 14px rgba(200,144,26,.18);}
+@keyframes lbFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+
+
+/* ══ LEADERBOARD COUNTER ══ */
+.lb-counter{position:relative;text-align:center;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,rgba(60,40,10,.55),rgba(20,12,30,.85) 70%);
+  border:1.5px solid rgba(200,169,110,.4);border-radius:22px;padding:26px 20px;margin-bottom:22px;
+  box-shadow:0 0 40px rgba(200,144,26,.12),inset 0 0 40px rgba(200,144,26,.06);}
+.lb-counter-glow{position:absolute;top:50%;left:50%;width:200px;height:200px;
+  transform:translate(-50%,-30%);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,80,.18),transparent 65%);
+  animation:lbGlowPulse 4s ease-in-out infinite;pointer-events:none;}
+@keyframes lbGlowPulse{0%,100%{opacity:.6;transform:translate(-50%,-30%) scale(1);}50%{opacity:1;transform:translate(-50%,-30%) scale(1.15);}}
+.lb-counter-stars{position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 70% 60%,rgba(200,180,255,.5),transparent),
+    radial-gradient(1px 1px at 40% 80%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1px 1px at 85% 25%,rgba(255,220,150,.5),transparent),
+    radial-gradient(1px 1px at 55% 45%,rgba(255,255,255,.35),transparent);
+  animation:lbStarTwinkle 5s ease-in-out infinite;}
+@keyframes lbStarTwinkle{0%,100%{opacity:.5;}50%{opacity:1;}}
+.lb-total-num{font-family:Orbitron,monospace;font-size:54px;font-weight:900;
+  background:linear-gradient(135deg,#fff,#ffd700 40%,#c8901a);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:0 0 30px rgba(255,200,80,.3);letter-spacing:2px;line-height:1;}
+
 </style>
 </head>
 <body>
@@ -913,7 +941,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <div class="cosmos-hdr">
       <div class="cosmos-logo">✦ AEON<span>Навигационная система</span></div>
       <div style="display:flex;align-items:center;gap:8px;">
-      <button onclick="openLeaderboard()" style="display:flex;align-items:center;gap:4px;background:rgba(200,169,110,.1);border:.5px solid rgba(200,169,110,.3);border-radius:16px;padding:5px 11px;cursor:pointer;color:var(--aeon2);font-family:Orbitron,monospace;font-size:10px;">🏆</button>
+      <button onclick="openLeaderboard()" class="lb-float-btn" style="display:flex;align-items:center;gap:4px;background:rgba(200,169,110,.1);border:.5px solid rgba(200,169,110,.3);border-radius:16px;padding:5px 11px;cursor:pointer;color:var(--aeon2);font-family:Orbitron,monospace;font-size:13px;">🏆</button>
       <div class="cosmos-bal">
         <svg width="12" height="12" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a0e04" stroke="#c8a96e" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="5" ry="3.5" fill="none" stroke="#e8c87e" stroke-width=".9"/><circle cx="16" cy="16" r="1.8" fill="#e8c87e"/></svg>
         <span class="cosmos-bal-val" id="cos-bal">500</span>
@@ -1135,10 +1163,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <div style="font-family:Cinzel,serif;font-size:11px;color:rgba(200,169,110,.5);letter-spacing:3px;">─── РЕЙТИНГ ГАЛАКТИКИ ───</div>
     </div>
     <!-- Счётчик игроков -->
-    <div style="text-align:center;background:radial-gradient(ellipse at center,rgba(200,144,26,.12),transparent 70%);border:1px solid rgba(200,169,110,.25);border-radius:18px;padding:20px;margin-bottom:20px;">
-      <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:6px;">ПИЛОТОВ ВО ВСЕЛЕННОЙ</div>
-      <div id="lb-total" style="font-family:Orbitron,monospace;font-size:40px;font-weight:900;color:var(--aeon2);text-shadow:0 0 24px rgba(200,144,26,.4);">—</div>
-      <div id="lb-myrank" style="font-size:10px;color:rgba(200,180,255,.6);margin-top:6px;"></div>
+    <div class="lb-counter">
+      <div class="lb-counter-stars"></div>
+      <div class="lb-counter-glow"></div>
+      <div style="position:relative;z-index:2;">
+        <div style="font-size:9px;color:rgba(200,169,110,.6);letter-spacing:3px;margin-bottom:10px;">✦ ПИЛОТОВ ВО ВСЕЛЕННОЙ ✦</div>
+        <div id="lb-total" class="lb-total-num">—</div>
+        <div id="lb-myrank" style="font-size:11px;color:rgba(200,180,255,.7);margin-top:10px;font-family:Cinzel,serif;"></div>
+      </div>
     </div>
     <!-- Топ-10 -->
     <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:10px;">⭐ ТОП-10 ПО ОПЫТУ</div>
@@ -1881,12 +1913,13 @@ function renderMap(){
   var cxP=(W/2/W*100).toFixed(1);
   var Lx=(L.x/W*100).toFixed(1), Ly=(L.y/H*100).toFixed(1);
   var Rx=(R.x/W*100).toFixed(1), Ry=(R.y/H*100).toFixed(1);
-  // Верхняя дуга глаза проходит через Оракул (верхний узел)
-  var topY=(TOP.y/H*100).toFixed(1);
-  // Нижняя дуга — чуть ниже боковых узлов (к центру/Кодексу)
-  var botY=((L.y+H*0.12)/H*100).toFixed(1);
-  if(et)et.setAttribute('d','M '+Lx+','+Ly+' Q '+cxP+','+topY+' '+Rx+','+Ry);
-  if(eb)eb.setAttribute('d','M '+Rx+','+Ry+' Q '+cxP+','+botY+' '+Lx+','+Ly);
+  // Глаз центрирован на Кодексе: концы смыкания опущены ниже боковых узлов
+  var eyeMidY = L.y + H*0.04;            // линия смыкания глаза (углы)
+  var EyMid=(eyeMidY/H*100).toFixed(1);
+  var topY=((L.y - H*0.10)/H*100).toFixed(1);   // верхнее веко (над Кодексом)
+  var botY=((L.y + H*0.18)/H*100).toFixed(1);   // нижнее веко (под Кодексом)
+  if(et)et.setAttribute('d','M '+Lx+','+EyMid+' Q '+cxP+','+topY+' '+Rx+','+EyMid);
+  if(eb)eb.setAttribute('d','M '+Rx+','+EyMid+' Q '+cxP+','+botY+' '+Lx+','+EyMid);
   MAP_NODES.forEach(function(node,i){
     var p=pos[i];
     var isLocked=node.locked||(node.minLv&&(S.shipLevel||1)<node.minLv);
