@@ -736,6 +736,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   text-shadow:0 0 30px rgba(255,200,80,.3);letter-spacing:2px;line-height:1;}
 
+
+/* ══ LEADERBOARD FULL BACKGROUND ══ */
+#lb-screen{position:relative;}
+.lb-bg-stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%,rgba(255,255,255,.9),transparent),
+    radial-gradient(1px 1px at 28% 42%,rgba(200,180,255,.7),transparent),
+    radial-gradient(2px 2px at 45% 12%,rgba(255,220,150,.8),transparent),
+    radial-gradient(1px 1px at 62% 55%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.5px 1.5px at 78% 28%,rgba(180,200,255,.8),transparent),
+    radial-gradient(1px 1px at 88% 65%,rgba(255,255,255,.5),transparent),
+    radial-gradient(2px 2px at 35% 78%,rgba(255,200,100,.7),transparent),
+    radial-gradient(1px 1px at 55% 88%,rgba(200,180,255,.6),transparent),
+    radial-gradient(1.5px 1.5px at 18% 62%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1px 1px at 72% 82%,rgba(255,255,255,.5),transparent),
+    radial-gradient(2px 2px at 92% 15%,rgba(255,230,180,.7),transparent),
+    radial-gradient(1px 1px at 8% 88%,rgba(200,200,255,.6),transparent);
+  animation:lbBgTwinkle 6s ease-in-out infinite;}
+@keyframes lbBgTwinkle{0%,100%{opacity:.6;}50%{opacity:1;}}
+#lb-screen > div:not(.lb-bg-stars){position:relative;z-index:1;}
+
 </style>
 </head>
 <body>
@@ -1156,7 +1177,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 </div>
 
 <!-- ══ LEADERBOARD ══ -->
-<div class="screen" id="lb-screen" style="background:linear-gradient(160deg,#0a0618,#040210,#080418);z-index:30;overflow-y:auto;">
+<div class="screen" id="lb-screen" style="background:radial-gradient(ellipse at 50% 0%,#1a1230,#0a0618 45%,#040210);z-index:30;overflow-y:auto;">
+  <div class="lb-bg-stars"></div>
   <div style="padding:calc(var(--sat) + var(--tg-top,0px) + 14px) 16px 80px;">
     <button onclick="goCosmos()" style="background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;padding:7px 15px;color:rgba(200,169,110,.7);font-family:Orbitron,monospace;font-size:9px;letter-spacing:1px;cursor:pointer;margin-bottom:16px;">← Назад</button>
     <div style="text-align:center;margin-bottom:8px;">
@@ -1258,6 +1280,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <button class="ref-btn" onclick="shareRef()">📤 Поделиться</button>
         </div>
         <div id="ref-friends" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+      <!-- Бонус за подписку на канал -->
+      <div class="hc" style="border-color:rgba(0,229,255,.2);">
+        <div class="hc-t" style="color:rgba(0,229,255,.7);">📡 СИГНАЛ МАЯКА</div>
+        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(180,220,255,.6);line-height:1.7;margin-bottom:10px;">
+          Подпишись на канал AEON и получи 2500 монет + легендарный артефакт «Сигнал Маяка», которого не достать больше нигде.
+        </div>
+        <button onclick="openChannel()" style="width:100%;height:40px;border-radius:11px;border:.5px solid rgba(0,229,255,.3);background:rgba(0,229,255,.08);color:#00e5ff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;cursor:pointer;margin-bottom:8px;">📢 Открыть канал</button>
+        <button id="claim-channel-btn" onclick="claimChannelBonus()" style="width:100%;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#0088aa,#00e5ff);color:#04121a;font-family:Orbitron,monospace;font-size:11px;font-weight:700;cursor:pointer;">✅ Я подписался — забрать</button>
       </div>
     </div>
     <!-- Рюкзак -->
@@ -1457,6 +1488,8 @@ var ARTIFACTS = [
    desc:'Капсула из аркады Астероиды. Активируй — 2 минуты безлимитной энергии: тапай без остановки!'},
   {id:'quasar_lens',  icon:'🔆', name:'Линза Квазара',     rarity:'rare',   usable:true,
    desc:'Капсула из аркады Астероиды. Активируй — ×2 монеты со всех тапов на 10 минут.'},
+  {id:'beacon_signal',icon:'🛰️', name:'Сигнал Маяка',       rarity:'legendary', usable:false,
+   desc:'Передатчик древней станции AEON. Те, кто услышал зов — больше не одиноки в пустоте. Знак причастности к Сообществу. Выдаётся только за подписку на канал.'},
 ];
 
 /* ── MAP NODES ── */
@@ -2803,8 +2836,8 @@ window.showArtifactInfo=function(artId,idx){
   if(!def)return;
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:200;background:rgba(0,0,10,.8);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;';
-  var rarColor=def.rarity==='rare'?'#a855f7':'#9aa0b0';
-  var rarName=def.rarity==='rare'?'РЕДКИЙ':'ОБЫЧНЫЙ';
+  var rarColor=def.rarity==='legendary'?'#ffd700':def.rarity==='rare'?'#a855f7':'#9aa0b0';
+  var rarName=def.rarity==='legendary'?'ЛЕГЕНДАРНЫЙ':def.rarity==='rare'?'РЕДКИЙ':'ОБЫЧНЫЙ';
   var card=document.createElement('div');
   card.style.cssText='background:linear-gradient(160deg,#0c0820,#060414);border:1.5px solid '+rarColor+'55;border-radius:18px;padding:24px;text-align:center;max-width:290px;width:100%;';
   card.innerHTML='<div style="font-size:50px;margin-bottom:10px;">'+def.icon+'</div>'+
@@ -3510,6 +3543,50 @@ function loadLeaderboard(){
       });
     }).catch(function(){});
 }
+
+/* ══ БОНУС ЗА ПОДПИСКУ НА КАНАЛ ══ */
+var CHANNEL_URL='https://t.me/aeonuniverse';
+window.openChannel=function(){
+  if(tg&&tg.openTelegramLink)tg.openTelegramLink(CHANNEL_URL);
+  else window.open(CHANNEL_URL,'_blank');
+};
+window.claimChannelBonus=function(){
+  if(!SERVER_OK){bonusNotif('⚠️','НУЖЕН ИНТЕРНЕТ',0);return;}
+  var initData=getInitData();if(!initData)return;
+  var btn=$('claim-channel-btn');
+  if(btn){btn.disabled=true;btn.textContent='Проверяем…';}
+  fetch(API+'/api/check_subscription',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'tma '+initData}
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok){
+      S.bal=d.balance;
+      if(d.artifact&&S.artifacts&&S.artifacts.indexOf(d.artifact)<0)S.artifacts.push(d.artifact);
+      else if(d.artifact&&!S.artifacts)S.artifacts=[d.artifact];
+      localStorage.setItem(SK,JSON.stringify(S));
+      updateUI();
+      bonusNotif('🛰️','СИГНАЛ МАЯКА ПОЛУЧЕН!',2500);
+      spawnCoins(15);
+      if(btn){btn.textContent='✅ Награда получена';btn.style.opacity='.6';}
+      if(typeof renderBackpack==='function')renderBackpack();
+      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+    }else{
+      var msg=(d&&d.message)?d.message:'Не удалось проверить';
+      if(d&&d.reason==='already'){
+        bonusNotif('✅','БОНУС УЖЕ ПОЛУЧЕН',0);
+        if(btn){btn.textContent='✅ Награда получена';btn.style.opacity='.6';}
+      }else if(d&&d.reason==='not_subscribed'){
+        bonusNotif('📢','СНАЧАЛА ПОДПИШИСЬ',0);
+        if(btn){btn.disabled=false;btn.textContent='✅ Я подписался — забрать';}
+      }else{
+        bonusNotif('⚠️',msg,0);
+        if(btn){btn.disabled=false;btn.textContent='✅ Я подписался — забрать';}
+      }
+    }
+  }).catch(function(){
+    if(btn){btn.disabled=false;btn.textContent='✅ Я подписался — забрать';}
+  });
+};
 /* ── INIT ── */
 function bootWhenTelegramReady(attempt){
   attempt=attempt||0;
