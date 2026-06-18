@@ -741,20 +741,33 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #lb-screen{position:relative;}
 .lb-bg-stars{position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%,rgba(255,255,255,.9),transparent),
-    radial-gradient(1px 1px at 28% 42%,rgba(200,180,255,.7),transparent),
-    radial-gradient(2px 2px at 45% 12%,rgba(255,220,150,.8),transparent),
-    radial-gradient(1px 1px at 62% 55%,rgba(255,255,255,.6),transparent),
-    radial-gradient(1.5px 1.5px at 78% 28%,rgba(180,200,255,.8),transparent),
-    radial-gradient(1px 1px at 88% 65%,rgba(255,255,255,.5),transparent),
-    radial-gradient(2px 2px at 35% 78%,rgba(255,200,100,.7),transparent),
-    radial-gradient(1px 1px at 55% 88%,rgba(200,180,255,.6),transparent),
-    radial-gradient(1.5px 1.5px at 18% 62%,rgba(255,255,255,.7),transparent),
-    radial-gradient(1px 1px at 72% 82%,rgba(255,255,255,.5),transparent),
-    radial-gradient(2px 2px at 92% 15%,rgba(255,230,180,.7),transparent),
-    radial-gradient(1px 1px at 8% 88%,rgba(200,200,255,.6),transparent);
-  animation:lbBgTwinkle 6s ease-in-out infinite;}
-@keyframes lbBgTwinkle{0%,100%{opacity:.6;}50%{opacity:1;}}
+    radial-gradient(2.5px 2.5px at 12% 18%,rgba(255,255,255,1),transparent),
+    radial-gradient(2px 2px at 28% 42%,rgba(200,180,255,.95),transparent),
+    radial-gradient(3px 3px at 45% 12%,rgba(255,220,150,1),transparent),
+    radial-gradient(2px 2px at 62% 55%,rgba(255,255,255,.9),transparent),
+    radial-gradient(2.5px 2.5px at 78% 28%,rgba(180,200,255,1),transparent),
+    radial-gradient(2px 2px at 88% 65%,rgba(255,255,255,.85),transparent),
+    radial-gradient(3px 3px at 35% 78%,rgba(255,200,100,.95),transparent),
+    radial-gradient(2px 2px at 55% 88%,rgba(200,180,255,.9),transparent),
+    radial-gradient(2.5px 2.5px at 18% 62%,rgba(255,255,255,1),transparent),
+    radial-gradient(2px 2px at 72% 82%,rgba(255,255,255,.85),transparent),
+    radial-gradient(3px 3px at 92% 15%,rgba(255,230,180,.95),transparent),
+    radial-gradient(2px 2px at 8% 88%,rgba(200,200,255,.9),transparent),
+    radial-gradient(1.5px 1.5px at 22% 32%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1.5px 1.5px at 52% 25%,rgba(220,220,255,.7),transparent),
+    radial-gradient(1.5px 1.5px at 68% 70%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.5px 1.5px at 38% 58%,rgba(255,230,200,.7),transparent),
+    radial-gradient(1.5px 1.5px at 82% 48%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.5px 1.5px at 5% 45%,rgba(200,210,255,.65),transparent);
+  animation:lbBgTwinkle 4s ease-in-out infinite;}
+@keyframes lbBgTwinkle{0%,100%{opacity:.7;}50%{opacity:1;}}
+/* Туманность-подсветка по краям рейтинга */
+.lb-bg-stars::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(120,80,200,.18),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%,rgba(200,144,26,.1),transparent 55%),
+    radial-gradient(ellipse 60% 40% at 0% 80%,rgba(0,180,255,.08),transparent 55%);
+  animation:lbNebula 8s ease-in-out infinite;}
+@keyframes lbNebula{0%,100%{opacity:.7;}50%{opacity:1;}}
 #lb-screen > div:not(.lb-bg-stars){position:relative;z-index:1;}
 
 </style>
@@ -1705,14 +1718,14 @@ window.skipIntro=function(){
   S.introSeen=true;save();
   showScreen('welcome-screen');
   startWelcomeAnim();
-  setTimeout(function(){initMain();},5500);
+  setTimeout(function(){var ws=$('welcome-screen');if(ws&&ws.classList.contains('active'))initMain();},5500);
 };
 
 window.startWelcome=function(){
   S.introSeen=true;save();
   showScreen('welcome-screen');
   startWelcomeAnim();
-  setTimeout(function(){initMain();},5500);
+  setTimeout(function(){var ws=$('welcome-screen');if(ws&&ws.classList.contains('active'))initMain();},5500);
 };
 
 /* ── WELCOME WARP ── */
@@ -2549,20 +2562,30 @@ window.shareRef=function(){
   }
 };
 window.depositTON=function(){
-  if(tg&&tg.openTelegramLink){
-    tg.openTelegramLink('https://t.me/aeon_game_Bot?start=deposit');
-  } else {
-    alert('TON депозит — скоро!\nОткрой бота @aeon_game_Bot для пополнения.');
+  // Заглушка: реальная оплата TON появится после запуска
+  showTonSoon();
+}
+function showTonSoon(){
+  var ov=$('ton-soon-ov');
+  if(!ov){
+    ov=document.createElement('div');
+    ov.id='ton-soon-ov';
+    ov.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(2,1,12,.85);backdrop-filter:blur(6px);';
+    ov.innerHTML='<div style="max-width:300px;margin:0 24px;text-align:center;background:linear-gradient(160deg,#0e0a26,#070318);border:1px solid rgba(0,229,255,.3);border-radius:22px;padding:30px 24px;box-shadow:0 0 40px rgba(0,229,255,.15);">'+
+      '<div style="font-size:44px;margin-bottom:14px;">💎</div>'+
+      '<div style="font-family:Orbitron,monospace;font-size:15px;color:#00e5ff;letter-spacing:1px;margin-bottom:12px;">TON СКОРО</div>'+
+      '<div style="font-family:Cinzel,serif;font-size:12px;color:rgba(180,220,255,.7);line-height:1.7;margin-bottom:22px;">Оплата через TON появится в одном из ближайших обновлений. Сейчас всё в игре доступно бесплатно — твой путь только начинается.</div>'+
+      '<button onclick="closeTonSoon()" style="width:100%;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#0088aa,#00e5ff);color:#04121a;font-family:Orbitron,monospace;font-size:11px;font-weight:700;cursor:pointer;">Понятно ✦</button>'+
+      '</div>';
+    document.body.appendChild(ov);
   }
-};
+  ov.style.display='flex';
+  if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('light');
+}
+window.closeTonSoon=function(){var ov=$('ton-soon-ov');if(ov)ov.style.display='none';};
 window.buyTON=function(tons,aeonAmount){
-  bonusNotif('💎','TON ДЕПОЗИТ СКОРО',0);
-  // TODO: подключить реальный TON платёж
-  if(tg&&tg.openTelegramLink){
-    tg.openTelegramLink('https://t.me/aeon_game_Bot?start=deposit_'+tons);
-  } else {
-    alert('Пополнение '+tons+' TON = '+aeonAmount.toLocaleString()+' AEON\nОткрой @aeon_game_Bot');
-  }
+  // Заглушка: реальная оплата TON появится после запуска
+  showTonSoon();
 };
 
 /* ── RESIZE ── */
@@ -3594,6 +3617,8 @@ function bootWhenTelegramReady(attempt){
     tg=window.Telegram.WebApp;
     tgU=tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
     try{tg.expand();tg.ready();}catch(e){}
+    try{if(tg.requestFullscreen)tg.requestFullscreen();}catch(e){}
+    try{if(tg.disableVerticalSwipes)tg.disableVerticalSwipes();}catch(e){}
     try{applyTgSafeArea();if(tg.onEvent){tg.onEvent('safeAreaChanged',applyTgSafeArea);tg.onEvent('contentSafeAreaChanged',applyTgSafeArea);tg.onEvent('viewportChanged',applyTgSafeArea);}}catch(e){}
     startApp();
   }else if(attempt<30){
