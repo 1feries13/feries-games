@@ -2200,11 +2200,8 @@ function handleCellClick(idx){
     var nextItem=item1+1;
     var nextDef=MITEMS.find(function(m){return m.id===nextItem;});
     if(!nextDef){var inf2=$('mg-info');if(inf2)inf2.textContent='Это максимальный уровень!';selCell=-1;renderMergeGrid();return;}
-    if(nextDef.locked&&!S.unlockedItems){
-      var inf3=$('mg-info');if(inf3)inf3.textContent='Нужно купить '+nextDef.name+' за '+nextDef.price+' 🪙';
-      selCell=-1;renderMergeGrid();return;
-    }
-    // Синтез!
+    // Синтез! (высшие уровни доступны без платной разблокировки)
+
     S.mergeEnergy-=MERGE_COST;
     S.mergeGrid[idx]=nextItem;
     S.mergeGrid[selCell]=null;
