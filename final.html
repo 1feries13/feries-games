@@ -1913,11 +1913,11 @@ function renderMap(){
   var cxP=(W/2/W*100).toFixed(1);
   var Lx=(L.x/W*100).toFixed(1), Ly=(L.y/H*100).toFixed(1);
   var Rx=(R.x/W*100).toFixed(1), Ry=(R.y/H*100).toFixed(1);
-  // Глаз центрирован на Кодексе: концы смыкания опущены ниже боковых узлов
-  var eyeMidY = L.y + H*0.04;            // линия смыкания глаза (углы)
+  // Глаз центрирован на Кодексе: веки симметрично вокруг него
+  var eyeMidY = L.y + H*0.05;            // линия смыкания глаза (углы)
   var EyMid=(eyeMidY/H*100).toFixed(1);
-  var topY=((L.y - H*0.10)/H*100).toFixed(1);   // верхнее веко (над Кодексом)
-  var botY=((L.y + H*0.18)/H*100).toFixed(1);   // нижнее веко (под Кодексом)
+  var topY=((L.y - H*0.06)/H*100).toFixed(1);   // верхнее веко (над Кодексом)
+  var botY=((L.y + H*0.15)/H*100).toFixed(1);   // нижнее веко (под Кодексом)
   if(et)et.setAttribute('d','M '+Lx+','+EyMid+' Q '+cxP+','+topY+' '+Rx+','+EyMid);
   if(eb)eb.setAttribute('d','M '+Rx+','+EyMid+' Q '+cxP+','+botY+' '+Lx+','+EyMid);
   MAP_NODES.forEach(function(node,i){
@@ -3461,6 +3461,10 @@ function renderUpgradeBlock(){
 /* ══ РЕЙТИНГ ГАЛАКТИКИ ══ */
 window.openLeaderboard=function(){
   showScreen('lb-screen');
+  // Мгновенный плейсхолдер пока грузится
+  var t=$('lb-total');if(t)t.textContent='···';
+  var list=$('lb-list');
+  if(list)list.innerHTML='<div style="text-align:center;font-size:10px;color:rgba(200,169,110,.4);padding:20px;font-family:Cinzel,serif;">Сканируем галактику…</div>';
   loadLeaderboard();
 };
 function loadLeaderboard(){
@@ -3486,8 +3490,16 @@ function loadLeaderboard(){
       var medals={1:'🥇',2:'🥈',3:'🥉'};
       d.top.forEach(function(p){
         var el=document.createElement('div');
-        var hl=p.me?'background:rgba(200,144,26,.14);border-color:rgba(200,169,110,.5);':'background:rgba(255,255,255,.03);border-color:rgba(168,85,247,.12);';
-        el.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border:.5px solid;border-radius:11px;'+hl;
+        // Цветной фон по месту: золото / серебро / бронза / обычный
+        var styleByRank={
+          1:'background:linear-gradient(135deg,rgba(255,200,60,.22),rgba(180,130,10,.08));border-color:rgba(255,200,60,.55);box-shadow:0 0 18px rgba(255,190,60,.18);',
+          2:'background:linear-gradient(135deg,rgba(210,220,235,.18),rgba(120,130,150,.06));border-color:rgba(200,210,230,.45);box-shadow:0 0 14px rgba(200,210,235,.12);',
+          3:'background:linear-gradient(135deg,rgba(205,130,70,.2),rgba(120,70,30,.07));border-color:rgba(205,130,70,.45);box-shadow:0 0 14px rgba(205,130,70,.14);'
+        };
+        var hl=styleByRank[p.rank]||'background:linear-gradient(135deg,rgba(120,80,200,.1),rgba(60,40,110,.04));border-color:rgba(168,85,247,.22);';
+        // Если это ты и не в топ-3 — добавим золотистый акцент
+        if(p.me && !styleByRank[p.rank])hl='background:linear-gradient(135deg,rgba(200,144,26,.18),rgba(120,80,10,.05));border-color:rgba(200,169,110,.5);box-shadow:0 0 14px rgba(200,144,26,.15);';
+        el.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid;border-radius:13px;'+hl;
         var rankBadge=medals[p.rank]||('#'+p.rank);
         el.innerHTML='<div style="display:flex;align-items:center;gap:10px;">'+
           '<span style="font-size:14px;min-width:26px;text-align:center;">'+rankBadge+'</span>'+
