@@ -782,16 +782,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 
 <!-- ══ INTRO ══ -->
 <div class="screen active" id="intro-screen">
-  <button class="intro-skip" onclick="skipIntro()">ПРОПУСТИТЬ</button>
+  <button class="intro-skip" onclick="skipIntro()" data-i18n="intro_skip">ПРОПУСТИТЬ</button>
   <!-- Слайд 1: Война -->
   <div class="intro-slide show" id="slide-1">
     <div class="war-particles" id="war-p"></div>
     <div class="intro-content">
       <div class="intro-icon-wrap" style="font-size:64px;">⚔️</div>
-      <div class="intro-title">Великая Война<br>Уничтожила Всё</div>
-      <div class="intro-text">Миллионы лет назад цивилизации поддались страху и гневу. Война за владение Камнем Начала уничтожила 90% вселенной. Галактики превратились в пепел.</div>
+      <div class="intro-title" data-i18n="intro_t1">Великая Война<br>Уничтожила Всё</div>
+      <div class="intro-text" data-i18n="intro_d1">Миллионы лет назад цивилизации поддались страху и гневу. Война за владение Камнем Начала уничтожила 90% вселенной. Галактики превратились в пепел.</div>
       <div class="intro-dots"><div class="intro-dot active"></div><div class="intro-dot"></div><div class="intro-dot"></div></div>
-      <button class="intro-btn" onclick="goSlide(2)">ДАЛЕЕ →</button>
+      <button class="intro-btn" onclick="goSlide(2)" data-i18n="intro_next">ДАЛЕЕ →</button>
     </div>
   </div>
   <!-- Слайд 2: Потеря -->
@@ -800,10 +800,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <div class="void-expand"></div>
     <div class="intro-content">
       <div class="intro-icon-wrap" style="font-size:64px;">💔</div>
-      <div class="intro-title">Цивилизации<br>Потеряли Себя</div>
-      <div class="intro-text">Выжившие блуждали среди обломков. Эго и страх разрушили то, что строилось эпохами. Хранители разбили Камень на три части и скрыли их.</div>
+      <div class="intro-title" data-i18n="intro_t2">Цивилизации<br>Потеряли Себя</div>
+      <div class="intro-text" data-i18n="intro_d2">Выжившие блуждали среди обломков. Эго и страх разрушили то, что строилось эпохами. Хранители разбили Камень на три части и скрыли их.</div>
       <div class="intro-dots"><div class="intro-dot"></div><div class="intro-dot active"></div><div class="intro-dot"></div></div>
-      <button class="intro-btn" onclick="goSlide(3)">ДАЛЕЕ →</button>
+      <button class="intro-btn" onclick="goSlide(3)" data-i18n="intro_next">ДАЛЕЕ →</button>
     </div>
   </div>
   <!-- Слайд 3: Путь -->
@@ -816,10 +816,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     </div>
     <div class="intro-content">
       <div class="intro-icon-wrap" style="height:40px;"></div>
-      <div class="intro-title">Твой Путь<br>Начинается Сейчас</div>
-      <div class="intro-text">Ты — один из выживших. Найди три Осколка Камня Начала. Пройди путь от страха к свету. Стань тем кем ты был всегда.</div>
+      <div class="intro-title" data-i18n="intro_t3">Твой Путь<br>Начинается Сейчас</div>
+      <div class="intro-text" data-i18n="intro_d3">Ты — один из выживших. Найди три Осколка Камня Начала. Пройди путь от страха к свету. Стань тем кем ты был всегда.</div>
       <div class="intro-dots"><div class="intro-dot"></div><div class="intro-dot"></div><div class="intro-dot active"></div></div>
-      <button class="intro-btn" onclick="startWelcome()" style="background:rgba(200,169,110,.14);border-color:rgba(200,169,110,.38);color:var(--aeon2);">🚀 НАЧАТЬ ПУТЬ</button>
+      <button class="intro-btn" onclick="startWelcome()" style="background:rgba(200,169,110,.14);border-color:rgba(200,169,110,.38);color:var(--aeon2);" data-i18n="intro_start">🚀 НАЧАТЬ ПУТЬ</button>
     </div>
   </div>
 </div>
@@ -828,7 +828,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 <div class="screen" id="welcome-screen">
   <canvas id="welcome-canvas"></canvas>
   <div class="welcome-text">
-    <div class="welcome-title">Добро пожаловать, выживший.<br>Найди путь к истокам<br>и стань легендой.</div>
+    <div class="welcome-title" data-i18n="welcome_title">Добро пожаловать, выживший.<br>Найди путь к истокам<br>и стань легендой.</div>
   </div>
 </div>
 
@@ -838,11 +838,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <div class="main-ui">
     <div class="main-hdr">
       <div class="main-logo">✦ AEON<span>Universe of Ages</span></div>
-      <div class="streak-badge">🔥 <span id="streak-d">1</span> день</div>
+      <div class="streak-badge">🔥 <span id="streak-d">1</span><span data-i18n="m_streak_day"> день</span></div>
     </div>
     <div class="ship-zone">
       <div class="combo-wrap" id="combo-w">
-        <div class="combo-lbl">⚡ КОМБО <span id="combo-n">0</span>/10</div>
+        <div class="combo-lbl">⚡ <span data-i18n="m_combo">КОМБО</span> <span id="combo-n">0</span>/10</div>
         <div class="combo-track"><div class="combo-fill" id="combo-f"></div></div>
       </div>
       <div class="tap-phrase" id="tap-ph"></div>
@@ -927,33 +927,33 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
             </svg>
           </div>
         </div>
-        <div class="ship-hint" id="ship-h">удерживай для входа</div>
+        <div class="ship-hint" id="ship-h" data-i18n="m_hold">удерживай для входа</div>
       </div>
     </div>
     <div class="main-bottom">
       <div class="res-bars">
         <div class="res-bar">
-          <div class="res-bar-hdr"><span class="res-bar-lbl">⚡ ЭНЕРГИЯ</span><span class="res-bar-val ev" id="en-d">100/100</span></div>
+          <div class="res-bar-hdr"><span class="res-bar-lbl">⚡ <span data-i18n="m_energy">ЭНЕРГИЯ</span></span><span class="res-bar-val ev" id="en-d">100/100</span></div>
           <div class="res-bar-track"><div class="res-bar-fill ef" id="en-f" style="width:100%"></div></div>
         </div>
         <div class="res-bar">
-          <div class="res-bar-hdr"><span class="res-bar-lbl">✨ ОПЫТ</span><span class="res-bar-val xv" id="xp-d">0/500</span></div>
+          <div class="res-bar-hdr"><span class="res-bar-lbl" data-i18n="p_exp">✨ ОПЫТ</span><span class="res-bar-val xv" id="xp-d">0/500</span></div>
           <div class="res-bar-track"><div class="res-bar-fill xf" id="xp-f" style="width:0%"></div></div>
         </div>
       </div>
       <div class="coins-bar">
         <div class="c-disp"><span class="c-ico">🪙</span><span class="c-val" id="main-c">500</span><span class="c-lbl">AEON</span></div>
         <div class="sep"></div>
-        <div class="c-disp"><span class="c-ico">⚡</span><span class="c-val ev" id="main-e">100</span><span class="c-lbl">ЭНЕРГИЯ</span></div>
+        <div class="c-disp"><span class="c-ico">⚡</span><span class="c-val ev" id="main-e">100</span><span class="c-lbl" data-i18n="m_energy">ЭНЕРГИЯ</span></div>
         <div class="sep"></div>
         <div class="c-disp" onclick="showUpgradeInfo()" style="cursor:pointer;">
           <span class="c-ico">🛸</span>
-          <span style="font-size:10px;font-weight:700;color:rgba(200,169,110,.7);">Ур.<span id="main-ship-lv">1</span></span>
+          <span style="font-size:10px;font-weight:700;color:rgba(200,169,110,.7);"><span data-i18n="m_lvl">Ур.</span><span id="main-ship-lv">1</span></span>
         </div>
       </div>
       <div id="upgrade-hint" style="display:none;margin-top:6px;text-align:center;">
         <button onclick="tryShipUpgrade()" style="padding:8px 20px;border-radius:10px;border:.5px solid rgba(200,169,110,.3);background:linear-gradient(135deg,rgba(200,144,26,.15),rgba(200,144,26,.05));color:var(--aeon2);font-family:Orbitron,monospace;font-size:9px;cursor:pointer;letter-spacing:1px;">
-          ⬆️ УЛУЧШИТЬ КОРАБЛЬ
+          <span data-i18n="m_upgrade">⬆️ УЛУЧШИТЬ КОРАБЛЬ</span>
         </button>
       </div>
     </div>
@@ -962,10 +962,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 
 <!-- ══ BOTTOM NAV ══ -->
 <div id="bnav">
-  <button class="bn active" id="bn-ship" onclick="goMain()"><span class="bi">🛸</span><span class="bl">Корабль</span></button>
-  <button class="bn" id="bn-map" onclick="goCosmos()"><span class="bi">🌌</span><span class="bl">Карта</span></button>
-  <button class="bn" id="bn-shop" onclick="goShop()"><span class="bi">🛍️</span><span class="bl">Магазин</span></button>
-  <button class="bn" id="bn-home" onclick="goHome()"><span class="bi">🏠</span><span class="bl">Дом</span></button>
+  <button class="bn active" id="bn-ship" onclick="goMain()"><span class="bi">🛸</span><span class="bl" data-i18n="nav_ship">Корабль</span></button>
+  <button class="bn" id="bn-map" onclick="goCosmos()"><span class="bi">🌌</span><span class="bl" data-i18n="nav_map">Карта</span></button>
+  <button class="bn" id="bn-shop" onclick="goShop()"><span class="bi">🛍️</span><span class="bl" data-i18n="nav_shop">Магазин</span></button>
+  <button class="bn" id="bn-home" onclick="goHome()"><span class="bi">🏠</span><span class="bl" data-i18n="nav_home">Дом</span></button>
 </div>
 
 <!-- ══ COSMOS ══ -->
@@ -973,7 +973,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <canvas id="cosmos-canvas"></canvas>
   <div class="cosmos-ui">
     <div class="cosmos-hdr">
-      <div class="cosmos-logo">✦ AEON<span>Навигационная система</span></div>
+      <div class="cosmos-logo">✦ AEON<span data-i18n="nav_system">Навигационная система</span></div>
       <div style="display:flex;align-items:center;gap:8px;">
       <button onclick="openLeaderboard()" class="lb-float-btn" style="display:flex;align-items:center;gap:4px;background:rgba(200,169,110,.1);border:.5px solid rgba(200,169,110,.3);border-radius:16px;padding:5px 11px;cursor:pointer;color:var(--aeon2);font-family:Orbitron,monospace;font-size:13px;">🏆</button>
       <div class="cosmos-bal">
@@ -1005,8 +1005,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <!-- Шапка -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
       <div>
-        <div style="font-size:16px;font-weight:900;color:var(--aeon2);letter-spacing:2px;">📜 КОДЕКС ВЫЖИВШЕГО</div>
-        <div style="font-family:Cinzel,serif;font-size:9px;color:rgba(200,144,26,.45);margin-top:2px;">Инструкция по прохождению</div>
+        <div style="font-size:16px;font-weight:900;color:var(--aeon2);letter-spacing:2px;" data-i18n="codex_title">📜 КОДЕКС ВЫЖИВШЕГО</div>
+        <div style="font-family:Cinzel,serif;font-size:9px;color:rgba(200,144,26,.45);margin-top:2px;" data-i18n="codex_sub">Инструкция по прохождению</div>
       </div>
       <button onclick="closeCodex()" style="width:28px;height:28px;border-radius:50%;
         background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.12);
@@ -1016,42 +1016,42 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <!-- Осколки -->
     <div style="background:rgba(200,144,26,.07);border:.5px solid rgba(200,144,26,.25);
       border-radius:12px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:9px;color:var(--aeon2);letter-spacing:2px;margin-bottom:8px;">🔮 ОСКОЛКИ КАМНЯ НАЧАЛА</div>
+      <div style="font-size:9px;color:var(--aeon2);letter-spacing:2px;margin-bottom:8px;" data-i18n="codex_shards">🔮 ОСКОЛКИ КАМНЯ НАЧАЛА</div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:18px;">💠</span>
           <div>
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);">Осколок Света</div>
-            <div style="font-size:8.5px;color:rgba(200,144,26,.5);">Ур.3 — найти в игре Астероиды</div>
-            <div style="font-size:8px;color:var(--green);">Бонус: ×10 монет за тап навсегда</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);" data-i18n="shard_light">Осколок Света</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.5);" data-i18n="shard_light_d">Ур.3 — найти в игре Астероиды</div>
+            <div style="font-size:8px;color:var(--green);" data-i18n="shard_light_b">Бонус: ×10 монет за тап навсегда</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:18px;">🌑</span>
           <div>
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);">Осколок Тени</div>
-            <div style="font-size:8.5px;color:rgba(200,144,26,.35);">Ур.6 — создать Эссенцию Творца</div>
-            <div style="font-size:8px;color:rgba(0,255,159,.5);">Бонус: ???</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_shadow">Осколок Тени</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_shadow_d">Ур.6 — создать Эссенцию Творца</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="codex_bonus_q">Бонус: ???</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:18px;">⚡</span>
           <div>
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);">Осколок Воли</div>
-            <div style="font-size:8.5px;color:rgba(200,144,26,.35);">Ур.9 — финал игры</div>
-            <div style="font-size:8px;color:rgba(0,255,159,.5);">Бонус: ???</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_will">Осколок Воли</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_will_d">Ур.9 — финал игры</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="codex_bonus_q">Бонус: ???</div>
           </div>
         </div>
       </div>
     </div>
     <!-- Уровни -->
-    <div style="font-size:9px;color:rgba(200,144,26,.45);letter-spacing:2px;margin-bottom:10px;">🚀 УРОВНИ КОРАБЛЯ</div>
+    <div style="font-size:9px;color:rgba(200,144,26,.45);letter-spacing:2px;margin-bottom:10px;" data-i18n="codex_levels_t">🚀 УРОВНИ КОРАБЛЯ</div>
     <div id="codex-levels" style="display:flex;flex-direction:column;gap:8px;"></div>
     <!-- Доп инфо -->
     <div style="margin-top:14px;background:rgba(168,85,247,.06);border:.5px solid rgba(168,85,247,.18);
       border-radius:12px;padding:12px;">
-      <div style="font-size:9px;color:rgba(168,85,247,.6);letter-spacing:2px;margin-bottom:8px;">⚡ ЭНЕРГИЯ И СИНТЕЗ</div>
-      <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(255,255,255,.35);line-height:1.7;">
+      <div style="font-size:9px;color:rgba(168,85,247,.6);letter-spacing:2px;margin-bottom:8px;" data-i18n="p_energy_synth">⚡ ЭНЕРГИЯ И СИНТЕЗ</div>
+      <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(255,255,255,.35);line-height:1.7;" data-i18n="rules_block">
         1 тап = -1 энергия + 1 монета<br>
         Комбо (10 тапов) = ×2 монеты пока не остановишься<br>
         Энергия +1 в минуту (Квантовый Двигатель ускоряет)<br>
@@ -1071,7 +1071,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <div class="gc-ds" id="gc-ds"></div>
   <div class="gc-cost" id="gc-cost">⚡ <span id="gc-ev">20</span> энергии</div>
   <div id="gc-lock" style="display:none;text-align:center;padding:14px;color:rgba(255,120,120,.85);font-family:Orbitron,monospace;font-size:11px;letter-spacing:1px;background:rgba(255,58,92,.08);border:.5px solid rgba(255,58,92,.25);border-radius:12px;">🔒 Локация закрыта</div>
-  <button class="gc-go" id="gc-go" onclick="doHyperjump()">🚀 Совершить гиперпрыжок</button>
+  <button class="gc-go" id="gc-go" onclick="doHyperjump()" data-i18n="btn_jump">🚀 Совершить гиперпрыжок</button>
 </div></div>
 
 <!-- ══ HYPERJUMP ══ -->
@@ -1085,16 +1085,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <canvas id="merge-canvas"></canvas>
   <div class="merge-ui">
     <div class="merge-hdr">
-      <button class="mg-back game-back-top" onclick="returnToMain()" style="margin:0;">← Назад</button>
+      <button class="mg-back game-back-top" onclick="returnToMain()" style="margin:0;" data-i18n="back">← Назад</button>
       <div class="mg-title">АНГАР СИНТЕЗА</div>
       <div class="mg-energy">🔮 <span id="mg-en">50</span></div>
     </div>
     <div class="merge-energy-bar">
-      <div class="meb-hdr"><span>ЭНЕРГИЯ МАТЕРИИ</span><span id="mg-en-d">50/50</span></div>
+      <div class="meb-hdr"><span data-i18n="matter_bar">ЭНЕРГИЯ МАТЕРИИ</span><span id="mg-en-d">50/50</span></div>
       <div class="meb-track"><div class="meb-fill" id="mg-en-f" style="width:100%"></div></div>
     </div>
     <div class="daily-code" id="daily-code">
-      <div class="dc-title">🧪 ЕЖЕДНЕВНЫЙ АЛХИМИЧЕСКИЙ КОД <span class="dc-soon">СКОРО</span></div>
+      <div class="dc-title">🧪 <span data-i18n="alchemy_code">ЕЖЕДНЕВНЫЙ АЛХИМИЧЕСКИЙ КОД</span> <span class="dc-soon"data-i18n="soon">СКОРО</span></div>
       <div class="dc-slots" onclick="dailyCodeInfo()">
         <div class="dc-slot">?</div>
         <div class="dc-slot">?</div>
@@ -1104,7 +1104,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       </div>
     </div>
     <div class="merge-orders">
-      <div class="mo-title">📋 ЗАКАЗЫ</div>
+      <div class="mo-title">📋 <span data-i18n="orders">ЗАКАЗЫ</span></div>
       <div class="mo-list" id="mo-list"></div>
     </div>
     <div class="merge-grid-wrap">
@@ -1112,7 +1112,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     </div>
     <div class="merge-bottom">
       <div class="merge-btns">
-        <button class="mg-gen-btn" id="mg-gen" onclick="mergeGenerate()">✦ Создать Пыль (-5 ⚡)</button>
+        <button class="mg-gen-btn" id="mg-gen" onclick="mergeGenerate()" data-i18n="create_dust">✦ Создать Пыль (-5 ⚡)</button>
       </div>
       <div class="mg-info" id="mg-info">Выбери ячейку или создай материю</div>
     </div>
@@ -1121,13 +1121,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 
 <!-- ══ RUNES SCREEN ══ -->
 <div class="screen" id="runes-screen">
-  <button class="runes-back" onclick="returnToMain()">← Назад</button>
-  <div class="runes-title">✦ РУНЫ СУДЬБЫ ✦</div>
-  <div class="runes-sub">Три кольца — один выбор</div>
+  <button class="runes-back" onclick="returnToMain()" data-i18n="back">← Назад</button>
+  <div class="runes-title" data-i18n="runes_title">✦ РУНЫ СУДЬБЫ ✦</div>
+  <div class="runes-sub" data-i18n="runes_sub">Три кольца — один выбор</div>
   <div class="runes-rings" id="runes-rings"></div>
-  <div class="runes-msg" id="runes-msg">Испытай судьбу вселенной</div>
-  <button class="runes-go-btn" id="runes-btn" onclick="spinRunes()">⚡ ИСПЫТАТЬ СУДЬБУ</button>
-  <div class="runes-free-tag" id="runes-free">Бесплатно сегодня!</div>
+  <div class="runes-msg" id="runes-msg" data-i18n="runes_msg">Испытай судьбу вселенной</div>
+  <button class="runes-go-btn" id="runes-btn" onclick="spinRunes()" data-i18n="runes_btn">⚡ ИСПЫТАТЬ СУДЬБУ</button>
+  <div class="runes-free-tag" id="runes-free" data-i18n="runes_free">Бесплатно сегодня!</div>
 </div>
 
 <!-- ══ ORACLE SCREEN ══ -->
@@ -1141,9 +1141,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <span style="bottom:18%;left:14%;animation-delay:1.7s;">ᛗ</span>
     <span style="bottom:14%;right:12%;animation-delay:2.8s;">ᚨ</span>
   </div>
-  <button class="oracle-back" onclick="returnToMain()" style="z-index:5;">← Назад</button>
-  <div class="oracle-title" style="z-index:2;">─── О Р А К У Л ───</div>
-  <div class="oracle-sub">Голос древней вселенной</div>
+  <button class="oracle-back" onclick="returnToMain()" style="z-index:5;" data-i18n="back">← Назад</button>
+  <div class="oracle-title" style="z-index:2;" data-i18n="oracle_title">─── О Р А К У Л ───</div>
+  <div class="oracle-sub" data-i18n="oracle_sub">Голос древней вселенной</div>
   <div class="oracle-ball-wrap" onclick="tapOracle()" style="z-index:2;">
     <div class="nebula" id="oracle-ball">
       <div class="neb-layer n1"></div>
@@ -1156,7 +1156,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <div class="oracle-prophecy" id="oracle-proph" style="z-index:2;">
     <div class="op-corner tl">✦</div><div class="op-corner tr">✦</div>
     <div class="op-corner bl">✦</div><div class="op-corner br">✦</div>
-    <div class="oracle-p-text" id="oracle-text">Коснись туманности — она шепнёт твоё предназначение</div>
+    <div class="oracle-p-text" id="oracle-text" data-i18n="oracle_hint">Коснись туманности — она шепнёт твоё предназначение</div>
     <div class="oracle-p-boost" id="oracle-boost"></div>
   </div>
   <div class="oracle-tap-hint" id="oracle-hint" style="z-index:2;">← КОСНИСЬ ТУМАННОСТИ →</div>
@@ -1169,22 +1169,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   <button onclick="astExit()" style="position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 10px);left:14px;z-index:5;
     background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;
     padding:6px 14px;color:rgba(200,169,110,.6);font-family:Orbitron,monospace;font-size:8px;
-    letter-spacing:1px;cursor:pointer;">← Выйти</button>
+    letter-spacing:1px;cursor:pointer;" data-i18n="ast_exit">← Выйти</button>
   <div id="ast-result" style="display:none;position:absolute;inset:0;z-index:6;
     background:rgba(0,0,10,.85);backdrop-filter:blur(8px);
     align-items:center;justify-content:center;flex-direction:column;padding:24px;">
     <div style="background:linear-gradient(160deg,#0e0a02,#06040e);border:1.5px solid rgba(200,144,26,.4);
       border-radius:20px;padding:26px 30px;text-align:center;max-width:300px;width:100%;">
       <div style="font-size:44px;margin-bottom:10px;">💥</div>
-      <div id="ast-res-reason" style="font-family:Cinzel,serif;font-size:13px;color:rgba(255,255,255,.6);margin-bottom:12px;">Полёт завершён</div>
-      <div style="font-size:8px;color:rgba(200,169,110,.45);letter-spacing:2px;margin-bottom:4px;">СОБРАНО</div>
+      <div id="ast-res-reason" style="font-family:Cinzel,serif;font-size:13px;color:rgba(255,255,255,.6);margin-bottom:12px;" data-i18n="ast_done">Полёт завершён</div>
+      <div style="font-size:8px;color:rgba(200,169,110,.45);letter-spacing:2px;margin-bottom:4px;" data-i18n="ast_collected">СОБРАНО</div>
       <div id="ast-res-coins" style="font-size:30px;font-weight:900;color:var(--aeon2);margin-bottom:18px;font-family:Orbitron,monospace;">+0</div>
       <button onclick="astRetry()" style="width:100%;height:44px;border-radius:22px;border:1px solid rgba(0,229,255,.3);
         background:rgba(0,229,255,.08);color:#00e5ff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;
-        letter-spacing:1px;cursor:pointer;margin-bottom:8px;">🔄 ЕЩЁ РАЗ (-30 ⚡)</button>
+        letter-spacing:1px;cursor:pointer;margin-bottom:8px;" data-i18n="ast_again">🔄 ЕЩЁ РАЗ (-30 ⚡)</button>
       <button onclick="astCollect()" style="width:100%;height:48px;border-radius:24px;border:none;
         background:linear-gradient(135deg,var(--aeon),var(--aeon2));color:#07071a;
-        font-family:Orbitron,monospace;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer;">✦ ЗАБРАТЬ</button>
+        font-family:Orbitron,monospace;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer;" data-i18n="ast_claim">✦ ЗАБРАТЬ</button>
     </div>
   </div>
 </div>
@@ -1193,7 +1193,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 <div class="screen" id="lb-screen" style="background:radial-gradient(ellipse at 50% 0%,#1a1230,#0a0618 45%,#040210);z-index:30;overflow-y:auto;">
   <div class="lb-bg-stars"></div>
   <div style="padding:calc(var(--sat) + var(--tg-top,0px) + 14px) 16px 80px;">
-    <button onclick="goCosmos()" style="background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;padding:7px 15px;color:rgba(200,169,110,.7);font-family:Orbitron,monospace;font-size:9px;letter-spacing:1px;cursor:pointer;margin-bottom:16px;">← Назад</button>
+    <button onclick="goCosmos()" data-i18n="back" style="background:rgba(255,255,255,.06);border:.5px solid rgba(200,169,110,.25);border-radius:18px;padding:7px 15px;color:rgba(200,169,110,.7);font-family:Orbitron,monospace;font-size:9px;letter-spacing:1px;cursor:pointer;margin-bottom:16px;">← Назад</button>
     <div style="text-align:center;margin-bottom:8px;">
       <div style="font-family:Cinzel,serif;font-size:11px;color:rgba(200,169,110,.5);letter-spacing:3px;">─── РЕЙТИНГ ГАЛАКТИКИ ───</div>
     </div>
@@ -1202,13 +1202,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <div class="lb-counter-stars"></div>
       <div class="lb-counter-glow"></div>
       <div style="position:relative;z-index:2;">
-        <div style="font-size:9px;color:rgba(200,169,110,.6);letter-spacing:3px;margin-bottom:10px;">✦ ПИЛОТОВ ВО ВСЕЛЕННОЙ ✦</div>
+        <div style="font-size:9px;color:rgba(200,169,110,.6);letter-spacing:3px;margin-bottom:10px;"><span data-i18n="lb_pilots">✦ ПИЛОТОВ ВО ВСЕЛЕННОЙ ✦</span></div>
         <div id="lb-total" class="lb-total-num">—</div>
         <div id="lb-myrank" style="font-size:11px;color:rgba(200,180,255,.7);margin-top:10px;font-family:Cinzel,serif;"></div>
       </div>
     </div>
     <!-- Топ-10 -->
-    <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:10px;">⭐ ТОП-10 ПО ОПЫТУ</div>
+    <div style="font-size:9px;color:rgba(200,169,110,.5);letter-spacing:2px;margin-bottom:10px;">⭐ <span data-i18n="lb_top">ТОП-10 ПО ОПЫТУ</span></div>
     <div id="lb-list" style="display:flex;flex-direction:column;gap:7px;"></div>
   </div>
 </div>
@@ -1216,104 +1216,75 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 <!-- ══ HOME ══ -->
 <div class="screen" id="home-screen">
   <div class="home-hdr">
-    <button class="home-back" onclick="goMain()">← Корабль</button>
-    <div class="home-title">ДОМ</div>
-    <div class="home-bal">🪙 <span id="home-bal">500</span></div>
+    <button class="home-back" onclick="goMain()" data-i18n="back_ship">← Корабль</button>
+    <div class="home-title" data-i18n="scr_home">ДОМ</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button onclick="toggleLang()" style="display:flex;align-items:center;gap:3px;background:rgba(168,85,247,.12);border:.5px solid rgba(168,85,247,.3);border-radius:14px;padding:5px 10px;cursor:pointer;color:#c8a9ff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;">🌐 <span id="lang-btn-label">RU</span></button>
+      <div class="home-bal">🪙 <span id="home-bal">500</span></div>
+    </div>
   </div>
   <div class="htabs">
-    <div class="htab active" onclick="htab('pilot',this)">👤 Пилот</div>
-    <div class="htab" onclick="htab('backpack',this)">🎒 Рюкзак</div>
-    <div class="htab" onclick="htab('wallet',this)">💎 Кошелёк</div>
+    <div class="htab active" onclick="htab('pilot',this)">👤 <span data-i18n="tab_pilot">Пилот</span></div>
+    <div class="htab" onclick="htab('backpack',this)">🎒 <span data-i18n="tab_backpack">Рюкзак</span></div>
+    <div class="htab" onclick="htab('wallet',this)">💎 <span data-i18n="tab_wallet">Кошелёк</span></div>
+    <div class="htab" onclick="htab('friends',this)">🤝 <span data-i18n="tab_friends">Друзья</span></div>
   </div>
   <div class="hpanels">
     <!-- Пилот -->
     <div class="hpanel active" id="hp-pilot" style="padding-bottom:80px;">
       <div class="hc">
-        <div class="hc-t">👨‍🚀 ПИЛОТ</div>
+        <div class="hc-t" data-i18n="pilot_t">👨‍🚀 ПИЛОТ</div>
         <div class="pilot-row">
           <div class="pilot-av" id="p-av" style="display:flex;align-items:center;justify-content:center;font-size:28px;background:radial-gradient(circle,rgba(168,85,247,.3),#0a0418);">🛸</div>
-          <div><div class="pilot-name" id="p-name">Выживший</div><div class="pilot-uid" id="p-uid">#000000</div><div class="pilot-rank" id="p-rank">🌱 Новичок</div></div>
+          <div><div class="pilot-name" id="p-name" data-i18n="p_survivor">Выживший</div><div class="pilot-uid" id="p-uid">#000000</div><div class="pilot-rank" id="p-rank">🌱 Новичок</div></div>
         </div>
         <div class="xp-row">
-          <div class="xp-hdr"><span>ОПЫТ</span><span id="p-xp-l">0/500</span></div>
+          <div class="xp-hdr"><span data-i18n="m_exp">ОПЫТ</span><span id="p-xp-l">0/500</span></div>
           <div class="xp-tr"><div class="xp-fi" id="p-xp-f" style="width:0%"></div></div>
         </div>
         <div class="stats-g">
-          <div class="stb"><div class="stv" id="p-taps">0</div><div class="stl">ТАПОВ</div></div>
-          <div class="stb"><div class="stv" id="p-merges">0</div><div class="stl">СИНТЕЗ</div></div>
-          <div class="stb"><div class="stv" id="p-max">0</div><div class="stl">РЕКОРД</div></div>
+          <div class="stb"><div class="stv" id="p-taps">0</div><div class="stl" data-i18n="p_taps">ТАПОВ</div></div>
+          <div class="stb"><div class="stv" id="p-merges">0</div><div class="stl" data-i18n="p_synth">СИНТЕЗ</div></div>
+          <div class="stb"><div class="stv" id="p-max">0</div><div class="stl"><span data-i18n="st_record">РЕКОРД</span></div></div>
         </div>
       </div>
       <!-- Улучшение корабля -->
       <div class="hc" style="border-color:rgba(200,169,110,.22);">
-        <div class="hc-t" style="color:var(--aeon2);">🚀 УЛУЧШЕНИЕ КОРАБЛЯ</div>
+        <div class="hc-t" style="color:var(--aeon2);" data-i18n="upg_t">🚀 УЛУЧШЕНИЕ КОРАБЛЯ</div>
         <div id="upg-info" style="font-family:Cinzel,serif;font-size:10px;color:rgba(200,180,140,.6);line-height:1.7;margin-bottom:10px;"></div>
         <button id="upg-btn" onclick="tryShipUpgrade()" style="width:100%;height:44px;border-radius:12px;border:none;cursor:pointer;font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:.5px;">Улучшить</button>
       </div>
       <!-- Ежедневный бонус -->
       <div class="hc" style="border-color:rgba(255,215,0,.18);">
-        <div class="hc-t" style="color:rgba(255,215,0,.65);">🔥 ЕЖЕДНЕВНЫЙ БОНУС</div>
+        <div class="hc-t" style="color:rgba(255,215,0,.65);" data-i18n="daily_t">🔥 ЕЖЕДНЕВНЫЙ БОНУС</div>
         <div class="daily-row" id="daily-row"></div>
-        <button id="daily-claim" onclick="claimDaily()" style="width:100%;margin-top:10px;height:42px;border-radius:12px;border:none;cursor:pointer;font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:.5px;background:linear-gradient(135deg,#c8901a,#ffd700);color:#1a1000;">🎁 Забрать награду</button>
+        <button id="daily-claim" onclick="claimDaily()" style="width:100%;margin-top:10px;height:42px;border-radius:12px;border:none;cursor:pointer;font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:.5px;background:linear-gradient(135deg,#c8901a,#ffd700);color:#1a1000;" data-i18n="claim_reward">🎁 Забрать награду</button>
       </div>
       <!-- Осколки -->
       <div class="hc" style="border-color:rgba(200,169,110,.2);">
-        <div class="hc-t" style="color:rgba(200,169,110,.65);">🔮 ОСКОЛКИ КАМНЯ НАЧАЛА</div>
+        <div class="hc-t" style="color:rgba(200,169,110,.65);" data-i18n="codex_shards">🔮 ОСКОЛКИ КАМНЯ НАЧАЛА</div>
         <div class="shards">
-          <div class="shard" id="sh-1"><div class="sh-ico">💠</div><div><div class="sh-name">Осколок Света</div><div class="sh-lore">Спрятан в Туманности Забытых. Хранит память о первом рассвете.</div></div><div class="sh-status">🔒</div></div>
-          <div class="shard" id="sh-2"><div class="sh-ico">🌑</div><div><div class="sh-name">Осколок Тени</div><div class="sh-lore">Скрыт в Сердце Пустоты. Хранит тайну разрушения.</div></div><div class="sh-status">🔒</div></div>
-          <div class="shard" id="sh-3"><div class="sh-ico">⚡</div><div><div class="sh-name">Осколок Воли</div><div class="sh-lore">Местонахождение неизвестно. Только сильнейшие найдут путь.</div></div><div class="sh-status">🔒</div></div>
+          <div class="shard" id="sh-1"><div class="sh-ico">💠</div><div><div class="sh-name" data-i18n="shard_light">Осколок Света</div><div class="sh-lore" data-i18n="shard_light_lore">Спрятан в Туманности Забытых. Хранит память о первом рассвете.</div></div><div class="sh-status">🔒</div></div>
+          <div class="shard" id="sh-2"><div class="sh-ico">🌑</div><div><div class="sh-name" data-i18n="shard_shadow">Осколок Тени</div><div class="sh-lore" data-i18n="shard_shadow_lore">Скрыт в Сердце Пустоты. Хранит тайну разрушения.</div></div><div class="sh-status">🔒</div></div>
+          <div class="shard" id="sh-3"><div class="sh-ico">⚡</div><div><div class="sh-name" data-i18n="shard_will">Осколок Воли</div><div class="sh-lore" data-i18n="shard_will_lore">Местонахождение неизвестно. Только сильнейшие найдут путь.</div></div><div class="sh-status">🔒</div></div>
         </div>
       </div>
       <!-- Достижения -->
       <div class="hc" style="border-color:rgba(255,215,0,.15);">
-        <div class="hc-t" style="color:rgba(255,215,0,.62);">🏆 ДОСТИЖЕНИЯ</div>
+        <div class="hc-t" style="color:rgba(255,215,0,.62);" data-i18n="ach_title">🏆 ДОСТИЖЕНИЯ</div>
         <div style="display:flex;flex-direction:column;gap:5px;" id="ach-list"></div>
-      </div>
-      <!-- Реферал -->
-      <div class="hc" style="border-color:rgba(168,85,247,.15);">
-        <div class="hc-t" style="color:rgba(168,85,247,.6);">👥 КВАНТОВАЯ СВЯЗЬ</div>
-        <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(200,180,255,.5);line-height:1.6;margin-bottom:10px;">
-          Приглашай друзей через звёздный мост. За старт — по 500 монет обоим. Когда друг дойдёт до 2 уровня — тебе +2000 и 5% с его добычи навсегда.
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
-          <div class="ac-stat" style="background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);">
-            <div class="ac-val" id="ref-total" style="color:rgba(200,160,255,.9);">0</div>
-            <div class="ac-lbl">ДРУЗЕЙ</div></div>
-          <div class="ac-stat" style="background:rgba(0,255,159,.06);border-color:rgba(0,255,159,.18);">
-            <div class="ac-val" id="ref-active" style="color:var(--green);">0</div>
-            <div class="ac-lbl">АКТИВНЫХ</div></div>
-          <div class="ac-stat" style="background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);">
-            <div class="ac-val" id="ref-earned" style="color:var(--aeon2);">0</div>
-            <div class="ac-lbl">КЭШБЭК 🪙</div></div>
-        </div>
-        <div class="ref-box" id="p-ref">https://t.me/aeon_game_Bot</div>
-        <div class="ref-btns">
-          <button class="ref-btn" onclick="copyRef()">📋 Копировать</button>
-          <button class="ref-btn" onclick="shareRef()">📤 Поделиться</button>
-        </div>
-        <div id="ref-friends" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
-      </div>
-      <!-- Бонус за подписку на канал -->
-      <div class="hc" style="border-color:rgba(0,229,255,.2);">
-        <div class="hc-t" style="color:rgba(0,229,255,.7);">📡 СИГНАЛ МАЯКА</div>
-        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(180,220,255,.6);line-height:1.7;margin-bottom:10px;">
-          Подпишись на канал AEON и получи 2500 монет + легендарный артефакт «Сигнал Маяка», которого не достать больше нигде.
-        </div>
-        <button onclick="openChannel()" style="width:100%;height:40px;border-radius:11px;border:.5px solid rgba(0,229,255,.3);background:rgba(0,229,255,.08);color:#00e5ff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;cursor:pointer;margin-bottom:8px;">📢 Открыть канал</button>
-        <button id="claim-channel-btn" onclick="claimChannelBonus()" style="width:100%;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#0088aa,#00e5ff);color:#04121a;font-family:Orbitron,monospace;font-size:11px;font-weight:700;cursor:pointer;">✅ Я подписался — забрать</button>
       </div>
     </div>
     <!-- Рюкзак -->
     <div class="hpanel" id="hp-backpack">
       <div class="hc">
-        <div class="hc-t">🎒 АРТЕФАКТЫ</div>
+        <div class="hc-t" data-i18n="bp_title">🎒 АРТЕФАКТЫ</div>
         <div class="bp-grid" id="bp-grid"></div>
       </div>
       <!-- Артефакты инфо -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
-        <div class="hc-t" style="color:rgba(168,85,247,.6);">📖 КАК ПОЛУЧИТЬ АРТЕФАКТЫ</div>
-        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(255,255,255,.3);line-height:1.7;">
+        <div class="hc-t" style="color:rgba(168,85,247,.6);" data-i18n="bp_how_t">📖 КАК ПОЛУЧИТЬ АРТЕФАКТЫ</div>
+        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(255,255,255,.3);line-height:1.7;" data-i18n="bp_how_d">
           Артефакты выпадают при синтезе высших уровней,
           за достижения и особые события вселенной.
           Каждый хранит частицу истории.
@@ -1322,26 +1293,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     </div>
     <!-- Кошелёк -->
     <div class="hpanel" id="hp-wallet" style="padding-bottom:80px;">
-      <div class="wal-bal"><div class="wb-lbl">БАЛАНС AEON</div><div class="wb-amt" id="p-bal">500</div></div>
-      <button class="dep-btn" onclick="depositTON()">⬇️ ПОПОЛНИТЬ ЧЕРЕЗ TON</button>
+      <div class="wal-bal"><div class="wb-lbl" data-i18n="w_balance">БАЛАНС AEON</div><div class="wb-amt" id="p-bal">500</div></div>
+      <button class="dep-btn" onclick="depositTON()" data-i18n="w_deposit">⬇️ ПОПОЛНИТЬ ЧЕРЕЗ TON</button>
       <!-- Пакеты TON -->
       <div class="hc" style="border-color:rgba(0,100,255,.22);margin-top:0;">
-        <div class="hc-t" style="color:rgba(100,180,255,.7);">💎 ПАКЕТЫ TON</div>
+        <div class="hc-t" style="color:rgba(100,180,255,.7);" data-i18n="w_packages">💎 ПАКЕТЫ TON</div>
         <div style="display:flex;flex-direction:column;gap:7px;" id="ton-packages">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.06);border:.5px solid rgba(0,100,255,.18);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.8);">Стартер</div><div style="font-size:9px;color:rgba(255,255,255,.3);">1 TON = 1,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.8);" data-i18n="w_starter">Стартер</div><div style="font-size:9px;color:rgba(255,255,255,.3);">1 TON = 1,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(1,1000)">1 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.07);border:.5px solid rgba(0,100,255,.22);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.9);">Пилот <span style="font-size:8px;color:var(--green);">+20%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">5 TON = 6,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.9);" data-i18n="w_pilot">Пилот</div><div style="display:none"><span style="font-size:8px;color:var(--green);">+20%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">5 TON = 6,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(5,6000)">5 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.08);border:.5px solid rgba(0,150,255,.28);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(150,200,255,.9);">Капитан <span style="font-size:8px;color:var(--green);">+50%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">10 TON = 15,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(150,200,255,.9);"><span data-i18n="w_captain">Капитан</span> <span style="font-size:8px;color:var(--green);">+50%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">10 TON = 15,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(10,15000)">10 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(200,169,110,.07);border:.5px solid rgba(200,169,110,.25);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:var(--aeon2);">Адмирал <span style="font-size:8px;color:var(--green);">+100%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">25 TON = 50,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--aeon2);"><span data-i18n="w_admiral">Адмирал</span> <span style="font-size:8px;color:var(--green);">+100%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">25 TON = 50,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(25,50000)">25 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(168,85,247,.08));border:.5px solid rgba(200,169,110,.35);border-radius:10px;">
@@ -1353,26 +1324,59 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <!-- AEON монета с вращением -->
       <div id="aeon-coin-wallet"></div>
     </div>
+    <!-- Друзья -->
+    <div class="hpanel" id="hp-friends" style="padding-bottom:80px;">
+<div class="hc" style="border-color:rgba(168,85,247,.15);">
+        <div class="hc-t" style="color:rgba(168,85,247,.6);" data-i18n="ql_title">👥 КВАНТОВАЯ СВЯЗЬ</div>
+        <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(200,180,255,.5);line-height:1.6;margin-bottom:10px;"data-i18n="ql_desc">Приглашай друзей через звёздный мост. За старт — по 500 монет обоим. Когда друг дойдёт до 2 уровня — тебе +2000 и 5% с его добычи навсегда.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
+          <div class="ac-stat" style="background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);">
+            <div class="ac-val" id="ref-total" style="color:rgba(200,160,255,.9);">0</div>
+            <div class="ac-lbl"data-i18n="ql_friends">ДРУЗЕЙ</div></div>
+          <div class="ac-stat" style="background:rgba(0,255,159,.06);border-color:rgba(0,255,159,.18);">
+            <div class="ac-val" id="ref-active" style="color:var(--green);">0</div>
+            <div class="ac-lbl"data-i18n="ql_active">АКТИВНЫХ</div></div>
+          <div class="ac-stat" style="background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);">
+            <div class="ac-val" id="ref-earned" style="color:var(--aeon2);">0</div>
+            <div class="ac-lbl"data-i18n="ql_cashback">КЭШБЭК 🪙</div></div>
+        </div>
+        <div class="ref-box" id="p-ref">https://t.me/aeon_game_Bot</div>
+        <div class="ref-btns">
+          <button class="ref-btn" onclick="copyRef()"data-i18n="ql_copy">📋 Копировать</button>
+          <button class="ref-btn" onclick="shareRef()"data-i18n="ql_share">📤 Поделиться</button>
+        </div>
+        <div id="ref-friends" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+      <!-- Бонус за подписку на канал -->
+      <div class="hc" style="border-color:rgba(0,229,255,.2);">
+        <div class="hc-t" style="color:rgba(0,229,255,.7);" data-i18n="bc_title">📡 СИГНАЛ МАЯКА</div>
+        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(180,220,255,.6);line-height:1.7;margin-bottom:10px;"data-i18n="bc_desc">Подпишись на канал AEON и получи 2500 монет + легендарный артефакт «Сигнал Маяка», которого не достать больше нигде.
+        </div>
+        <button onclick="openChannel()" style="width:100%;height:40px;border-radius:11px;border:.5px solid rgba(0,229,255,.3);background:rgba(0,229,255,.08);color:#00e5ff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;cursor:pointer;margin-bottom:8px;"data-i18n="bc_open">📢 Открыть канал</button>
+        <button id="claim-channel-btn" onclick="claimChannelBonus()" style="width:100%;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,#0088aa,#00e5ff);color:#04121a;font-family:Orbitron,monospace;font-size:11px;font-weight:700;cursor:pointer;"data-i18n="bc_claim">✅ Я подписался — забрать</button>
+      </div>
+    </div>
+    </div>
   </div>
-</div>
 
 <!-- ══ SHOP ══ -->
 <div class="screen" id="shop-screen">
   <div class="shop-hdr">
-    <button class="shop-back" onclick="goMain()">← Назад</button>
-    <div class="shop-title">МАГАЗИН</div>
+    <button class="shop-back" onclick="goMain()" data-i18n="back">← Назад</button>
+    <div class="shop-title" data-i18n="scr_shop">МАГАЗИН</div>
     <div class="shop-bal">🪙 <span id="sh-bal">500</span></div>
   </div>
   <div class="shop-body">
     <div class="shop-sec">⚡ ЭНЕРГИЯ</div>
-    <div class="shop-item"><div class="si-ico">⚡</div><div class="si-info"><div class="si-name">Заправка Энергии</div><div class="si-desc">Полный бак энергии корабля. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-tap-energy">800 🪙</div><button class="si-btn" onclick="buyEnergyServer('tap')">ЗАПРАВИТЬ</button></div></div>
-    <div class="shop-item"><div class="si-ico">🔮</div><div class="si-info"><div class="si-name">Энергия Материи</div><div class="si-desc">Полный бак энергии синтеза. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-merge-energy">500 🪙</div><button class="si-btn" onclick="buyEnergyServer('merge')">ЗАПРАВИТЬ</button></div></div>
-    <div class="shop-sec">🔧 МОДУЛИ КОРАБЛЯ</div>
+    <div class="shop-item"><div class="si-ico">⚡</div><div class="si-info"><div class="si-name" data-i18n="fuel_energy">Заправка Энергии</div><div class="si-desc" data-i18n="fuel_energy_d">Полный бак энергии корабля. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-tap-energy">800 🪙</div><button class="si-btn" onclick="buyEnergyServer('tap')" data-i18n="refuel">ЗАПРАВИТЬ</button></div></div>
+    <div class="shop-item"><div class="si-ico">🔮</div><div class="si-info"><div class="si-name" data-i18n="matter_energy">Энергия Материи</div><div class="si-desc" data-i18n="matter_energy_d">Полный бак энергии синтеза. Цена растёт с уровнем. До 5 раз в день.</div></div><div class="si-price"><div class="si-tag" id="price-merge-energy">500 🪙</div><button class="si-btn" onclick="buyEnergyServer('merge')" data-i18n="refuel">ЗАПРАВИТЬ</button></div></div>
+    <div class="shop-sec" data-i18n="shop_modules">🔧 МОДУЛИ КОРАБЛЯ</div>
     <div id="shop-modules" style="display:flex;flex-direction:column;gap:11px;"></div>
-    <div class="shop-sec">🛸 СКИНЫ КОРАБЛЯ</div>
-    <div class="shop-item"><div class="si-ico">🌫️</div><div class="si-info"><div class="si-name">Серебряное Свечение</div><div class="si-desc">Постоянный скин: холодное серебряное сияние корпуса.</div></div><div class="si-price"><div class="si-tag">25 000 🪙</div><button class="si-btn" onclick="buyItem('aura_silver',25000)">КУПИТЬ</button></div></div>
-    <div class="shop-item"><div class="si-ico">✨</div><div class="si-info"><div class="si-name">Золотое Свечение</div><div class="si-desc">Элитный перманентный статус-скин. Видно издалека.</div></div><div class="si-price"><div class="si-tag">100 000 🪙</div><button class="si-btn" onclick="buyItem('aura_gold',100000)">КУПИТЬ</button></div></div>
-    <div class="shop-coming"><div class="sc-ico">🔮</div><div class="sc-title">БОЛЬШЕ СКОРО</div><div class="sc-text">Скины кораблей, улучшения и редкие артефакты появятся в следующих обновлениях.</div></div>
+    <div class="shop-sec" data-i18n="shop_skins">🛸 СКИНЫ КОРАБЛЯ</div>
+    <div class="shop-item"><div class="si-ico">🌫️</div><div class="si-info"><div class="si-name" data-i18n="skin_silver">Серебряное Свечение</div><div class="si-desc" data-i18n="skin_silver_d">Постоянный скин: холодное серебряное сияние корпуса.</div></div><div class="si-price"><div class="si-tag">25 000 🪙</div><button class="si-btn" onclick="buyItem('aura_silver',25000)" data-i18n="buy">КУПИТЬ</button></div></div>
+    <div class="shop-item"><div class="si-ico">✨</div><div class="si-info"><div class="si-name" data-i18n="skin_gold">Золотое Свечение</div><div class="si-desc" data-i18n="skin_gold_d">Элитный перманентный статус-скин. Видно издалека.</div></div><div class="si-price"><div class="si-tag">100 000 🪙</div><button class="si-btn" onclick="buyItem('aura_gold',100000)" data-i18n="buy">КУПИТЬ</button></div></div>
+    <div class="shop-coming"><div class="sc-ico">🔮</div><div class="sc-title" data-i18n="shop_soon_t">БОЛЬШЕ СКОРО</div><div class="sc-text" data-i18n="shop_soon_d">Скины кораблей, улучшения и редкие артефакты появятся в следующих обновлениях.</div></div>
   </div>
 </div>
 
@@ -1388,6 +1392,258 @@ window.onerror = function(){ return true; };
 window.addEventListener('unhandledrejection', function(e){ e.preventDefault(); });
 
 const API = 'https://web-production-0c777.up.railway.app';
+
+/* ══════════ СИСТЕМА ПЕРЕВОДОВ (i18n) ══════════ */
+var LANG = 'ru';  // по умолчанию русский
+(function detectLang(){
+  try{
+    var saved = localStorage.getItem('aeon_lang');
+    if(saved==='ru'||saved==='en'){ LANG=saved; return; }
+    var tgLang = (window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initDataUnsafe
+      &&window.Telegram.WebApp.initDataUnsafe.user&&window.Telegram.WebApp.initDataUnsafe.user.language_code)||'';
+    // Русскоязычные локали → русский, всё остальное → английский
+    LANG = (tgLang.indexOf('ru')===0||tgLang==='be'||tgLang==='uk'||tgLang==='kk') ? 'ru' : 'en';
+  }catch(e){ LANG='ru'; }
+})();
+
+var I18N = {
+  // ── Навигация / вкладки ──
+  nav_ship:{ru:'КОРАБЛЬ',en:'SHIP'},
+  nav_map:{ru:'КАРТА',en:'MAP'},
+  nav_shop:{ru:'МАГАЗИН',en:'SHOP'},
+  nav_home:{ru:'ДОМ',en:'HOME'},
+  tab_pilot:{ru:'Пилот',en:'Pilot'},
+  tab_backpack:{ru:'Рюкзак',en:'Backpack'},
+  tab_wallet:{ru:'Кошелёк',en:'Wallet'},
+  tab_friends:{ru:'Друзья',en:'Friends'},
+  ql_title:{ru:'👥 КВАНТОВАЯ СВЯЗЬ',en:'👥 QUANTUM LINK'},
+  ql_desc:{ru:'Приглашай друзей через звёздный мост. За старт — по 500 монет обоим. Когда друг дойдёт до 2 уровня — тебе +2000 и 5% с его добычи навсегда.',en:'Invite friends through the starbridge. For the start — 500 coins to both. When a friend reaches level 2 — you get +2000 and 5% of their earnings forever.'},
+  ql_friends:{ru:'ДРУЗЕЙ',en:'FRIENDS'},
+  ql_active:{ru:'АКТИВНЫХ',en:'ACTIVE'},
+  ql_cashback:{ru:'КЭШБЭК',en:'CASHBACK'},
+  ql_copy:{ru:'📋 Копировать',en:'📋 Copy'},
+  ql_share:{ru:'📤 Поделиться',en:'📤 Share'},
+  bc_title:{ru:'📡 СИГНАЛ МАЯКА',en:'📡 BEACON SIGNAL'},
+  bc_desc:{ru:'Подпишись на канал AEON и получи 2500 монет + легендарный артефакт «Сигнал Маяка», которого не достать больше нигде.',en:'Subscribe to the AEON channel and get 2500 coins + the legendary "Beacon Signal" artifact, found nowhere else.'},
+  bc_open:{ru:'📢 Открыть канал',en:'📢 Open channel'},
+  bc_claim:{ru:'✅ Я подписался — забрать',en:'✅ I subscribed — claim'},
+  shop_soon_t:{ru:'БОЛЬШЕ СКОРО',en:'MORE SOON'},
+  shop_soon_d:{ru:'Скины кораблей, улучшения и редкие артефакты появятся в следующих обновлениях.',en:'Ship skins, upgrades and rare artifacts will arrive in future updates.'},
+  oracle_title:{ru:'─── О Р А К У Л ───',en:'─── O R A C L E ───'},
+  oracle_sub:{ru:'Голос древней вселенной',en:'Voice of the ancient universe'},
+  oracle_done:{ru:'Пророчество получено. Возвращайся завтра.',en:'Prophecy received. Come back tomorrow.'},
+  ast_exit:{ru:'← Выйти',en:'← Exit'},
+  ast_done:{ru:'Полёт завершён',en:'Flight complete'},
+  ast_collected:{ru:'СОБРАНО',en:'COLLECTED'},
+  ast_again:{ru:'🔄 ЕЩЁ РАЗ (-30 ⚡)',en:'🔄 AGAIN (-30 ⚡)'},
+  ast_claim:{ru:'✦ ЗАБРАТЬ',en:'✦ CLAIM'},
+  ast_collision:{ru:'Столкновение!',en:'Collision!'},
+  ast_shard_found:{ru:'Осколок найден!',en:'Shard found!'},
+  ast_no_energy:{ru:'Нужно 30 энергии для полёта',en:'Need 30 energy to fly'},
+  // ── Общее ──
+  back:{ru:'← Назад',en:'← Back'},
+  back_ship:{ru:'← Корабль',en:'← Ship'},
+  soon:{ru:'СКОРО',en:'SOON'},
+  // ── Заголовки экранов ──
+  scr_home:{ru:'ДОМ',en:'HOME'},
+  scr_shop:{ru:'МАГАЗИН',en:'SHOP'},
+  scr_hangar:{ru:'АНГАР СИНТЕЗА',en:'SYNTHESIS HANGAR'},
+  scr_rating:{ru:'<span data-i18n="scr_rating">——— РЕЙТИНГ ГАЛАКТИКИ ———</span>',en:'——— GALAXY RANKING ———'},
+  // ── Магазин ──
+  shop_energy:{ru:'⚡ ЭНЕРГИЯ',en:'⚡ ENERGY'},
+  shop_modules:{ru:'🔧 МОДУЛИ КОРАБЛЯ',en:'🔧 SHIP MODULES'},
+  shop_skins:{ru:'🛸 СКИНЫ КОРАБЛЯ',en:'🛸 SHIP SKINS'},
+  refuel:{ru:'ЗАПРАВИТЬ',en:'REFUEL'},
+  buy:{ru:'КУПИТЬ',en:'BUY'},
+  fuel_energy:{ru:'Заправка Энергии',en:'Energy Refuel'},
+  fuel_energy_d:{ru:'Полный бак энергии корабля. Цена растёт с уровнем. До 5 раз в день.',en:'Full ship energy tank. Price grows with level. Up to 5x/day.'},
+  matter_energy:{ru:'Энергия Материи',en:'Matter Energy'},
+  matter_energy_d:{ru:'Полный бак энергии синтеза. Цена растёт с уровнем. До 5 раз в день.',en:'Full synthesis energy tank. Price grows with level. Up to 5x/day.'},
+  // ── Ангар ──
+  matter_bar:{ru:'ЭНЕРГИЯ МАТЕРИИ',en:'MATTER ENERGY'},
+  alchemy_code:{ru:'ЕЖЕДНЕВНЫЙ АЛХИМИЧЕСКИЙ КОД',en:'DAILY ALCHEMY CODE'},
+  orders:{ru:'ЗАКАЗЫ',en:'ORDERS'},
+  // ── Профиль ──
+  exp:{ru:'ОПЫТ',en:'XP'},
+  st_taps:{ru:'ТАПОВ',en:'TAPS'},
+  st_synth:{ru:'СИНТЕЗ',en:'SYNTHESIS'},
+  st_record:{ru:'РЕКОРД',en:'RECORD'},
+  daily_bonus:{ru:'ЕЖЕДНЕВНЫЙ БОНУС',en:'DAILY BONUS'},
+  shards_title:{ru:'ОСКОЛКИ КАМНЯ НАЧАЛА',en:'SHARDS OF THE GENESIS STONE'},
+  upgrade_ship:{ru:'🚀 УЛУЧШЕНИЕ КОРАБЛЯ',en:'🚀 SHIP UPGRADE'},
+  artifacts_title:{ru:'🎒 АРТЕФАКТЫ',en:'🎒 ARTIFACTS'},
+  quantum_link:{ru:'👥 КВАНТОВАЯ СВЯЗЬ',en:'👥 QUANTUM LINK'},
+  beacon_title:{ru:'📡 СИГНАЛ МАЯКА',en:'📡 BEACON SIGNAL'},
+  // ── Рейтинг ──
+  lb_pilots:{ru:'✦ ПИЛОТОВ ВО ВСЕЛЕННОЙ ✦',en:'✦ PILOTS IN THE UNIVERSE ✦'},
+  lb_top:{ru:'ТОП-10 ПО ОПЫТУ',en:'TOP-10 BY XP'},
+  codex:{ru:'КОДЕКС',en:'CODEX'},
+  create_dust:{ru:'✦ Создать Пыль (-5 ⚡)',en:'✦ Create Dust (-5 ⚡)'},
+  low_matter:{ru:'Мало энергии материи!',en:'Not enough matter energy!'},
+  pick_or_create:{ru:'Выбери ячейку или создай материю',en:'Pick a cell or create matter'},
+  max_level:{ru:'Это максимальный уровень!',en:'This is the max level!'},
+  low_matter_timer1:{ru:'⚡ Мало энергии материи! Восстановится через ~',en:'⚡ Not enough matter energy! Restores in ~'},
+  low_matter_timer2:{ru:' мин.',en:' min.'},
+  energy_empty:{ru:'Энергия исчерпана',en:'Energy depleted'},
+  // ── Кнопки общие ──
+  btn_jump:{ru:'🚀 Совершить гиперпрыжок',en:'🚀 Make hyperjump'},
+  open_channel:{ru:'📢 Открыть канал',en:'📢 Open channel'},
+  skin_silver:{ru:'Серебряное Свечение',en:'Silver Glow'},
+  skin_silver_d:{ru:'Постоянный скин: холодное серебряное сияние корпуса.',en:'Permanent skin: cold silver hull glow.'},
+  skin_gold:{ru:'Золотое Свечение',en:'Golden Glow'},
+  skin_gold_d:{ru:'Элитный перманентный статус-скин. Видно издалека.',en:'Elite permanent status skin. Visible from afar.'},
+  claim_sub:{ru:'✅ Я подписался — забрать',en:'✅ I subscribed — claim'},
+  intro_skip:{ru:'ПРОПУСТИТЬ',en:'SKIP'},
+  intro_next:{ru:'ДАЛЕЕ →',en:'NEXT →'},
+  intro_start:{ru:'🚀 НАЧАТЬ ПУТЬ',en:'🚀 BEGIN THE PATH'},
+  intro_t1:{ru:'Великая Война<br>Уничтожила Всё',en:'The Great War<br>Destroyed Everything'},
+  intro_d1:{ru:'Миллионы лет назад цивилизации поддались страху и гневу. Война за владение Камнем Начала уничтожила 90% вселенной. Галактики превратились в пепел.',en:'Millions of years ago civilizations gave in to fear and rage. The war for the Genesis Stone destroyed 90% of the universe. Galaxies turned to ash.'},
+  intro_t2:{ru:'Цивилизации<br>Потеряли Себя',en:'Civilizations<br>Lost Themselves'},
+  intro_d2:{ru:'Выжившие блуждали среди обломков. Эго и страх разрушили то, что строилось веками. Свет почти угас.',en:'Survivors wandered among the ruins. Ego and fear destroyed what took ages to build. The light almost faded.'},
+  intro_t3:{ru:'Твой Путь<br>Начинается Сейчас',en:'Your Path<br>Begins Now'},
+  intro_d3:{ru:'Ты — один из выживших. Найди три Осколка Камня Начала. Пройди путь от страха к свету и стань тем, кем был всегда.',en:'You are one of the survivors. Find the three Shards of the Genesis Stone. Walk the path from fear to light and become who you always were.'},
+  oracle_hint:{ru:'Коснись туманности — она шепнёт твоё предназначение',en:'Touch the nebula — it will whisper your destiny'},
+  daily_claimed:{ru:'✅ Награда забрана. Возвращайся завтра',en:'✅ Reward claimed. Come back tomorrow'},
+  synth_done:{ru:'СИНТЕЗ!',en:'SYNTHESIS!'},
+  level_up:{ru:'УРОВЕНЬ',en:'LEVEL'},
+  not_enough_coins:{ru:'МАЛО МОНЕТ',en:'NOT ENOUGH COINS'},
+  max_reached:{ru:'МАКСИМУМ',en:'MAX REACHED'},
+  copied:{ru:'Скопировано!',en:'Copied!'},
+  codex_title:{ru:'📜 КОДЕКС ВЫЖИВШЕГО',en:'📜 SURVIVOR\'S CODEX'},
+  codex_sub:{ru:'Инструкция по прохождению',en:'Walkthrough guide'},
+  codex_shards:{ru:'🔮 ОСКОЛКИ КАМНЯ НАЧАЛА',en:'🔮 SHARDS OF THE GENESIS STONE'},
+  shard_light:{ru:'Осколок Света',en:'Shard of Light'},
+  shard_light_d:{ru:'Ур.3 — найти в игре Астероиды',en:'Lvl.3 — find in the Asteroids game'},
+  shard_light_b:{ru:'Бонус: ×10 монет за тап навсегда',en:'Bonus: x10 coins per tap forever'},
+  shard_shadow:{ru:'Осколок Тени',en:'Shard of Shadow'},
+  shard_shadow_d:{ru:'Ур.6 — создать Эссенцию Творца',en:'Lvl.6 — craft the Creator\'s Essence'},
+  shard_will:{ru:'Осколок Воли',en:'Shard of Will'},
+  shard_will_d:{ru:'Ур.9 — финал игры',en:'Lvl.9 — the finale'},
+  shard_light_lore:{ru:'Спрятан в Туманности Забытых. Хранит память о первом рассвете.',en:'Hidden in the Nebula of the Forgotten. Holds the memory of the first dawn.'},
+  shard_shadow_lore:{ru:'Скрыт в Сердце Пустоты. Хранит тайну разрушения.',en:'Concealed in the Heart of the Void. Holds the secret of destruction.'},
+  shard_will_lore:{ru:'Местонахождение неизвестно. Только сильнейшие найдут путь.',en:'Location unknown. Only the strongest will find the way.'},
+  nav_system:{ru:'Навигационная система',en:'Navigation system'},
+  ach_title:{ru:'🏆 ДОСТИЖЕНИЯ',en:'🏆 ACHIEVEMENTS'},
+  pilot_t:{ru:'👨‍🚀 ПИЛОТ',en:'👨‍🚀 PILOT'},
+  m_lvl:{ru:'Ур.',en:'Lvl.'},
+  runes_title:{ru:'✦ РУНЫ СУДЬБЫ ✦',en:'✦ RUNES OF FATE ✦'},
+  runes_sub:{ru:'Три кольца — один выбор',en:'Three rings — one choice'},
+  runes_msg:{ru:'Испытай судьбу вселенной',en:'Test the fate of the universe'},
+  runes_btn:{ru:'⚡ ИСПЫТАТЬ СУДЬБУ',en:'⚡ TEST YOUR FATE'},
+  runes_free:{ru:'Бесплатно сегодня!',en:'Free today!'},
+  runes_next:{ru:'Следующий бросок завтра',en:'Next roll tomorrow'},
+  runes_triple:{ru:'⚡ ТРОЙНОЕ СОВПАДЕНИЕ! +1000 AEON',en:'⚡ TRIPLE MATCH! +1000 AEON'},
+  runes_double:{ru:'✨ Двойное совпадение! +200 AEON',en:'✨ Double match! +200 AEON'},
+  runes_none:{ru:'Руны не совпали. Вселенная испытывает тебя.',en:'The runes did not match. The universe tests you.'},
+  rules_block:{ru:'1 тап = -1 энергия + 1 монета<br>Комбо (10 тапов) = ×2 монеты пока не остановишься<br>Энергия +1 в минуту (Квантовый Двигатель ускоряет)<br>XP даётся за синтез и заказы — не за тапы<br>Синтез предметов = -5 энергии материи<br>Энергия 0 = корабль тускнеет, тапы не работают',en:'1 tap = -1 energy + 1 coin<br>Combo (10 taps) = x2 coins until you stop<br>Energy +1 per minute (Quantum Engine speeds it up)<br>XP comes from synthesis and orders — not from taps<br>Item synthesis = -5 matter energy<br>Energy 0 = ship dims, taps stop working'},
+  codex_bonus_q:{ru:'Бонус: ???',en:'Bonus: ???'},
+  codex_levels_t:{ru:'🚀 УРОВНИ КОРАБЛЯ',en:'🚀 SHIP LEVELS'},
+  n_energy_low:{ru:'ЭНЕРГИЯ НА ИСХОДЕ',en:'ENERGY RUNNING LOW'},
+  n_combo:{ru:'КОМБО АКТИВИРОВАНО!',en:'COMBO ACTIVATED!'},
+  n_synth:{ru:'СИНТЕЗ!',en:'SYNTHESIS!'},
+  n_shadow_found:{ru:'ОСКОЛОК ТЕНИ НАЙДЕН!',en:'SHARD OF SHADOW FOUND!'},
+  n_order_done:{ru:'ЗАКАЗ ВЫПОЛНЕН!',en:'ORDER COMPLETE!'},
+  n_triple:{ru:'ТРОЙНОЙ РЕЗОНАНС!',en:'TRIPLE RESONANCE!'},
+  n_resonance:{ru:'РЕЗОНАНС',en:'RESONANCE'},
+  n_prophecy:{ru:'ПРОРОЧЕСТВО',en:'PROPHECY'},
+  n_already_bought:{ru:'УЖЕ КУПЛЕНО',en:'ALREADY OWNED'},
+  n_low_coins:{ru:'МАЛО МОНЕТ',en:'NOT ENOUGH COINS'},
+  n_bought:{ru:'КУПЛЕНО',en:'PURCHASED'},
+  n_not_enough:{ru:'НЕ ХВАТАЕТ',en:'NOT ENOUGH'},
+  n_ast_open:{ru:'АСТЕРОИДЫ ОТКРЫТЫ!',en:'ASTEROIDS UNLOCKED!'},
+  n_unlimited:{ru:'БЕЗЛИМИТ ЭНЕРГИИ — 2 МИН',en:'UNLIMITED ENERGY — 2 MIN'},
+  n_modules_lv3:{ru:'МОДУЛИ ОТКРОЮТСЯ НА УР.3',en:'MODULES UNLOCK AT LVL.3'},
+  n_max:{ru:'МАКСИМУМ',en:'MAX REACHED'},
+  n_scanner:{ru:'СКАНЕР: ОФЛАЙН ДОХОД',en:'SCANNER: OFFLINE INCOME'},
+  n_need30:{ru:'НУЖНО 30 ЭНЕРГИИ',en:'NEED 30 ENERGY'},
+  n_fog_cleared:{ru:'ТУМАН РАССЕЯЛСЯ: ',en:'FOG CLEARED: '},
+  n_need_net:{ru:'НУЖЕН ИНТЕРНЕТ',en:'INTERNET REQUIRED'},
+  n_tank_full:{ru:'БАК УЖЕ ПОЛОН',en:'TANK ALREADY FULL'},
+  n_tank_filled:{ru:'БАК ПОЛОН! (',en:'TANK FILLED! ('},
+  n_limit:{ru:'ЛИМИТ ',en:'LIMIT '},
+  n_need:{ru:'НУЖНО ',en:'NEED '},
+  n_beacon_got:{ru:'СИГНАЛ МАЯКА ПОЛУЧЕН!',en:'BEACON SIGNAL RECEIVED!'},
+  n_bonus_got:{ru:'БОНУС УЖЕ ПОЛУЧЕН',en:'BONUS ALREADY CLAIMED'},
+  n_subscribe_first:{ru:'СНАЧАЛА ПОДПИШИСЬ',en:'SUBSCRIBE FIRST'},
+  n_day:{ru:'ДЕНЬ ',en:'DAY '},
+  n_level:{ru:'УРОВЕНЬ ',en:'LEVEL '},
+  p_survivor:{ru:'Выживший',en:'Survivor'},
+  p_exp:{ru:'✨ ОПЫТ',en:'✨ XP'},
+  p_taps:{ru:'ТАПОВ',en:'TAPS'},
+  p_synth:{ru:'СИНТЕЗ',en:'SYNTHESIS'},
+  p_record:{ru:'РЕКОРД',en:'RECORD'},
+  p_energy_synth:{ru:'⚡ ЭНЕРГИЯ И СИНТЕЗ',en:'⚡ ENERGY & SYNTHESIS'},
+  daily_t:{ru:'🔥 ЕЖЕДНЕВНЫЙ БОНУС',en:'🔥 DAILY BONUS'},
+  upg_t:{ru:'🚀 УЛУЧШЕНИЕ КОРАБЛЯ',en:'🚀 SHIP UPGRADE'},
+  upg_locked:{ru:'🔒 Условия не выполнены',en:'🔒 Requirements not met'},
+  upg_next:{ru:'Следующий: ',en:'Next: '},
+  upg_create:{ru:'Создать ',en:'Create '},
+  upg_streak:{ru:'Стрик ',en:'Streak '},
+  upg_days:{ru:' дней',en:' days'},
+  upg_have:{ru:' (есть ',en:' (have '},
+  upg_btn_do:{ru:'🚀 Улучшить до Ур.',en:'🚀 Upgrade to Lvl.'},
+  upg_max:{ru:'Достигнут максимальный уровень корабля. Ты прошёл весь путь.',en:'Maximum ship level reached. You have walked the whole path.'},
+  claim_btn:{ru:'🎁 Забрать +',en:'🎁 Claim +'},
+  claim_day:{ru:' (день ',en:' (day '},
+  claim_reward:{ru:'🎁 Забрать награду',en:'🎁 Claim reward'},
+  m_upgrade:{ru:'⬆️ УЛУЧШИТЬ КОРАБЛЬ',en:'⬆️ UPGRADE SHIP'},
+  m_exp:{ru:'ОПЫТ',en:'XP'},
+  m_energy:{ru:'ЭНЕРГИЯ',en:'ENERGY'},
+  m_combo:{ru:'КОМБО',en:'COMBO'},
+  m_hold:{ru:'удерживай для входа',en:'hold to enter'},
+  welcome_title:{ru:'Добро пожаловать, выживший.<br>Найди путь к истокам<br>и стань легендой.',en:'Welcome, survivor.<br>Find your way to the origins<br>and become a legend.'},
+  m_streak_day:{ru:' день',en:' day'},
+  w_balance:{ru:'БАЛАНС AEON',en:'AEON BALANCE'},
+  w_deposit:{ru:'⬇️ ПОПОЛНИТЬ ЧЕРЕЗ TON',en:'⬇️ TOP UP WITH TON'},
+  w_packages:{ru:'💎 ПАКЕТЫ TON',en:'💎 TON PACKAGES'},
+  w_starter:{ru:'Стартер',en:'Starter'},
+  w_pilot:{ru:'Пилот',en:'Pilot'},
+  w_captain:{ru:'Капитан',en:'Captain'},
+  w_admiral:{ru:'Адмирал',en:'Admiral'},
+  bp_title:{ru:'🎒 АРТЕФАКТЫ',en:'🎒 ARTIFACTS'},
+  bp_how_t:{ru:'📖 КАК ПОЛУЧИТЬ АРТЕФАКТЫ',en:'📖 HOW TO GET ARTIFACTS'},
+  bp_how_d:{ru:'Артефакты выпадают при синтезе высших уровней, за достижения и особые события вселенной. Каждый хранит частицу истории.',en:'Artifacts drop from high-level synthesis, achievements and special cosmic events. Each one holds a fragment of history.'},
+};
+
+function t_buy(){return LANG==='en'?'BUY':'КУПИТЬ';}
+function t(key){
+  var e = I18N[key];
+  if(!e) return key;
+  return e[LANG] || e.ru || key;
+}
+
+window.setLang = function(l){
+  LANG = (l==='en')?'en':'ru';
+  try{ localStorage.setItem('aeon_lang',LANG); }catch(e){}
+  applyTranslations();
+  var b=document.getElementById('lang-btn-label'); if(b)b.textContent=(LANG==='ru'?'RU':'EN');
+  // Перерисовать карту если открыта (имена локаций)
+  try{ var cs=document.getElementById('cosmos-screen'); if(cs&&cs.classList.contains('active')&&typeof renderMap==='function')renderMap(); }catch(e){}
+  try{ var ss=document.getElementById('shop-screen'); if(ss&&ss.classList.contains('active')&&typeof renderShopModules==='function')renderShopModules(); }catch(e){}
+  try{ if(typeof loadLeaderboard==='function'){var ls=document.getElementById('lb-screen');if(ls&&ls.classList.contains('active'))loadLeaderboard();} }catch(e){}
+  try{ var hs=document.getElementById('home-screen'); if(hs&&hs.classList.contains('active')){if(typeof renderProfile==='function')renderProfile();if(typeof renderAchs==='function')renderAchs();} }catch(e){}
+  try{ if(typeof renderDaily==='function')renderDaily(); }catch(e){}
+  try{ var cs2=document.getElementById('cosmos-screen'); if(cs2&&cs2.classList.contains('active')&&typeof renderMap==='function')renderMap(); }catch(e){}
+  try{ var co=document.getElementById('codex-ov'); if(co&&co.style.display!=='none'&&co.offsetParent!==null&&typeof renderCodexLevels==='function')renderCodexLevels(); }catch(e){}
+};
+window.toggleLang = function(){ setLang(LANG==='ru'?'en':'ru'); };
+
+// Применяет переводы ко всем элементам с data-i18n
+function applyTranslations(){
+  try{
+    var els = document.querySelectorAll('[data-i18n]');
+    els.forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if(!key) return;
+      var val = t(key);
+      // Если перевод содержит HTML-теги (например <br>) — innerHTML, иначе textContent
+      if(val.indexOf('<')!==-1) el.innerHTML = val;
+      else el.textContent = val;
+    });
+    document.documentElement.setAttribute('lang', LANG);
+  }catch(e){}
+}
+
 var tg  = window.Telegram && window.Telegram.WebApp || null;
 if (tg) {
   tg.expand();
@@ -1422,18 +1678,19 @@ function $(id){ return document.getElementById(id); }
 
 /* ── LEVELS ── */
 var LEVELS = [
-  {name:'Новичок',icon:'🌱',min:0,eLimit:100},
-  {name:'Пилот',icon:'🚀',min:500,eLimit:120},
-  {name:'Исследователь',icon:'🔭',min:2000,eLimit:150},
-  {name:'Капитан',icon:'⭐',min:5000,eLimit:200},
-  {name:'Адмирал',icon:'🌌',min:12000,eLimit:260},
-  {name:'Легенда',icon:'👑',min:30000,eLimit:320},
+  {name:'Новичок',name_en:'Rookie',icon:'🌱',min:0,eLimit:100},
+  {name:'Пилот',name_en:'Pilot',icon:'🚀',min:500,eLimit:120},
+  {name:'Исследователь',name_en:'Explorer',icon:'🔭',min:2000,eLimit:150},
+  {name:'Капитан',name_en:'Captain',icon:'⭐',min:5000,eLimit:200},
+  {name:'Адмирал',name_en:'Admiral',icon:'🌌',min:12000,eLimit:260},
+  {name:'Легенда',name_en:'Legend',icon:'👑',min:30000,eLimit:320},
 ];
+function levelName(lv){return (LANG==='en'&&lv.name_en)?lv.name_en:lv.name;}
 function getLv(){ return LEVELS.slice().reverse().find(function(l){return S.xp>=l.min;})||LEVELS[0]; }
 function getNextLv(){ return LEVELS.find(function(l){return l.min>S.xp;})||null; }
 
 /* ── PHRASES ── */
-var PHRASES = [
+var PHRASES_RU = [
   '«Ты не ищешь камень. Ты ищешь себя.»',
   '«Энергия следует за вниманием.»',
   '«Каждый удар сердца — это выбор.»',
@@ -1446,95 +1703,168 @@ var PHRASES = [
   '«Путь домой начинается внутри.»',
   '«Всё что ищешь — уже в тебе.»',
   '«Каждый момент — это новое начало.»',
+  '«Наблюдатель и наблюдаемое — одно.»',
+  '«Время — это иллюзия, которую ты создаёшь сам.»',
+  '«Ты не капля в океане. Ты океан в капле.»',
+  '«Материя — это застывший свет сознания.»',
+  '«Между мыслью и вселенной нет границы.»',
+  '«Пустота полна. Тишина звучит.»',
+  '«Ты — способ, которым космос познаёт себя.»',
+  '«Звёзды внутри тебя горят дольше тех, что снаружи.»',
+  '«Смысл не находят. Смысл рождают.»',
 ];
-var COMBO_PHRASES = [
+var PHRASES_EN = [
+  '"You do not seek the stone. You seek yourself."',
+  '"Energy flows where attention goes."',
+  '"Every heartbeat is a choice."',
+  '"Darkness does not vanish. It becomes light."',
+  '"The universe speaks through silence."',
+  '"Fear is love that forgot itself."',
+  '"You are already where you are going."',
+  '"Destruction precedes creation."',
+  '"The stone shattered to become many."',
+  '"The way home begins within."',
+  '"All you seek is already within you."',
+  '"Every moment is a new beginning."',
+  '"The observer and the observed are one."',
+  '"Time is an illusion you create yourself."',
+  '"You are not a drop in the ocean. You are the ocean in a drop."',
+  '"Matter is the frozen light of consciousness."',
+  '"Between thought and universe there is no border."',
+  '"The void is full. The silence sings."',
+  '"You are the way the cosmos knows itself."',
+  '"The stars within you burn longer than those without."',
+  '"Meaning is not found. Meaning is born."',
+];
+var COMBO_PHRASES_RU = [
   '«Ты вспомнил кто ты есть.»',
   '«Сила была в тебе всегда.»',
   '«Творец пробудился.»',
   '«Вселенная откликнулась.»',
+  '«Сознание узнало себя.»',
+  '«Ты стал тем, кем был до рождения.»',
 ];
+var COMBO_PHRASES_EN = [
+  '"You remembered who you are."',
+  '"The power was always within you."',
+  '"The Creator has awakened."',
+  '"The universe has responded."',
+  '"Consciousness recognized itself."',
+  '"You became who you were before birth."',
+];
+var PHRASES = PHRASES_RU;
+var COMBO_PHRASES = COMBO_PHRASES_RU;
 
 /* ── ACHIEVEMENTS ── */
 var ACHS = [
-  {id:'tap1',     icon:'👆', name:'Первый шаг',        desc:'Первый тап по кораблю',        diff:'easy',   check:function(s){return s.taps>=1;}},
-  {id:'tap100',   icon:'💪', name:'Постоянство',        desc:'100 тапов по кораблю',          diff:'easy',   check:function(s){return s.taps>=100;}},
-  {id:'tap1000',  icon:'🔥', name:'Неутомимый',         desc:'1000 тапов по кораблю',         diff:'med',    check:function(s){return s.taps>=1000;}},
-  {id:'tap10000', icon:'⚡', name:'Легенда тапинга',    desc:'10000 тапов. Ты серьёзен.',     diff:'hard',   check:function(s){return s.taps>=10000;}},
-  {id:'merge1',   icon:'🧪', name:'Алхимик',            desc:'Первый синтез',                  diff:'easy',   check:function(s){return s.merges>=1;}},
-  {id:'merge50',  icon:'🔮', name:'Мастер синтеза',     desc:'50 синтезов',                    diff:'med',    check:function(s){return s.merges>=50;}},
-  {id:'merge500', icon:'💎', name:'Архитектор материи', desc:'500 синтезов',                   diff:'hard',   check:function(s){return s.merges>=500;}},
-  {id:'bal5k',    icon:'🪙', name:'Накопитель',          desc:'5000 AEON на балансе',           diff:'med',    check:function(s){return s.bal>=5000;}},
-  {id:'bal100k',  icon:'👑', name:'Богач Космоса',       desc:'100,000 AEON на балансе',        diff:'hard',   check:function(s){return s.bal>=100000;}},
-  {id:'streak7',  icon:'📅', name:'7 дней подряд',       desc:'Заходи 7 дней подряд',           diff:'med',    check:function(s){return s.streakDays>=7;}},
-  {id:'streak30', icon:'🌟', name:'Верный пилот',        desc:'30 дней подряд',                 diff:'hard',   check:function(s){return s.streakDays>=30;}},
-  {id:'shard1',   icon:'💠', name:'Искатель',            desc:'Найди первый Осколок',           diff:'hard',   check:function(s){return s.shards&&s.shards[1];}},
-  {id:'shard3',   icon:'🔮', name:'ЛЕГЕНДА ВСЕЛЕННОЙ',  desc:'Собери все 3 Осколка Камня',    diff:'legend', check:function(s){return s.shards&&s.shards[1]&&s.shards[2]&&s.shards[3];}},
+  {id:'tap1',     icon:'👆', name:'Первый шаг',        name_en:'First Step',        desc:'Первый тап по кораблю',        desc_en:'First tap on the ship',        diff:'easy',   check:function(s){return s.taps>=1;}},
+  {id:'tap100',   icon:'💪', name:'Постоянство',        name_en:'Persistence',       desc:'100 тапов по кораблю',          desc_en:'100 taps on the ship',         diff:'easy',   check:function(s){return s.taps>=100;}},
+  {id:'tap1000',  icon:'🔥', name:'Неутомимый',         name_en:'Tireless',          desc:'1000 тапов по кораблю',         desc_en:'1000 taps on the ship',        diff:'med',    check:function(s){return s.taps>=1000;}},
+  {id:'tap10000', icon:'⚡', name:'Легенда тапинга',    name_en:'Tapping Legend',    desc:'10000 тапов. Ты серьёзен.',     desc_en:'10000 taps. You are serious.', diff:'hard',   check:function(s){return s.taps>=10000;}},
+  {id:'merge1',   icon:'🧪', name:'Алхимик',            name_en:'Alchemist',         desc:'Первый синтез',                  desc_en:'First synthesis',              diff:'easy',   check:function(s){return s.merges>=1;}},
+  {id:'merge50',  icon:'🔮', name:'Мастер синтеза',     name_en:'Synthesis Master',  desc:'50 синтезов',                    desc_en:'50 syntheses',                 diff:'med',    check:function(s){return s.merges>=50;}},
+  {id:'merge500', icon:'💎', name:'Архитектор материи', name_en:'Matter Architect',  desc:'500 синтезов',                   desc_en:'500 syntheses',                diff:'hard',   check:function(s){return s.merges>=500;}},
+  {id:'bal5k',    icon:'🪙', name:'Накопитель',          name_en:'Hoarder',           desc:'5000 AEON на балансе',           desc_en:'5000 AEON in balance',         diff:'med',    check:function(s){return s.bal>=5000;}},
+  {id:'bal100k',  icon:'👑', name:'Богач Космоса',       name_en:'Cosmic Tycoon',     desc:'100,000 AEON на балансе',        desc_en:'100,000 AEON in balance',      diff:'hard',   check:function(s){return s.bal>=100000;}},
+  {id:'streak7',  icon:'📅', name:'7 дней подряд',       name_en:'7 Days Streak',     desc:'Заходи 7 дней подряд',           desc_en:'Log in 7 days in a row',       diff:'med',    check:function(s){return s.streakDays>=7;}},
+  {id:'streak30', icon:'🌟', name:'Верный пилот',        name_en:'Loyal Pilot',       desc:'30 дней подряд',                 desc_en:'30 days in a row',             diff:'hard',   check:function(s){return s.streakDays>=30;}},
+  {id:'shard1',   icon:'💠', name:'Искатель',            name_en:'Seeker',            desc:'Найди первый Осколок',           desc_en:'Find your first Shard',        diff:'hard',   check:function(s){return s.shards&&s.shards[1];}},
+  {id:'shard3',   icon:'🔮', name:'ЛЕГЕНДА ВСЕЛЕННОЙ',  name_en:'LEGEND OF THE UNIVERSE', desc:'Собери все 3 Осколка Камня',    desc_en:'Collect all 3 Shards of the Stone', diff:'legend', check:function(s){return s.shards&&s.shards[1]&&s.shards[2]&&s.shards[3];}},
 ];
+function achName(a){return (LANG==='en'&&a.name_en)?a.name_en:a.name;}
+function achDesc(a){return (LANG==='en'&&a.desc_en)?a.desc_en:a.desc;}
 
 /* ── MERGE ITEMS ── */
 var MITEMS = [
-  {id:1, icon:'💨', name:'Космическая Пыль',  rarity:'common', locked:false, price:0},
-  {id:2, icon:'🪨', name:'Обломок',           rarity:'common', locked:false, price:0},
-  {id:3, icon:'💎', name:'Кристалл',          rarity:'uncommon',locked:false, price:0},
-  {id:4, icon:'⚡', name:'Энерго-ячейка',     rarity:'rare',   locked:false, price:0},
-  {id:5, icon:'🌌', name:'Антиматерия',       rarity:'rare',   locked:true,  price:500},
-  {id:6, icon:'✨', name:'Эссенция Творца',   rarity:'epic',   locked:false, price:0},
-  {id:7, icon:'🔮', name:'Осколок Камня',     rarity:'legend', locked:true,  price:0},
+  {id:1, icon:'💨', name:'Космическая Пыль',  name_en:'Cosmic Dust',      rarity:'common', locked:false, price:0},
+  {id:2, icon:'🪨', name:'Обломок',           name_en:'Debris',           rarity:'common', locked:false, price:0},
+  {id:3, icon:'💎', name:'Кристалл',          name_en:'Crystal',          rarity:'uncommon',locked:false, price:0},
+  {id:4, icon:'⚡', name:'Энерго-ячейка',     name_en:'Energy Cell',      rarity:'rare',   locked:false, price:0},
+  {id:5, icon:'🌌', name:'Антиматерия',       name_en:'Antimatter',       rarity:'rare',   locked:true,  price:500},
+  {id:6, icon:'✨', name:'Эссенция Творца',   name_en:"Creator's Essence",rarity:'epic',   locked:false, price:0},
+  {id:7, icon:'🔮', name:'Осколок Камня',     name_en:'Stone Shard',      rarity:'legend', locked:true,  price:0},
 ];
+function mitemName(m){return (LANG==='en'&&m&&m.name_en)?m.name_en:(m?m.name:'');}
 var MERGE_COST = 5; // энергия за слияние
 
 /* ── ARTIFACTS ── */
 var ARTIFACTS = [
-  {id:'star_shard',   icon:'💫', name:'Осколок Звезды',  rarity:'rare',   usable:false,
-   desc:'Фрагмент сверхновой, погасшей миллиарды лет назад. Тепло её света всё ещё живёт внутри.'},
-  {id:'void_crystal', icon:'🔮', name:'Кристалл Пустоты', rarity:'rare',  usable:false,
-   desc:'Дар Оракула. Тот кто смотрит в него долго — видит себя настоящего.'},
-  {id:'time_dust',    icon:'⏳', name:'Пыль Времени',      rarity:'common', usable:false,
-   desc:'Песчинки мгновений, собранные в странствиях. Каждая хранит чью-то историю.'},
-  {id:'light_orb',    icon:'✨', name:'Шар Света',         rarity:'common', usable:false,
-   desc:'Сгусток чистой надежды. Светит ярче когда рядом тьма.'},
-  {id:'dark_matter',  icon:'🌑', name:'Тёмная Материя',    rarity:'rare',   usable:false,
-   desc:'Из сердца пустоты. Невидимая сила, что держит галактики вместе.'},
-  {id:'cosmos_seed',  icon:'🌱', name:'Семя Космоса',      rarity:'common', usable:false,
-   desc:'Первый шаг пилота. Из таких семян рождаются новые миры.'},
-  {id:'chronos_core', icon:'⏱️', name:'Ядро Хроноса',      rarity:'rare',   usable:true,
-   desc:'Капсула из аркады Астероиды. Активируй — 2 минуты безлимитной энергии: тапай без остановки!'},
-  {id:'quasar_lens',  icon:'🔆', name:'Линза Квазара',     rarity:'rare',   usable:true,
-   desc:'Капсула из аркады Астероиды. Активируй — ×2 монеты со всех тапов на 10 минут.'},
-  {id:'beacon_signal',icon:'🛰️', name:'Сигнал Маяка',       rarity:'legendary', usable:false,
-   desc:'Передатчик древней станции AEON. Те, кто услышал зов — больше не одиноки в пустоте. Знак причастности к Сообществу. Выдаётся только за подписку на канал.'},
+  {id:'star_shard',   icon:'💫', name:'Осколок Звезды',  name_en:'Star Shard',  rarity:'rare',   usable:false,
+   desc:'Фрагмент сверхновой, погасшей миллиарды лет назад. Тепло её света всё ещё живёт внутри.',
+   desc_en:'A fragment of a supernova that faded billions of years ago. The warmth of its light still lives within.'},
+  {id:'void_crystal', icon:'🔮', name:'Кристалл Пустоты', name_en:'Void Crystal', rarity:'rare',  usable:false,
+   desc:'Дар Оракула. Тот кто смотрит в него долго — видит себя настоящего.',
+   desc_en:'A gift of the Oracle. Those who gaze into it long enough see their true self.'},
+  {id:'time_dust',    icon:'⏳', name:'Пыль Времени',      name_en:'Time Dust',     rarity:'common', usable:false,
+   desc:'Песчинки мгновений, собранные в странствиях. Каждая хранит чью-то историю.',
+   desc_en:'Grains of moments gathered in wandering. Each holds someone\'s story.'},
+  {id:'light_orb',    icon:'✨', name:'Шар Света',         name_en:'Orb of Light',  rarity:'common', usable:false,
+   desc:'Сгусток чистой надежды. Светит ярче когда рядом тьма.',
+   desc_en:'A cluster of pure hope. It shines brighter when darkness is near.'},
+  {id:'dark_matter',  icon:'🌑', name:'Тёмная Материя',    name_en:'Dark Matter',   rarity:'rare',   usable:false,
+   desc:'Из сердца пустоты. Невидимая сила, что держит галактики вместе.',
+   desc_en:'From the heart of the void. The invisible force that holds galaxies together.'},
+  {id:'cosmos_seed',  icon:'🌱', name:'Семя Космоса',      name_en:'Cosmos Seed',   rarity:'common', usable:false,
+   desc:'Первый шаг пилота. Из таких семян рождаются новые миры.',
+   desc_en:'A pilot\'s first step. From such seeds new worlds are born.'},
+  {id:'chronos_core', icon:'⏱️', name:'Ядро Хроноса',      name_en:'Chronos Core',  rarity:'rare',   usable:true,
+   desc:'Капсула из аркады Астероиды. Активируй — 2 минуты безлимитной энергии: тапай без остановки!',
+   desc_en:'A capsule from the Asteroids arcade. Activate — 2 minutes of unlimited energy: tap nonstop!'},
+  {id:'quasar_lens',  icon:'🔆', name:'Линза Квазара',     name_en:'Quasar Lens',   rarity:'rare',   usable:true,
+   desc:'Капсула из аркады Астероиды. Активируй — ×2 монеты со всех тапов на 10 минут.',
+   desc_en:'A capsule from the Asteroids arcade. Activate — x2 coins from all taps for 10 minutes.'},
+  {id:'beacon_signal',icon:'🛰️', name:'Сигнал Маяка',       name_en:'Beacon Signal', rarity:'legendary', usable:false,
+   desc:'Передатчик древней станции AEON. Те, кто услышал зов — больше не одиноки в пустоте. Знак причастности к Сообществу. Выдаётся только за подписку на канал.',
+   desc_en:'A transmitter of the ancient AEON station. Those who heard the call are no longer alone in the void. A mark of belonging to the Community. Granted only for subscribing to the channel.'},
 ];
+function artName(a){return (LANG==='en'&&a.name_en)?a.name_en:a.name;}
+function artDesc(a){return (LANG==='en'&&a.desc_en)?a.desc_en:a.desc;}
 
 /* ── MAP NODES ── */
 var MAP_NODES = [
   {id:'merge',  icon:'🧪', name:'АНГАР СИНТЕЗА', sub:'Алхимия',      color:'#a855f7', color2:'#7020c0', cost:0,  locked:false,
-   desc:'Объединяй космическую материю. Создавай предметы высших уровней.'},
+   name_en:'SYNTHESIS HANGAR', sub_en:'Alchemy',
+   desc:'Объединяй космическую материю. Создавай предметы высших уровней.',
+   desc_en:'Merge cosmic matter. Craft higher-level items.'},
   {id:'runes',  icon:'🔯', name:'РУНЫ СУДЬБЫ',   sub:'1×/день',      color:'#ffd700', color2:'#c8901a', cost:0,  locked:false,
-   desc:'Три кольца рун. Совпадение приносит бонусы. Раз в день — бесплатно.'},
+   name_en:'RUNES OF FATE', sub_en:'1x/day',
+   desc:'Три кольца рун. Совпадение приносит бонусы. Раз в день — бесплатно.',
+   desc_en:'Three rune rings. Matches bring bonuses. Once a day — free.'},
   {id:'oracle', icon:'🔮', name:'ОРАКУЛ',     sub:'Ежедневно',    color:'#a855f7', color2:'#4010a0', cost:0,  locked:false,
-   desc:'Ежедневное пророчество. Коснись хрустального шара и получи дар вселенной.'},
+   name_en:'ORACLE', sub_en:'Daily',
+   desc:'Ежедневное пророчество. Коснись хрустального шара и получи дар вселенной.',
+   desc_en:'A daily prophecy. Touch the crystal orb and receive the universe\'s gift.'},
   {id:'ast', icon:'🛸', name:'АСТЕРОИДЫ',      sub:'Ур.3+',        color:'#ff6432', color2:'#c03010', cost:30, locked:false, minLv:3,
-   desc:'Свайпай влево-вправо, сбивай метеориты, собирай монеты. Где-то в поле скрыт Осколок Света.'},
+   name_en:'ASTEROIDS', sub_en:'Lvl.3+',
+   desc:'Свайпай влево-вправо, сбивай метеориты, собирай монеты. Где-то в поле скрыт Осколок Света.',
+   desc_en:'Swipe left-right, shoot meteors, collect coins. A Shard of Light hides somewhere in the field.'},
 ];
+
+// Хелперы для локализованных полей локаций
+function nodeName(n){return (LANG==='en'&&n.name_en)?n.name_en:n.name;}
+function nodeSub(n){return (LANG==='en'&&n.sub_en)?n.sub_en:n.sub;}
+function nodeDesc(n){return (LANG==='en'&&n.desc_en)?n.desc_en:n.desc;}
 
 /* ── ORACLE DATA ── */
 var PROPHECIES = [
-  {text:'«У тебя всё получится. Вселенная уже ведёт тебя к этому.»', boost:'+300 монет', action:function(){S.bal+=300;}},
-  {text:'«Всё, во что ты искренне веришь — обязательно сбудется.»', boost:'+250 монет', action:function(){S.bal+=250;}},
-  {text:'«Ты сильнее, чем думаешь. Сегодня ты это почувствуешь.»', boost:'+50 энергии', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
-  {text:'«Лучшее впереди. Доверься пути — он не ошибается.»', boost:'+300 монет', action:function(){S.bal+=300;}},
-  {text:'«Сегодня удача на твоей стороне. Используй её.»', boost:'+100 XP', action:function(){S.xp+=100;}},
-  {text:'«Твоё сердце знает дорогу. Просто иди вперёд.»', boost:'+50 энергии материи', action:function(){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+50);}},
-  {text:'«Ты заслуживаешь всего хорошего. И оно уже близко.»', boost:'+400 монет', action:function(){S.bal+=400;}},
-  {text:'«Каждый твой шаг приближает тебя к мечте.»', boost:'Редкий артефакт', action:function(){addArtifact('void_crystal');}},
-  {text:'«Спокойствие внутри рождает победы снаружи.»', boost:'+50 энергии', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
-  {text:'«Ты не один. Свет всегда рядом, даже в темноте.»', boost:'+200 XP', action:function(){S.xp+=200;}},
-  {text:'«Твоя доброта вернётся к тебе многократно.»', boost:'+350 монет', action:function(){S.bal+=350;}},
-  {text:'«Сегодня — идеальный день, чтобы поверить в себя.»', boost:'+500 монет', action:function(){S.bal+=500;}},
-  {text:'«Ты рождён для великого. И вселенная это помнит.»', boost:'Редкий артефакт', action:function(){addArtifact('star_shard');}},
-  {text:'«Отпусти страх — и увидишь, как открываются двери.»', boost:'+150 XP', action:function(){S.xp+=150;}},
-  {text:'«Мир добрее, чем кажется. И он на твоей стороне.»', boost:'+300 монет', action:function(){S.bal+=300;}},
+  {text:'«У тебя всё получится. Вселенная уже ведёт тебя к этому.»', text_en:'"You will succeed. The universe is already guiding you there."', boost:'+300 монет', boost_en:'+300 coins', action:function(){S.bal+=300;}},
+  {text:'«Всё, во что ты искренне веришь — обязательно сбудется.»', text_en:'"Everything you truly believe in will surely come true."', boost:'+250 монет', boost_en:'+250 coins', action:function(){S.bal+=250;}},
+  {text:'«Ты сильнее, чем думаешь. Сегодня ты это почувствуешь.»', text_en:'"You are stronger than you think. Today you will feel it."', boost:'+50 энергии', boost_en:'+50 energy', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
+  {text:'«Лучшее впереди. Доверься пути — он не ошибается.»', text_en:'"The best is ahead. Trust the path — it never errs."', boost:'+300 монет', boost_en:'+300 coins', action:function(){S.bal+=300;}},
+  {text:'«Сегодня удача на твоей стороне. Используй её.»', text_en:'"Today luck is on your side. Use it."', boost:'+100 XP', boost_en:'+100 XP', action:function(){S.xp+=100;}},
+  {text:'«Твоё сердце знает дорогу. Просто иди вперёд.»', text_en:'"Your heart knows the way. Just keep going."', boost:'+50 энергии материи', boost_en:'+50 matter energy', action:function(){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+50);}},
+  {text:'«Ты заслуживаешь всего хорошего. И оно уже близко.»', text_en:'"You deserve all that is good. And it is already near."', boost:'+400 монет', boost_en:'+400 coins', action:function(){S.bal+=400;}},
+  {text:'«Каждый твой шаг приближает тебя к мечте.»', text_en:'"Every step brings you closer to your dream."', boost:'Редкий артефакт', boost_en:'Rare artifact', action:function(){addArtifact('void_crystal');}},
+  {text:'«Спокойствие внутри рождает победы снаружи.»', text_en:'"Calm within gives birth to victories without."', boost:'+50 энергии', boost_en:'+50 energy', action:function(){S.energy=Math.min(S.maxEnergy,S.energy+50);}},
+  {text:'«Ты не один. Свет всегда рядом, даже в темноте.»', text_en:'"You are not alone. Light is always near, even in the dark."', boost:'+200 XP', boost_en:'+200 XP', action:function(){S.xp+=200;}},
+  {text:'«Твоя доброта вернётся к тебе многократно.»', text_en:'"Your kindness will return to you many times over."', boost:'+350 монет', boost_en:'+350 coins', action:function(){S.bal+=350;}},
+  {text:'«Сегодня — идеальный день, чтобы поверить в себя.»', text_en:'"Today is the perfect day to believe in yourself."', boost:'+500 монет', boost_en:'+500 coins', action:function(){S.bal+=500;}},
+  {text:'«Ты рождён для великого. И вселенная это помнит.»', text_en:'"You were born for greatness. And the universe remembers."', boost:'Редкий артефакт', boost_en:'Rare artifact', action:function(){addArtifact('star_shard');}},
+  {text:'«Отпусти страх — и увидишь, как открываются двери.»', text_en:'"Let go of fear — and watch the doors open."', boost:'+150 XP', boost_en:'+150 XP', action:function(){S.xp+=150;}},
+  {text:'«Мир добрее, чем кажется. И он на твоей стороне.»', text_en:'"The world is kinder than it seems. And it is on your side."', boost:'+300 монет', boost_en:'+300 coins', action:function(){S.bal+=300;}},
 ];
+function prophText(p){return (LANG==='en'&&p.text_en)?p.text_en:p.text;}
+function prophBoost(p){return (LANG==='en'&&p.boost_en)?p.boost_en:p.boost;}
 
 /* ── RUNE SYMBOLS ── */
 var RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
@@ -1595,7 +1925,7 @@ function checkAchs(){
   ACHS.forEach(function(a){
     if(!S.achievements[a.id]&&a.check(S)){
       S.achievements[a.id]=true;
-      bonusNotif(a.icon,a.name,0);
+      bonusNotif(a.icon,achName(a),0);
     }
   });
 }
@@ -1665,7 +1995,12 @@ function startEnergyTimer(){}
 function updateEnergyTimer(){
   var ed=$('en-d');if(!ed)return;
   if(S.boostNoEnergyUntil&&Date.now()<S.boostNoEnergyUntil){
-    ed.textContent='∞ '+Math.ceil((S.boostNoEnergyUntil-Date.now())/1000)+'с';return;
+    ed.textContent=(LANG==='en'?'∞ ':'∞ ')+Math.ceil((S.boostNoEnergyUntil-Date.now())/1000)+(LANG==='en'?'s':'с');return;
+  }
+  // Капсула только что закончилась — синхронизируем накопленный баланс на сервер
+  if(_needSyncAfterBoost&&S.boostNoEnergyUntil&&Date.now()>=S.boostNoEnergyUntil){
+    _needSyncAfterBoost=false; S.boostNoEnergyUntil=0;
+    if(typeof save==='function')save();
   }
   if(S.energy>=S.maxEnergy){ed.textContent=S.energy+'/'+S.maxEnergy;return;}
   ed.textContent=S.energy+'/'+S.maxEnergy+' ('+Math.max(0,regenPeriod()-_regenAcc)+'с)';
@@ -1717,6 +2052,7 @@ window.goSlide=function(n){
 window.skipIntro=function(){
   S.introSeen=true;save();
   showScreen('welcome-screen');
+  applyTranslations();
   startWelcomeAnim();
   setTimeout(function(){var ws=$('welcome-screen');if(ws&&ws.classList.contains('active'))initMain();},5500);
 };
@@ -1724,6 +2060,7 @@ window.skipIntro=function(){
 window.startWelcome=function(){
   S.introSeen=true;save();
   showScreen('welcome-screen');
+  applyTranslations();
   startWelcomeAnim();
   setTimeout(function(){var ws=$('welcome-screen');if(ws&&ws.classList.contains('active'))initMain();},5500);
 };
@@ -1782,12 +2119,20 @@ function initMain(){
   S.maxEnergy=computeMaxEnergy();
   applyAura();
   claimOffline();
+  applyTranslations();
 }
 
 function dailyBonusAmount(){
-  var d=S.streakDays||1, b=50;
-  if(d>=3)b=100; if(d>=7)b=300; if(d>=14)b=500; if(d>=30)b=1000;
-  return b;
+  // Совпадает с визуальной таблицей наград по дням
+  var d=S.streakDays||1;
+  if(d>=30)return 1000;
+  if(d>=14)return 500;
+  if(d>=7)return 300;
+  if(d>=5)return 150;
+  if(d>=4)return 125;
+  if(d>=3)return 100;
+  if(d>=2)return 75;
+  return 50;
 }
 function checkStreak(){
   var today=new Date().toDateString();
@@ -1805,26 +2150,26 @@ function updateDailyBtn(){
   var btn=$('daily-claim');if(!btn)return;
   if(S.dailyClaimed){
     btn.disabled=true;
-    btn.textContent='✅ Награда забрана. Возвращайся завтра';
+    btn.textContent=t('daily_claimed');
     btn.style.opacity='.55';
   }else{
     btn.disabled=false;
     btn.style.opacity='1';
-    btn.textContent='🎁 Забрать +'+dailyBonusAmount()+' 🪙 (день '+(S.streakDays||1)+')';
+    btn.textContent=t('claim_btn')+dailyBonusAmount()+' 🪙'+t('claim_day')+(S.streakDays||1)+')';
   }
 }
 window.claimDaily=function(){
   if(S.dailyClaimed)return;
   var bonus=dailyBonusAmount();
   S.bal+=bonus; S.dailyClaimed=true; save();
-  bonusNotif('🔥','ДЕНЬ '+(S.streakDays||1),bonus);
+  bonusNotif('🔥',t('n_day')+(S.streakDays||1),bonus);
   spawnCoins(10); updateUI(); updateDailyBtn(); renderDaily();
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 };
 
 window.goMain=function(){
   document.querySelectorAll('.screen').forEach(function(s){if(s.id!=='main-screen')s.classList.remove('active');});
-  hudShow(false);showScreen('main-screen');setNav('bn-ship');updateUI();
+  hudShow(false);showScreen('main-screen');setNav('bn-ship');updateUI();applyTranslations();
 };
 
 function initShipTap(){
@@ -1855,7 +2200,7 @@ function initShipTap(){
 function doTap(e){
   var noEnergyMode=S.boostNoEnergyUntil&&Date.now()<S.boostNoEnergyUntil;
   if(!noEnergyMode){
-    if(S.energy<1){bonusNotif('⚡','ЭНЕРГИЯ НА ИСХОДЕ',0);return;}
+    if(S.energy<1){bonusNotif('⚡',t('n_energy_low'),0);return;}
     S.energy=Math.max(0,S.energy-1);
   }
   var tapBonus=S.shards&&S.shards[1]?10:1; // Осколок 1 = x10 навсегда
@@ -1878,7 +2223,7 @@ function doTap(e){
     comboActive=true;
     var sw=$('ship-w');if(sw){sw.classList.add('shake');setTimeout(function(){sw.classList.remove('shake');},400);}
     if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('heavy');
-    bonusNotif('⚡','КОМБО АКТИВИРОВАНО!',0);
+    bonusNotif('⚡',t('n_combo'),0);
     showPhrase(true);
   }
   if(comboActive){
@@ -1904,7 +2249,7 @@ function doTap(e){
   if(SERVER_OK){
     // Оптимистично показываем, на сервер шлём пачкой (он подтвердит истину)
     localStorage.setItem(SK,JSON.stringify(S));
-    queueServerTap(isCombo);
+    if(!noEnergyMode)queueServerTap(isCombo);else _needSyncAfterBoost=true;
     updateUI();
   }else{
     save();
@@ -1914,7 +2259,7 @@ function doTap(e){
 
 function showPhrase(isCombo){
   var el=$('tap-ph');if(!el)return;
-  var arr=isCombo?COMBO_PHRASES:PHRASES;
+  var arr=isCombo?(LANG==='en'?COMBO_PHRASES_EN:COMBO_PHRASES_RU):(LANG==='en'?PHRASES_EN:PHRASES_RU);
   el.textContent=arr[Math.floor(Math.random()*arr.length)];
   el.classList.add('show');
   if(phraseTimer)clearTimeout(phraseTimer);
@@ -1976,7 +2321,7 @@ function renderMap(){
       '<div class="mnode-aura" style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle,'+node.color+'18,transparent 70%);margin-left:-38px;margin-top:-38px;animation:mnFloat '+(3+i*.5)+'s ease-in-out infinite;"></div>'+
       '<div class="mnode-icon mnode-float" style="animation-delay:'+(i*.8)+'s;">'+node.icon+'</div>'+
       (isLocked?'<div class="lock-b">'+(node.minLv?('УР.'+node.minLv):'СКОРО')+'</div>':'')+
-      '</div><div class="mnode-name">'+node.name+'<small>'+node.sub+'</small></div>';
+      '</div><div class="mnode-name">'+nodeName(node)+'<small>'+nodeSub(node)+'</small></div>';
     (function(nd,locked){
       function handler(e){if(e&&e.preventDefault)e.preventDefault();openCard(nd,locked);}
       el.addEventListener('click',handler);
@@ -1989,7 +2334,7 @@ function renderMap(){
   var codex=document.createElement('div');
   codex.className='home-node';
   codex.style.cssText='left:'+cx+'px;top:'+cy+'px;';
-  codex.innerHTML='<div class="home-planet" style="font-size:26px;background:radial-gradient(circle at 35% 30%,rgba(255,215,0,.28),rgba(90,60,0,.92));border-color:rgba(255,215,0,.45);box-shadow:0 0 26px rgba(255,215,0,.22);">📜</div><div class="home-lbl" style="color:rgba(255,215,0,.78);">КОДЕКС</div>';
+  codex.innerHTML='<div class="home-planet" style="font-size:26px;background:radial-gradient(circle at 35% 30%,rgba(255,215,0,.28),rgba(90,60,0,.92));border-color:rgba(255,215,0,.45);box-shadow:0 0 26px rgba(255,215,0,.22);">📜</div><div class="home-lbl" style="color:rgba(255,215,0,.78);">'+(LANG==='en'?'CODEX':'КОДЕКС')+'</div>';
   codex.addEventListener('click',openCodex);
   codex.addEventListener('touchend',function(e){e.preventDefault();openCodex();});
   zone.appendChild(codex);
@@ -2000,8 +2345,8 @@ function openCard(node,locked){
   selNodeLocked=!!locked;
   var gc=$('gc'); gc.style.setProperty('--gc',node.color); gc.style.setProperty('--gc2',node.color2);
   var gi=$('gc-ico');if(gi)gi.textContent=node.icon;
-  var gn=$('gc-nm');if(gn)gn.textContent=node.name;
-  var gd=$('gc-ds');if(gd)gd.textContent=node.desc;
+  var gn=$('gc-nm');if(gn)gn.textContent=nodeName(node);
+  var gd=$('gc-ds');if(gd)gd.textContent=nodeDesc(node);
   var gcost=$('gc-cost');
   var goBtn=$('gc-go');
   var lockMsg=$('gc-lock');
@@ -2025,7 +2370,7 @@ var hjRaf=null;
 window.doHyperjump=function(){
   if(!selNode)return;
   if(selNode.cost>0){
-    if(S.energy<selNode.cost){closeCard();bonusNotif('⚡','НУЖНО '+selNode.cost+' ЭНЕРГИИ',0);return;}
+    if(S.energy<selNode.cost){closeCard();bonusNotif('⚡',t('n_need')+selNode.cost+(LANG==='en'?' ENERGY':' ЭНЕРГИИ'),0);return;}
     S.energy-=selNode.cost;save();updateUI();
   }
   closeCard();showScreen('hj-screen');
@@ -2072,9 +2417,9 @@ function enterGame(id){
   // Скрываем нижнее меню в играх
   var bn=$('bnav');if(bn)bn.classList.remove('show');
   if(id==='merge'){showScreen('merge-screen');hudShow(true);if(sFs.merge)sFs.merge.stop();sFs.merge=makeStars('merge-canvas',180,.4);initMerge();}
-  else if(id==='runes'){showScreen('runes-screen');initRunes();}
-  else if(id==='oracle'){showScreen('oracle-screen');if(sFs.oracle)sFs.oracle.stop();sFs.oracle=makeStars('oracle-canvas',140,.3);initOracle();}
-  else if(id==='ast'){showScreen('ast-screen');initAsteroids();}
+  else if(id==='runes'){showScreen('runes-screen');initRunes();applyTranslations();}
+  else if(id==='oracle'){showScreen('oracle-screen');if(sFs.oracle)sFs.oracle.stop();sFs.oracle=makeStars('oracle-canvas',140,.3);initOracle();applyTranslations();}
+  else if(id==='ast'){showScreen('ast-screen');initAsteroids();applyTranslations();}
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 }
 
@@ -2183,10 +2528,10 @@ function handleCellClick(idx){
     renderMergeGrid();
     var info=$('mg-info');
     var def=MITEMS.find(function(m){return m.id===item;});
-    if(info&&def)info.textContent='Выбран: '+def.icon+' '+def.name+' — выбери такой же для синтеза';
+    if(info&&def)info.textContent=(LANG==='en'?'Selected: ':'Выбран: ')+def.icon+' '+mitemName(def)+(LANG==='en'?' — pick a matching one to synthesize':' — выбери такой же для синтеза');
     return;
   }
-  if(selCell===idx){selCell=-1;renderMergeGrid();var inf=$('mg-info');if(inf)inf.textContent='Выбери ячейку или создай материю';return;}
+  if(selCell===idx){selCell=-1;renderMergeGrid();var inf=$('mg-info');if(inf)inf.textContent=t('pick_or_create');return;}
   // Пробуем слить
   var item1=S.mergeGrid[selCell],item2=S.mergeGrid[idx];
   if(item1&&item2&&item1===item2){
@@ -2194,12 +2539,12 @@ function handleCellClick(idx){
     if(S.mergeEnergy<MERGE_COST){
       var info2=$('mg-info');
       var minLeft=Math.ceil((MERGE_COST-S.mergeEnergy)*5);
-      if(info2)info2.textContent='⚡ Мало энергии материи! Восстановится через ~'+minLeft+' мин.';
+      if(info2)info2.textContent=t('low_matter_timer1')+minLeft+t('low_matter_timer2');
       selCell=-1;renderMergeGrid();return;
     }
     var nextItem=item1+1;
     var nextDef=MITEMS.find(function(m){return m.id===nextItem;});
-    if(!nextDef){var inf2=$('mg-info');if(inf2)inf2.textContent='Это максимальный уровень!';selCell=-1;renderMergeGrid();return;}
+    if(!nextDef){var inf2=$('mg-info');if(inf2)inf2.textContent=t('max_level');selCell=-1;renderMergeGrid();return;}
     // Синтез! (высшие уровни доступны без платной разблокировки)
 
     S.mergeEnergy-=MERGE_COST;
@@ -2215,10 +2560,10 @@ function handleCellClick(idx){
     if(cells[idx]){cells[idx].classList.add('merging');setTimeout(function(){cells[idx].classList.remove('merging');},400);}
     renderMergeGrid();
     var inf4=$('mg-info');if(inf4)inf4.textContent='✨ Синтез! Создан: '+nextDef.icon+' '+nextDef.name+' +'+reward+' 🪙';
-    bonusNotif(nextDef.icon,'СИНТЕЗ!',reward);spawnCoins(4);
+    bonusNotif(nextDef.icon,t('n_synth'),reward);spawnCoins(4);
     updateUI();checkAchs();
     // Проверка осколка за ур.6
-    if(nextItem===6&&!S.shards[2]){S.shards[2]=true;save();setTimeout(function(){bonusNotif('🌑','ОСКОЛОК ТЕНИ НАЙДЕН!',0);renderProfile();},1000);}
+    if(nextItem===6&&!S.shards[2]){S.shards[2]=true;save();setTimeout(function(){bonusNotif('🌑',t('n_shadow_found'),0);renderProfile();},1000);}
     // Проверка заказов
     checkOrders(nextItem);
     if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('medium');
@@ -2235,7 +2580,7 @@ function handleCellClick(idx){
 
 function mergeGenerate(){
   if(S.mergeEnergy<MERGE_COST){
-    var info=$('mg-info');if(info)info.textContent='Мало энергии материи!';return;
+    var info=$('mg-info');if(info)info.textContent=t('low_matter');return;
   }
   var empty=-1;
   for(var i=0;i<25;i++){if(cellUnlocked(i)&&!S.mergeGrid[i]){empty=i;break;}}
@@ -2295,7 +2640,7 @@ function submitOrder(idx){
   S.orders.splice(idx,1);
   S.orders.push(newRandomOrder());
   save();
-  bonusNotif('📋','ЗАКАЗ ВЫПОЛНЕН!',order.reward);spawnCoins(8);
+  bonusNotif('📋',t('n_order_done'),order.reward);spawnCoins(8);
   renderOrders();renderMergeGrid();updateUI();checkAchs();
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 }
@@ -2306,9 +2651,13 @@ function initRunes(){
   var today=new Date().toDateString();
   var used=S.runesUsed===today;
   var btn=$('runes-btn'),free=$('runes-free'),msg=$('runes-msg');
-  if(btn)btn.disabled=used;
-  if(free)free.textContent=used?'Следующий бросок завтра':'Бесплатно сегодня!';
-  if(msg)msg.textContent='Испытай судьбу вселенной';
+  if(btn){
+    btn.disabled=used;
+    // Надёжная привязка клика (на случай если inline onclick не сработал)
+    if(!btn._bound){ btn._bound=true; btn.addEventListener('click',function(){ if(typeof spinRunes==='function')spinRunes(); }); }
+  }
+  if(free)free.textContent=used?t('runes_next'):t('runes_free');
+  if(msg)msg.textContent=t('runes_msg');
   if(msg)msg.className='runes-msg';
 }
 
@@ -2336,11 +2685,15 @@ function buildRuneRings(){
 
 window.spinRunes=function(){
   var today=new Date().toDateString();
-  if(S.runesUsed===today)return;
+  if(S.runesUsed===today){
+    var m0=$('runes-msg');if(m0){m0.textContent=t('runes_next');m0.className='runes-msg lose';}
+    var b0=$('runes-btn');if(b0)b0.disabled=true;
+    return;
+  }
   S.runesUsed=today;save();
   var btn=$('runes-btn'),free=$('runes-free');
   if(btn)btn.disabled=true;
-  if(free)free.textContent='Следующий бросок завтра';
+  if(free)free.textContent=t('runes_next');
   var frame=$('rune-frame');if(frame)frame.classList.remove('match');
   var results=[];
   for(var i=0;i<3;i++)results.push(RUNES[Math.floor(Math.random()*RUNES.length)]);
@@ -2378,16 +2731,16 @@ window.spinRunes=function(){
     var msg=$('runes-msg');
     if(matches===3){
       S.bal+=1000;S.xp+=100;save();updateUI();
-      if(msg){msg.textContent='⚡ ТРОЙНОЕ СОВПАДЕНИЕ! +1000 AEON';msg.className='runes-msg win';}
+      if(msg){msg.textContent=t('runes_triple');msg.className='runes-msg win';}
       if(frame)frame.classList.add('match');
-      bonusNotif('⚡','ТРОЙНОЙ РЕЗОНАНС!',1000);spawnCoins(20);
+      bonusNotif('⚡',t('n_triple'),1000);spawnCoins(20);
     }else if(matches===2){
       S.bal+=200;S.xp+=30;save();updateUI();
-      if(msg){msg.textContent='✨ Двойное совпадение! +200 AEON';msg.className='runes-msg win';}
-      bonusNotif('✨','РЕЗОНАНС',200);
+      if(msg){msg.textContent=t('runes_double');msg.className='runes-msg win';}
+      bonusNotif('✨',t('n_resonance'),200);
     }else{
       S.xp+=10;S.bal+=20;save();updateUI();
-      if(msg){msg.textContent='Руны не совпали. Вселенная испытывает тебя.';msg.className='runes-msg lose';}
+      if(msg){msg.textContent=t('runes_none');msg.className='runes-msg lose';}
     }
     checkAchs();
   },2050);
@@ -2422,27 +2775,29 @@ window.tapOracle=function(){
   var prophecy=PROPHECIES[Math.floor(Math.random()*PROPHECIES.length)];
   prophecy.action();save();updateUI();
   var text=$('oracle-text'),boost=$('oracle-boost'),hint=$('oracle-hint'),ousedEl=$('oracle-used');
-  if(text)text.textContent=prophecy.text;
-  if(boost)boost.textContent='🎁 '+prophecy.boost;
+  if(text)text.textContent=prophText(prophecy);
+  if(boost)boost.textContent='🎁 '+prophBoost(prophecy);
   var pr=$('oracle-proph');
   if(pr){pr.classList.remove('fly-out');void pr.offsetWidth;pr.classList.add('fly-out');}
   if(hint)hint.style.display='none';
-  if(ousedEl){ousedEl.style.display='block';ousedEl.textContent='Пророчество получено. Возвращайся завтра.';}
-  bonusNotif('🔮','ПРОРОЧЕСТВО',0);
+  if(ousedEl){ousedEl.style.display='block';ousedEl.textContent=t('oracle_done');}
+  bonusNotif('🔮',t('n_prophecy'),0);
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('medium');
 };
 
 /* ══ HOME ══ */
 window.goHome=function(){
   checkStreak();
-  showScreen('home-screen');setNav('bn-home');renderProfile();
+  showScreen('home-screen');setNav('bn-home');
+  renderProfile();if(typeof renderAchs==='function')renderAchs();
+  applyTranslations();
 };
 
 function renderProfile(){
   var lv=getLv(),nxt=getNextLv();
   var xPct=nxt?Math.min(100,((S.xp-(lv.min||0))/((nxt.min||500)-(lv.min||0)))*100):100;
   var uid=tgU?'#'+String(tgU.id).slice(-6):'#'+Math.abs((S.name||'X').split('').reduce(function(a,c){return a*31+c.charCodeAt(0)|0;},0)%900000+100000);
-  [['p-name',S.name||'Выживший'],['p-uid',uid],['p-rank',lv.icon+' '+lv.name],
+  [['p-name',S.name||t('p_survivor')],['p-uid',uid],['p-rank',lv.icon+' '+levelName(lv)],
    ['p-taps',S.taps||0],['p-merges',S.merges||0],['p-max',S.maxWin||0],
    ['p-xp-l',(S.xp||0)+(nxt?'/'+nxt.min:'')],['p-bal',S.bal],['home-bal',S.bal],
   ].forEach(function(pair){var e=$(pair[0]);if(e)e.textContent=pair[1];});
@@ -2457,14 +2812,14 @@ function renderDaily(){
   row.innerHTML='';
   var rewards=[
     {d:1,r:'🪙 50'},{d:2,r:'🪙 75'},{d:3,r:'💎+🪙100'},{d:4,r:'🪙 125'},
-    {d:5,r:'🪙 150'},{d:7,r:'🪙 300'},{d:14,r:'🪙 500'},{d:30,r:'🛸 скин'},
+    {d:5,r:'🪙 150'},{d:7,r:'🪙 300'},{d:14,r:'🪙 500'},{d:30,r:(LANG==='en'?'🛸 skin':'🛸 скин')},
   ];
   rewards.forEach(function(item){
     var done=(S.streakDays||1)>item.d;
     var today=(S.streakDays||1)===item.d;
     var div=document.createElement('div');
     div.className='day-item'+(done?' done':'')+(today?' today':'');
-    div.innerHTML='<div class="di-d">Д'+item.d+'</div><div class="di-r">'+item.r+'</div>';
+    div.innerHTML='<div class="di-d">'+(LANG==='en'?'D':'Д')+item.d+'</div><div class="di-r">'+item.r+'</div>';
     row.appendChild(div);
   });
 }
@@ -2475,7 +2830,7 @@ function renderAchs(){
   ACHS.forEach(function(a){
     var done=!!(S.achievements&&S.achievements[a.id]);
     var div=document.createElement('div');div.className='ach-item'+(done?' done':'');
-    div.innerHTML='<div class="ai-icon">'+a.icon+'</div><div class="ai-info"><div class="ai-name">'+a.name+'</div><div class="ai-desc">'+a.desc+'</div><div class="ai-diff '+a.diff+'">'+(a.diff==='easy'?'ЛЕГКО':a.diff==='med'?'СРЕДНЕЕ':a.diff==='hard'?'СЛОЖНО':'ЛЕГЕНДА')+'</div></div><div class="ai-status">'+(done?'✅':'🔒')+'</div>';
+    div.innerHTML='<div class="ai-icon">'+a.icon+'</div><div class="ai-info"><div class="ai-name">'+achName(a)+'</div><div class="ai-desc">'+achDesc(a)+'</div><div class="ai-diff '+a.diff+'">'+(LANG==='en'?(a.diff==='easy'?'EASY':a.diff==='med'?'MEDIUM':a.diff==='hard'?'HARD':'LEGEND'):(a.diff==='easy'?'ЛЕГКО':a.diff==='med'?'СРЕДНЕЕ':a.diff==='hard'?'СЛОЖНО':'ЛЕГЕНДА'))+'</div></div><div class="ai-status">'+(done?'✅':'🔒')+'</div>';
     list.appendChild(div);
   });
 }
@@ -2491,7 +2846,7 @@ function renderBackpack(){
       if(artId){for(var j=0;j<ARTIFACTS.length;j++){if(ARTIFACTS[j].id===artId){def=ARTIFACTS[j];break;}}}
       var slot=document.createElement('div');
       slot.className='bp-slot'+(def?' has'+(def.rarity==='rare'?' rare':''):'');
-      slot.innerHTML=def?'<div class="bp-icon">'+def.icon+'</div><div class="bp-name">'+def.name+'</div>':'<div class="bp-empty">✦</div>';
+      slot.innerHTML=def?'<div class="bp-icon">'+def.icon+'</div><div class="bp-name">'+artName(def)+'</div>':'<div class="bp-empty">✦</div>';
       if(def)slot.addEventListener('click',function(){showArtifactInfo(artId,idx);});
       grid.appendChild(slot);
     })(i);
@@ -2514,22 +2869,25 @@ window.htab=function(name,el){
   el.classList.add('active');
   var panel=document.getElementById('hp-'+name);if(panel)panel.classList.add('active');
   if(name==='wallet')renderAEONWallet();
+  if(name==='friends'&&typeof loadReferrals==='function')loadReferrals();
+  if(name==='pilot'){if(typeof renderProfile==='function')renderProfile();if(typeof renderAchs==='function')renderAchs();}
+  applyTranslations();
 };
 
 /* ── SHOP ── */
-window.goShop=function(){showScreen('shop-screen');setNav('bn-shop');var sb=$('sh-bal');if(sb)sb.textContent=S.bal;renderShopModules();
+window.goShop=function(){showScreen('shop-screen');setNav('bn-shop');applyTranslations();var sb=$('sh-bal');if(sb)sb.textContent=S.bal;renderShopModules();
   var pt=$('price-tap-energy');if(pt)pt.textContent=tapEnergyPrice()+' 🪙';
   var pm=$('price-merge-energy');if(pm)pm.textContent=mergeEnergyPrice()+' 🪙';
 };
 window.buyItem=function(id,price){
-  if((id==='aura_silver'&&S.shipAura==='silver')||(id==='aura_gold'&&S.shipAura==='golden')){bonusNotif('✨','УЖЕ КУПЛЕНО',0);return;}
-  if(S.bal<price){bonusNotif('🪙','МАЛО МОНЕТ',0);return;}
+  if((id==='aura_silver'&&S.shipAura==='silver')||(id==='aura_gold'&&S.shipAura==='golden')){bonusNotif('✨',t('n_already_bought'),0);return;}
+  if(S.bal<price){bonusNotif('🪙',t('n_low_coins'),0);return;}
   S.bal-=price;
   if(id==='energy')S.energy=Math.min(S.maxEnergy,S.energy+50);
   if(id==='merge_energy')S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+30);
   if(id==='aura_silver'){S.shipAura='silver';applyAura();}
   if(id==='aura_gold'){S.shipAura='golden';applyAura();}
-  save();updateUI();bonusNotif('✅','КУПЛЕНО',0);
+  save();updateUI();bonusNotif('✅',t('n_bought'),0);
   var sb=$('sh-bal');if(sb)sb.textContent=S.bal;
 };
 
@@ -2591,15 +2949,15 @@ window.addEventListener('resize',function(){if($('cosmos-screen')&&$('cosmos-scr
 
 /* ══ SHIP LEVELS ══ */
 var SHIP_LEVELS = [
-  {lv:1, name:'Обломок',       cost:0,      mergeReq:0, streakReq:0,  energyLimit:100},
-  {lv:2, name:'Шаттл',         cost:5000,   mergeReq:2, streakReq:0,  energyLimit:120},
-  {lv:3, name:'Разведчик',     cost:15000,  mergeReq:3, streakReq:0,  energyLimit:150},
-  {lv:4, name:'Крейсер',       cost:50000,  mergeReq:4, streakReq:7,  energyLimit:200},
-  {lv:5, name:'Линкор',        cost:150000, mergeReq:5, streakReq:14, energyLimit:260},
-  {lv:6, name:'Дредноут',      cost:500000, mergeReq:6, streakReq:21, energyLimit:320},
-  {lv:7, name:'Звёздный Страж',cost:1500000,mergeReq:0, streakReq:30, energyLimit:380},
-  {lv:8, name:'Архонт',        cost:5000000,mergeReq:0, streakReq:45, energyLimit:440},
-  {lv:9, name:'Корабль Творца', cost:0,     mergeReq:0, streakReq:0,  energyLimit:500},
+  {lv:1, name:'Обломок',       name_en:'Debris',        cost:0,      xpReq:0,     mergeReq:0, streakReq:0,  energyLimit:100},
+  {lv:2, name:'Шаттл',         name_en:'Shuttle',       cost:5000,   xpReq:500,   mergeReq:2, streakReq:0,  energyLimit:120},
+  {lv:3, name:'Разведчик',     name_en:'Scout',         cost:15000,  xpReq:2000,  mergeReq:3, streakReq:0,  energyLimit:150},
+  {lv:4, name:'Крейсер',       name_en:'Cruiser',       cost:50000,  xpReq:5000,  mergeReq:4, streakReq:7,  energyLimit:200},
+  {lv:5, name:'Линкор',        name_en:'Battleship',    cost:150000, xpReq:12000, mergeReq:5, streakReq:14, energyLimit:260},
+  {lv:6, name:'Дредноут',      name_en:'Dreadnought',   cost:500000, xpReq:30000, mergeReq:6, streakReq:21, energyLimit:320},
+  {lv:7, name:'Звёздный Страж',name_en:'Star Guardian', cost:1500000,xpReq:75000, mergeReq:0, streakReq:30, energyLimit:380},
+  {lv:8, name:'Архонт',        name_en:'Archon',        cost:5000000,xpReq:200000,mergeReq:0, streakReq:45, energyLimit:440},
+  {lv:9, name:'Корабль Творца', name_en:'Creator\'s Ship', cost:0,  xpReq:500000,mergeReq:0, streakReq:0,  energyLimit:500},
 ];
 
 function getShipLvDef(lv){return SHIP_LEVELS.find(function(l){return l.lv===lv;})||SHIP_LEVELS[0];}
@@ -2611,13 +2969,15 @@ function checkShipUpgrade(){
   var errors=[];
   // Монеты
   if(S.bal<next.cost)errors.push('Нужно '+next.cost.toLocaleString()+' AEON (есть '+S.bal.toLocaleString()+')');
+  // Опыт (XP)
+  if(next.xpReq>0&&(S.xp||0)<next.xpReq)errors.push((LANG==='en'?'Need ':'Нужно ')+next.xpReq.toLocaleString()+' XP ('+(LANG==='en'?'have ':'есть ')+(S.xp||0).toLocaleString()+')');
   // Синтез предмета
   if(next.mergeReq>0){
     var maxMerge=0;
     for(var i=0;i<25;i++){if((S.mergeGrid[i]||0)>=next.mergeReq&&(S.mergeGrid[i]||0)>maxMerge)maxMerge=S.mergeGrid[i]||0;}
     if(maxMerge<next.mergeReq){
       var mdef=MITEMS.find(function(m){return m.id===next.mergeReq;});
-      errors.push('Нужно создать: '+(mdef?mdef.name:'предмет ур.'+next.mergeReq));
+      errors.push((LANG==='en'?'Create: ':'Нужно создать: ')+(mdef?mitemName(mdef):((LANG==='en'?'item lvl.':'предмет ур.')+next.mergeReq)));
     }
   }
   // Стрик
@@ -2630,7 +2990,7 @@ function tryShipUpgrade(){
   var result=checkShipUpgrade();
   if(!result)return;
   if(!result.canUpgrade){
-    bonusNotif('🚫','НЕ ХВАТАЕТ',0);
+    bonusNotif('🚫',t('n_not_enough'),0);
     setTimeout(function(){
       var info=result.errors.join('\n');
       alert('Для перехода на уровень '+(S.shipLevel+1)+':\n'+info);
@@ -2644,13 +3004,13 @@ function tryShipUpgrade(){
   save();
   // Уровень 3 — открываем Астероиды (осколок там)
   if(S.shipLevel===3){
-    bonusNotif('🛸','АСТЕРОИДЫ ОТКРЫТЫ!',0);
+    bonusNotif('🛸',t('n_ast_open'),0);
   }
   // Обновляем maxEnergy
   var def=getShipLvDef(S.shipLevel);
   S.maxEnergy=computeMaxEnergy();
   save();updateUI();
-  bonusNotif('🚀','УРОВЕНЬ '+S.shipLevel+'!',0);
+  bonusNotif('🚀',t('n_level')+S.shipLevel+'!',0);
   renderUpgradeBlock();
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 }
@@ -2659,7 +3019,7 @@ function tryShipUpgrade(){
 function renderAEONWallet(){
   var el=document.getElementById('aeon-coin-wallet');if(!el)return;
   el.innerHTML='<div class="hc" style="border-color:rgba(200,144,26,.3);background:linear-gradient(135deg,rgba(200,144,26,.06),rgba(10,4,0,.5));margin-top:0;">'+
-    '<div class="hc-t" style="color:var(--aeon2);">🪙 МОНЕТА AEON</div>'+
+    '<div class="hc-t" style="color:var(--aeon2);">🪙 '+(LANG==="en"?"AEON COIN":"МОНЕТА AEON")+'</div>'+
     '<div style="display:flex;justify-content:center;margin-bottom:14px;">'+
     '<div style="width:120px;height:120px;animation:coinSpin3D 3.2s linear infinite;transform-style:preserve-3d;">'+
     '<svg width="120" height="120" viewBox="0 0 120 120">'+
@@ -2688,18 +3048,23 @@ function renderAEONWallet(){
     '<textPath href="#tc">✦ AEON · UNIVERSE · OF · AGES · ✦ · </textPath></text>'+
     '</svg></div></div>'+
     '<div style="font-family:Cinzel,serif;font-size:10.5px;color:rgba(200,169,110,.52);line-height:1.75;margin-bottom:12px;text-align:center;">'+
-    'Рождённая из столкновения первых галактик.<br>Первая криптовалюта рождённая из смысла.<br>'+
-    '<span style="color:rgba(200,144,26,.35);font-size:9px;">Хранит память о первом мгновении существования.</span></div>'+
+    (LANG==='en'?
+      'Born from the collision of the first galaxies.<br>The first currency forged not from code, but from meaning.<br>'+
+      '<span style="color:rgba(200,144,26,.35);font-size:9px;">Within it sleeps the memory of the first instant of existence — when the void first dreamed of light.</span>'
+     :
+      'Рождённая из столкновения первых галактик.<br>Первая валюта, рождённая не из кода, а из смысла.<br>'+
+      '<span style="color:rgba(200,144,26,.35);font-size:9px;">В ней дремлет память о первом мгновении бытия — когда пустота впервые помыслила о свете.</span>'
+    )+'</div>'+
     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;">'+
-    '<div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">ЭМИССИЯ</div></div>'+
-    '<div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">БЛОКЧЕЙН</div></div>'+
-    '<div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">ЭПОХА</div></div></div>'+
+    '<div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">'+(LANG==='en'?'EMISSION':'ЭМИССИЯ')+'</div></div>'+
+    '<div class="ac-stat"><div class="ac-val">TON</div><div class="ac-lbl">'+(LANG==='en'?'BLOCKCHAIN':'БЛОКЧЕЙН')+'</div></div>'+
+    '<div class="ac-stat"><div class="ac-val">v1</div><div class="ac-lbl">'+(LANG==='en'?'EPOCH':'ЭПОХА')+'</div></div></div>'+
     '<div class="aeon-roadmap">'+
-    '<div class="arm-title">🗺️ ДОРОЖНАЯ КАРТА</div>'+
-    '<div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">Запуск — внутриигровая валюта</div></div>'+
-    '<div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">10,000 пилотов — Community Token</div></div>'+
-    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">Листинг TON DEX</div></div>'+
-    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">CEX листинг — мировые биржи</div></div>'+
+    '<div class="arm-title">🗺️ '+(LANG==="en"?"ROADMAP":"ДОРОЖНАЯ КАРТА")+'</div>'+
+    '<div class="arm-item active"><div class="arm-status">✅</div><div class="arm-text">'+(LANG==='en'?'Launch — in-game currency':'Запуск — внутриигровая валюта')+'</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔄</div><div class="arm-text">'+(LANG==='en'?'10,000 pilots — Community Token':'10,000 пилотов — Community Token')+'</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">'+(LANG==='en'?'TON DEX listing':'Листинг TON DEX')+'</div></div>'+
+    '<div class="arm-item"><div class="arm-status">🔒</div><div class="arm-text">'+(LANG==='en'?'CEX listing — global exchanges':'CEX листинг — мировые биржи')+'</div></div>'+
     '</div></div>';
 }
 
@@ -2738,14 +3103,14 @@ function renderCodexLevels(){
   var el=document.getElementById('codex-levels');if(!el)return;
   el.innerHTML='';
   var CODEX_LEVELS=[
-    {from:1,to:2,cost:'5,000',mergeReq:'Обломок (ур.2)',streak:0,unlock:'',color:'rgba(200,169,110,.15)'},
-    {from:2,to:3,cost:'15,000',mergeReq:'Кристалл (ур.3)',streak:0,unlock:'🛸 Астероиды + 💠 Осколок Света',color:'rgba(0,255,159,.08)'},
-    {from:3,to:4,cost:'50,000',mergeReq:'Энерго-ячейка (ур.4)',streak:7,unlock:'',color:'rgba(200,169,110,.12)'},
-    {from:4,to:5,cost:'150,000',mergeReq:'Антиматерия (ур.5)',streak:14,unlock:'',color:'rgba(200,169,110,.12)'},
-    {from:5,to:6,cost:'500,000',mergeReq:'Эссенция Творца (ур.6)',streak:21,unlock:'🌑 Осколок Тени',color:'rgba(168,85,247,.1)'},
-    {from:6,to:7,cost:'1,500,000',mergeReq:'',streak:30,unlock:'',color:'rgba(200,169,110,.12)'},
-    {from:7,to:8,cost:'5,000,000',mergeReq:'',streak:45,unlock:'',color:'rgba(200,169,110,.12)'},
-    {from:8,to:9,cost:'???',mergeReq:'Все 3 Осколка',streak:0,unlock:'⚡ Осколок Воли — финал',color:'rgba(255,215,0,.1)'},
+    {from:1,to:2,cost:'5,000',mergeReq:'Обломок (ур.2)',mergeReq_en:'Debris (lvl.2)',streak:0,unlock:'',unlock_en:'',color:'rgba(200,169,110,.15)'},
+    {from:2,to:3,cost:'15,000',mergeReq:'Кристалл (ур.3)',mergeReq_en:'Crystal (lvl.3)',streak:0,unlock:'🛸 Астероиды + 💠 Осколок Света',unlock_en:'🛸 Asteroids + 💠 Shard of Light',color:'rgba(0,255,159,.08)'},
+    {from:3,to:4,cost:'50,000',mergeReq:'Энерго-ячейка (ур.4)',mergeReq_en:'Energy Cell (lvl.4)',streak:7,unlock:'',unlock_en:'',color:'rgba(200,169,110,.12)'},
+    {from:4,to:5,cost:'150,000',mergeReq:'Антиматерия (ур.5)',mergeReq_en:'Antimatter (lvl.5)',streak:14,unlock:'',unlock_en:'',color:'rgba(200,169,110,.12)'},
+    {from:5,to:6,cost:'500,000',mergeReq:'Эссенция Творца (ур.6)',mergeReq_en:'Creator\'s Essence (lvl.6)',streak:21,unlock:'🌑 Осколок Тени',unlock_en:'🌑 Shard of Shadow',color:'rgba(168,85,247,.1)'},
+    {from:6,to:7,cost:'1,500,000',mergeReq:'',mergeReq_en:'',streak:30,unlock:'',unlock_en:'',color:'rgba(200,169,110,.12)'},
+    {from:7,to:8,cost:'5,000,000',mergeReq:'',mergeReq_en:'',streak:45,unlock:'',unlock_en:'',color:'rgba(200,169,110,.12)'},
+    {from:8,to:9,cost:'???',mergeReq:'Все 3 Осколка',mergeReq_en:'All 3 Shards',streak:0,unlock:'⚡ Осколок Воли — финал',unlock_en:'⚡ Shard of Will — finale',color:'rgba(255,215,0,.1)'},
   ];
   var curLv=S.shipLevel||1;
   CODEX_LEVELS.forEach(function(row){
@@ -2760,13 +3125,15 @@ function renderCodexLevels(){
       '<span style="font-size:14px;">'+badge+'</span>'+
       '<span style="font-size:11px;font-weight:700;color:'+(isCurrent?'var(--aeon2)':isDone?'rgba(200,169,110,.5)':'rgba(255,255,255,.6)')+';">'+
       'Ур.'+row.from+' → Ур.'+row.to+'</span>'+
-      (isCurrent?'<span style="font-size:7px;background:rgba(200,144,26,.2);border-radius:6px;padding:1px 6px;color:var(--aeon2);">СЕЙЧАС</span>':'')+
+      (isCurrent?'<span style="font-size:7px;background:rgba(200,144,26,.2);border-radius:6px;padding:1px 6px;color:var(--aeon2);">'+(LANG==='en'?'NOW':'СЕЙЧАС')+'</span>':'')+
       '</div>'+
       '<div style="display:flex;flex-direction:column;gap:3px;padding-left:22px;">';
     html+='<div style="font-size:8.5px;color:rgba(255,255,255,.4);">🪙 '+row.cost+' AEON</div>';
-    if(row.mergeReq)html+='<div style="font-size:8.5px;color:rgba(168,85,247,.6);">🧪 '+row.mergeReq+'</div>';
-    if(row.streak)html+='<div style="font-size:8.5px;color:rgba(255,140,0,.6);">🔥 '+row.streak+' дней подряд</div>';
-    if(row.unlock)html+='<div style="font-size:8.5px;color:var(--green);">🔓 '+row.unlock+'</div>';
+    var _mr=(LANG==='en'&&row.mergeReq_en!==undefined)?row.mergeReq_en:row.mergeReq;
+    if(_mr)html+='<div style="font-size:8.5px;color:rgba(168,85,247,.6);">🧪 '+_mr+'</div>';
+    if(row.streak)html+='<div style="font-size:8.5px;color:rgba(255,140,0,.6);">🔥 '+row.streak+(LANG==='en'?' days streak':' дней подряд')+'</div>';
+    var _ul=(LANG==='en'&&row.unlock_en!==undefined)?row.unlock_en:row.unlock;
+    if(_ul)html+='<div style="font-size:8.5px;color:var(--green);">🔓 '+_ul+'</div>';
     html+='</div>';
     div.innerHTML=html;
     el.appendChild(div);
@@ -2861,9 +3228,9 @@ window.showArtifactInfo=function(artId,idx){
   var card=document.createElement('div');
   card.style.cssText='background:linear-gradient(160deg,#0c0820,#060414);border:1.5px solid '+rarColor+'55;border-radius:18px;padding:24px;text-align:center;max-width:290px;width:100%;';
   card.innerHTML='<div style="font-size:50px;margin-bottom:10px;">'+def.icon+'</div>'+
-    '<div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:6px;font-family:Orbitron,monospace;">'+def.name+'</div>'+
+    '<div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:6px;font-family:Orbitron,monospace;">'+artName(def)+'</div>'+
     '<div style="display:inline-block;font-size:7px;letter-spacing:2px;color:'+rarColor+';border:.5px solid '+rarColor+'66;border-radius:8px;padding:2px 9px;margin-bottom:12px;font-family:Orbitron,monospace;">'+rarName+'</div>'+
-    '<div style="font-family:Cinzel,serif;font-size:11px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:16px;">'+def.desc+'</div>'+
+    '<div style="font-family:Cinzel,serif;font-size:11px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:16px;">'+artDesc(def)+'</div>'+
     (def.usable?'<button id="art-use" style="width:100%;height:44px;border-radius:22px;border:none;background:linear-gradient(135deg,#3010a0,#a855f7);color:#fff;font-family:Orbitron,monospace;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-bottom:8px;">⚡ АКТИВИРОВАТЬ</button>':'')+
     '<button id="art-close" style="width:100%;height:40px;border-radius:20px;border:.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-family:Orbitron,monospace;font-size:9px;cursor:pointer;">ЗАКРЫТЬ</button>';
   ov.appendChild(card);
@@ -2878,7 +3245,7 @@ window.showArtifactInfo=function(artId,idx){
 function useArtifact(artId,idx){
   if(artId==='chronos_core'){
     S.boostNoEnergyUntil=Date.now()+120000;
-    bonusNotif('⏱️','БЕЗЛИМИТ ЭНЕРГИИ — 2 МИН',0);
+    bonusNotif('⏱️',t('n_unlimited'),0);
   } else if(artId==='quasar_lens'){
     S.boostX2Until=Date.now()+600000;
     bonusNotif('🔆','×2 МОНЕТЫ — 10 МИН',0);
@@ -2890,12 +3257,12 @@ function useArtifact(artId,idx){
 
 /* ══ МОДУЛИ КОРАБЛЯ ══ */
 var MODULES={
-  engine:{name:'Квантовый Двигатель',icon:'🌀',max:8,base:5000,
-    desc:function(l){return 'Энергия +1 каждые '+Math.max(20,60-5*l)+'с';}},
-  tank:{name:'Топливный Бак',icon:'🛢️',max:10,base:5000,
-    desc:function(l){return l?('+'+(10*l)+' к максимуму энергии'):'Увеличивает запас энергии';}},
-  scanner:{name:'Сканер Дальнего Космоса',icon:'📡',max:6,base:5000,
-    desc:function(l){return l?('Офлайн: '+(l*60)+' 🪙/час, до '+Math.min(8,2+l)+'ч'):'Пассивный доход пока ты офлайн';}}
+  engine:{name:'Квантовый Двигатель',name_en:'Quantum Engine',icon:'🌀',max:8,base:5000,
+    desc:function(l){return LANG==='en'?('Energy +1 every '+Math.max(20,60-5*l)+'s'):('Энергия +1 каждые '+Math.max(20,60-5*l)+'с');}},
+  tank:{name:'Топливный Бак',name_en:'Fuel Tank',icon:'🛢️',max:10,base:5000,
+    desc:function(l){return LANG==='en'?(l?('+'+(10*l)+' to max energy'):'Increases energy capacity'):(l?('+'+(10*l)+' к максимуму энергии'):'Увеличивает запас энергии');}},
+  scanner:{name:'Сканер Дальнего Космоса',name_en:'Deep Space Scanner',icon:'📡',max:6,base:5000,
+    desc:function(l){return LANG==='en'?(l?('Offline: '+(l*60)+' 🪙/hr, up to '+Math.min(8,2+l)+'h'):'Passive income while offline'):(l?('Офлайн: '+(l*60)+' 🪙/час, до '+Math.min(8,2+l)+'ч'):'Пассивный доход пока ты офлайн');}}
 };
 function modLevel(t){return t==='engine'?(S.modEngine||0):t==='tank'?(S.modTank||0):(S.modScanner||0);}
 function modCost(t){return MODULES[t].base*Math.pow(2,modLevel(t));}
@@ -2909,12 +3276,14 @@ function renderShopModules(){
     var div=document.createElement('div');div.className='shop-item';
     if(locked)div.style.opacity='.5';
     var right;
-    if(locked)right='<div class="si-tag" style="color:#ff3a5c;">🔒 УР.3</div>';
+    if(locked)right='<div class="si-tag" style="color:#ff3a5c;">🔒 '+(LANG==='en'?'LVL.3':'УР.3')+'</div>';
     else if(maxed)right='<div class="si-tag" style="color:var(--green);">MAX</div>';
-    else right='<div class="si-tag">'+modCost(t).toLocaleString('ru-RU')+' 🪙</div><button class="si-btn">КУПИТЬ</button>';
+    else right='<div class="si-tag">'+modCost(t).toLocaleString('ru-RU')+' 🪙</div><button class="si-btn">'+t_buy()+'</button>';
+    var mName=(LANG==='en'&&m.name_en)?m.name_en:m.name;
+    var lvlLbl=(LANG==='en'?'lvl.':'ур.')+l;
     div.innerHTML='<div class="si-ico">'+m.icon+'</div>'+
-      '<div class="si-info"><div class="si-name">'+m.name+' <span style="font-size:8px;color:rgba(0,229,255,.7);">ур.'+l+'</span></div>'+
-      '<div class="si-desc">'+(locked?'Откроется на 3 уровне корабля':m.desc(l))+'</div></div>'+
+      '<div class="si-info"><div class="si-name">'+mName+' <span style="font-size:8px;color:rgba(0,229,255,.7);">'+lvlLbl+'</span></div>'+
+      '<div class="si-desc">'+(locked?(LANG==='en'?'Unlocks at ship level 3':'Откроется на 3 уровне корабля'):m.desc(l))+'</div></div>'+
       '<div class="si-price">'+right+'</div>';
     var btn=div.querySelector('button');
     if(btn)btn.addEventListener('click',function(){buyModule(t);});
@@ -2923,11 +3292,11 @@ function renderShopModules(){
 }
 
 function buyModule(t){
-  if((S.shipLevel||1)<3){bonusNotif('🔒','МОДУЛИ ОТКРОЮТСЯ НА УР.3',0);return;}
+  if((S.shipLevel||1)<3){bonusNotif('🔒',t('n_modules_lv3'),0);return;}
   var m=MODULES[t],l=modLevel(t);
-  if(l>=m.max){bonusNotif('✅','МАКСИМУМ',0);return;}
+  if(l>=m.max){bonusNotif('✅',t('n_max'),0);return;}
   var cost=modCost(t);
-  if(S.bal<cost){bonusNotif('🪙','МАЛО МОНЕТ',0);return;}
+  if(S.bal<cost){bonusNotif('🪙',t('n_low_coins'),0);return;}
   S.bal-=cost;
   if(t==='engine')S.modEngine=l+1;
   if(t==='tank'){S.modTank=l+1;S.maxEnergy=computeMaxEnergy();}
@@ -2957,7 +3326,7 @@ function claimOffline(){
   var income=Math.floor(hours*lvl*60);
   if(income>=10){
     S.bal+=income;S.totalWin=(S.totalWin||0)+income;save();updateUI();
-    setTimeout(function(){bonusNotif('📡','СКАНЕР: ОФЛАЙН ДОХОД',income);},1700);
+    setTimeout(function(){bonusNotif('📡',t('n_scanner'),income);},1700);
   }
 }
 
@@ -3020,7 +3389,7 @@ function astLoop(){
   if(now-AST.lastDrain>30000){
     AST.lastDrain=now;
     S.energy=Math.max(0,S.energy-10);save();
-    if(S.energy<=0){endAsteroids('Энергия исчерпана');return;}
+    if(S.energy<=0){endAsteroids(t('energy_empty'));return;}
   }
   for(var i=AST.bullets.length-1;i>=0;i--){
     var b=AST.bullets[i];b.x+=b.vx;b.y+=b.vy;
@@ -3051,7 +3420,7 @@ function astLoop(){
   for(var p=0;p<AST.rocks.length;p++){
     var rp=AST.rocks[p];
     var ddx=rp.x-AST.px,ddy=rp.y-AST.py;
-    if(ddx*ddx+ddy*ddy<(rp.r+15)*(rp.r+15)){endAsteroids('Столкновение!');return;}
+    if(ddx*ddx+ddy*ddy<(rp.r+15)*(rp.r+15)){endAsteroids(t('ast_collision'));return;}
   }
   if(AST.shard){
     AST.shard.y+=AST.shard.vy;AST.shard.pulse+=.08;
@@ -3064,7 +3433,7 @@ function astLoop(){
         S.bal+=AST.coins;S.totalWin=(S.totalWin||0)+AST.coins;
         if(AST.coins>(S.maxWin||0))S.maxWin=AST.coins;
         save();updateUI();
-        var rr=$('ast-res-reason');if(rr)rr.textContent='Осколок найден!';
+        var rr=$('ast-res-reason');if(rr)rr.textContent=t('ast_shard_found');
         var rc=$('ast-res-coins');if(rc)rc.textContent='+'+AST.coins;
         var res=$('ast-result');if(res)res.style.display='flex';
         triggerShardFound(1);
@@ -3174,7 +3543,7 @@ function endAsteroids(reason){
   S.bal+=AST.coins;S.totalWin=(S.totalWin||0)+AST.coins;
   if(AST.coins>(S.maxWin||0))S.maxWin=AST.coins;
   save();updateUI();checkAchs();
-  var rr=$('ast-res-reason');if(rr)rr.textContent=reason||'Полёт завершён';
+  var rr=$('ast-res-reason');if(rr)rr.textContent=reason||t('ast_done');
   var rc=$('ast-res-coins');if(rc)rc.textContent='+'+AST.coins;
   var res=$('ast-result');if(res)res.style.display='flex';
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred('heavy');
@@ -3193,7 +3562,7 @@ window.astExit=function(){
 };
 window.astCollect=function(){window.astExit();};
 window.astRetry=function(){
-  if(S.energy<30){bonusNotif('⚡','НУЖНО 30 ЭНЕРГИИ',0);return;}
+  if(S.energy<30){bonusNotif('⚡',t('n_need30'),0);return;}
   S.energy-=30;save();updateUI();
   initAsteroids();
 };
@@ -3237,7 +3606,7 @@ function claimHiddenItems(){
       }
       got=true;
       var hd=MITEMS.find(function(m){return m.id===HIDDEN_ITEMS[idx];});
-      if(hd)bonusNotif(hd.icon,'ТУМАН РАССЕЯЛСЯ: '+hd.name+'!',0);
+      if(hd)bonusNotif(hd.icon,t('n_fog_cleared')+hd.name+'!',0);
     }
   }
   if(got)save();
@@ -3377,7 +3746,7 @@ function applyTgSafeArea(){
 }
 
 /* ── Батч-отправка тапов на сервер ── */
-var _pendingTaps=0, _pendingCombo=false, _tapFlushTimer=null;
+var _pendingTaps=0, _pendingCombo=false, _tapFlushTimer=null, _needSyncAfterBoost=false;
 function queueServerTap(isCombo){
   if(!SERVER_OK)return;
   _pendingTaps++;
@@ -3387,6 +3756,8 @@ function queueServerTap(isCombo){
 }
 function flushTaps(){
   _tapFlushTimer=null;
+  // Во время безлимит-капсулы не синхронизируем тапы (сервер не знает про капсулу и затрёт баланс)
+  if(S.boostNoEnergyUntil&&Date.now()<S.boostNoEnergyUntil){_tapFlushTimer=setTimeout(flushTaps,2000);return;}
   if(!SERVER_OK||_pendingTaps<=0)return;
   var n=_pendingTaps, combo=_pendingCombo;
   _pendingTaps=0; _pendingCombo=false;
@@ -3425,7 +3796,7 @@ function loadReferrals(){
     var box=$('ref-friends');if(!box)return;
     box.innerHTML='';
     if(!d.friends||d.friends.length===0){
-      box.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(168,85,247,.35);padding:8px;font-family:Cinzel,serif;">Пока никого. Позови первого пилота!</div>';
+      box.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(168,85,247,.35);padding:8px;font-family:Cinzel,serif;">'+(LANG==='en'?'No one yet. Invite your first pilot!':'Пока никого. Позови первого пилота!')+'</div>';
       return;
     }
     d.friends.forEach(function(f){
@@ -3436,7 +3807,7 @@ function loadReferrals(){
         '<span style="font-size:10px;color:rgba(220,210,255,.8);">'+f.name+'</span></div>'+
         '<div style="display:flex;align-items:center;gap:6px;">'+
         '<span style="font-size:8px;color:rgba(168,85,247,.6);">Ур.'+f.level+'</span>'+
-        (f.active?'<span style="font-size:7px;color:var(--green);background:rgba(0,255,159,.1);border-radius:5px;padding:1px 5px;">+5%</span>':'<span style="font-size:7px;color:rgba(255,180,80,.6);">до ур.2</span>')+
+        (f.active?'<span style="font-size:7px;color:var(--green);background:rgba(0,255,159,.1);border-radius:5px;padding:1px 5px;">+5%</span>':'<span style="font-size:7px;color:rgba(255,180,80,.6);">'+(LANG==='en'?'to lvl.2':'до ур.2')+'</span>')+
         '</div>';
       box.appendChild(el);
     });
@@ -3445,10 +3816,10 @@ function loadReferrals(){
 
 /* ══ СЕРВЕРНАЯ ПОКУПКА ЭНЕРГИИ ══ */
 function buyEnergyServer(kind){
-  if(!SERVER_OK){bonusNotif('⚠️','НУЖЕН ИНТЕРНЕТ',0);return;}
+  if(!SERVER_OK){bonusNotif('⚠️',t('n_need_net'),0);return;}
   // Мгновенная защита: бак уже полный — не тратим деньги
-  if(kind==='tap' && S.energy>=S.maxEnergy){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);return;}
-  if(kind==='merge' && S.mergeEnergy>=S.maxMergeEnergy){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);return;}
+  if(kind==='tap' && S.energy>=S.maxEnergy){bonusNotif('✅',t('n_tank_full'),0);return;}
+  if(kind==='merge' && S.mergeEnergy>=S.maxMergeEnergy){bonusNotif('✅',t('n_tank_full'),0);return;}
   var initData=getInitData();if(!initData)return;
   fetch(API+'/api/buy_energy',{
     method:'POST',
@@ -3457,9 +3828,9 @@ function buyEnergyServer(kind){
   }).then(function(r){return r.json();}).then(function(d){
     if(!d){return;}
     if(!d.ok){
-      if(d.reason==='limit')bonusNotif('🚫','ЛИМИТ '+d.limit+'/ДЕНЬ',0);
-      else if(d.reason==='no_money')bonusNotif('🪙','НУЖНО '+d.price+' МОНЕТ',0);
-      else if(d.reason==='full'){bonusNotif('✅','БАК УЖЕ ПОЛОН',0);
+      if(d.reason==='limit')bonusNotif('🚫',t('n_limit')+d.limit+(LANG==='en'?'/DAY':'/ДЕНЬ'),0);
+      else if(d.reason==='no_money')bonusNotif('🪙',t('n_need')+d.price+(LANG==='en'?' COINS':' МОНЕТ'),0);
+      else if(d.reason==='full'){bonusNotif('✅',t('n_tank_full'),0);
         if(typeof d.energy==='number')S.energy=d.energy;
         if(typeof d.mergeEnergy==='number')S.mergeEnergy=d.mergeEnergy;
         updateUI();}
@@ -3470,7 +3841,7 @@ function buyEnergyServer(kind){
     else{S.mergeEnergy=d.mergeEnergy;}
     localStorage.setItem(SK,JSON.stringify(S));
     updateUI();
-    bonusNotif('⚡','БАК ПОЛОН! ('+d.used+'/'+d.limit+')',0);
+    bonusNotif('⚡',t('n_tank_filled')+d.used+'/'+d.limit+')',0);
     if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
   }).catch(function(){});
 }
@@ -3484,36 +3855,36 @@ function renderUpgradeBlock(){
   if(!info||!btn)return;
   var next=getNextShipLv();
   if(!next){
-    info.textContent='Достигнут максимальный уровень корабля. Ты прошёл весь путь.';
+    info.textContent=t('upg_max');
     btn.style.display='none';return;
   }
   btn.style.display='block';
   var r=checkShipUpgrade();
-  var lines='Следующий: '+next.name+' (Ур.'+next.lv+')<br>';
+  var lines=t('upg_next')+(LANG==='en'&&next.name_en?next.name_en:next.name)+' ('+(LANG==='en'?'Lvl.':'Ур.')+next.lv+')<br>';
   lines+='• '+next.cost.toLocaleString()+' 🪙 '+(S.bal>=next.cost?'✅':'❌')+'<br>';
   if(next.mergeReq>0){
     var has=false;for(var i=0;i<25;i++){if((S.mergeGrid[i]||0)>=next.mergeReq){has=true;break;}}
     var mdef=MITEMS.find(function(m){return m.id===next.mergeReq;});
-    lines+='• Создать '+(mdef?mdef.name:'предмет ур.'+next.mergeReq)+' '+(has?'✅':'❌')+'<br>';
+    lines+='• '+t('upg_create')+(mdef?mitemName(mdef):((LANG==='en'?'item lvl.':'предмет ур.')+next.mergeReq))+' '+(has?'✅':'❌')+'<br>';
   }
   if(next.streakReq>0){
-    lines+='• Стрик '+next.streakReq+' дней '+((S.streakDays||1)>=next.streakReq?'✅':'❌ (есть '+(S.streakDays||1)+')')+'<br>';
+    lines+='• '+t('upg_streak')+next.streakReq+t('upg_days')+' '+((S.streakDays||1)>=next.streakReq?'✅':'❌'+t('upg_have')+(S.streakDays||1)+')')+'<br>';
   }
   info.innerHTML=lines;
   if(r&&r.canUpgrade){
     btn.disabled=false;btn.style.opacity='1';
     btn.style.background='linear-gradient(135deg,#c8901a,#ffd700)';btn.style.color='#1a1000';
-    btn.textContent='🚀 Улучшить до Ур.'+next.lv;
+    btn.textContent=t('upg_btn_do')+next.lv;
   }else{
     btn.disabled=true;btn.style.opacity='.5';
     btn.style.background='rgba(255,255,255,.06)';btn.style.color='rgba(255,255,255,.4)';
-    btn.textContent='🔒 Условия не выполнены';
+    btn.textContent=t('upg_locked');
   }
 }
 
 /* ══ РЕЙТИНГ ГАЛАКТИКИ ══ */
 window.openLeaderboard=function(){
-  showScreen('lb-screen');
+  showScreen('lb-screen');applyTranslations();
   // Мгновенный плейсхолдер пока грузится
   var t=$('lb-total');if(t)t.textContent='···';
   var list=$('lb-list');
@@ -3571,7 +3942,7 @@ window.openChannel=function(){
   else window.open(CHANNEL_URL,'_blank');
 };
 window.claimChannelBonus=function(){
-  if(!SERVER_OK){bonusNotif('⚠️','НУЖЕН ИНТЕРНЕТ',0);return;}
+  if(!SERVER_OK){bonusNotif('⚠️',t('n_need_net'),0);return;}
   var initData=getInitData();if(!initData)return;
   var btn=$('claim-channel-btn');
   if(btn){btn.disabled=true;btn.textContent='Проверяем…';}
@@ -3585,7 +3956,7 @@ window.claimChannelBonus=function(){
       else if(d.artifact&&!S.artifacts)S.artifacts=[d.artifact];
       localStorage.setItem(SK,JSON.stringify(S));
       updateUI();
-      bonusNotif('🛰️','СИГНАЛ МАЯКА ПОЛУЧЕН!',2500);
+      bonusNotif('🛰️',t('n_beacon_got'),2500);
       spawnCoins(15);
       if(btn){btn.textContent='✅ Награда получена';btn.style.opacity='.6';}
       if(typeof renderBackpack==='function')renderBackpack();
@@ -3593,10 +3964,10 @@ window.claimChannelBonus=function(){
     }else{
       var msg=(d&&d.message)?d.message:'Не удалось проверить';
       if(d&&d.reason==='already'){
-        bonusNotif('✅','БОНУС УЖЕ ПОЛУЧЕН',0);
+        bonusNotif('✅',t('n_bonus_got'),0);
         if(btn){btn.textContent='✅ Награда получена';btn.style.opacity='.6';}
       }else if(d&&d.reason==='not_subscribed'){
-        bonusNotif('📢','СНАЧАЛА ПОДПИШИСЬ',0);
+        bonusNotif('📢',t('n_subscribe_first'),0);
         if(btn){btn.disabled=false;btn.textContent='✅ Я подписался — забрать';}
       }else{
         bonusNotif('⚠️',msg,0);
@@ -3608,6 +3979,8 @@ window.claimChannelBonus=function(){
   });
 };
 /* ── INIT ── */
+  // Применяем язык при запуске
+  try{ applyTranslations(); var lb=document.getElementById('lang-btn-label'); if(lb)lb.textContent=(LANG==='ru'?'RU':'EN'); }catch(e){}
 function bootWhenTelegramReady(attempt){
   attempt=attempt||0;
   if(window.Telegram&&window.Telegram.WebApp){
