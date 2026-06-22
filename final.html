@@ -1268,6 +1268,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <div class="shard" id="sh-2"><div class="sh-ico">🌑</div><div><div class="sh-name" data-i18n="shard_shadow">Осколок Тени</div><div class="sh-lore" data-i18n="shard_shadow_lore">Скрыт в Сердце Пустоты. Хранит тайну разрушения.</div></div><div class="sh-status">🔒</div></div>
           <div class="shard" id="sh-3"><div class="sh-ico">⚡</div><div><div class="sh-name" data-i18n="shard_will">Осколок Воли</div><div class="sh-lore" data-i18n="shard_will_lore">Местонахождение неизвестно. Только сильнейшие найдут путь.</div></div><div class="sh-status">🔒</div></div>
         </div>
+        <button id="merge-stone-btn" onclick="mergeStone()" style="display:none;width:100%;margin-top:12px;padding:13px;border-radius:14px;border:1.5px solid rgba(255,215,0,.5);background:linear-gradient(145deg,#2a1d50,#4a3410);color:rgba(255,225,150,.95);font-family:Orbitron,monospace;font-size:12px;font-weight:900;letter-spacing:2px;cursor:pointer;" data-i18n="stone_merge_btn">✦ ОБЪЕДИНИТЬ ✦</button>
       </div>
       <!-- Достижения -->
       <div class="hc" style="border-color:rgba(255,215,0,.15);">
@@ -1526,6 +1527,13 @@ var I18N = {
   ach_title:{ru:'🏆 ДОСТИЖЕНИЯ',en:'🏆 ACHIEVEMENTS'},
   pilot_t:{ru:'👨‍🚀 ПИЛОТ',en:'👨‍🚀 PILOT'},
   m_lvl:{ru:'Ур.',en:'Lvl.'},
+  stone_title:{ru:'КАМЕНЬ НАЧАЛА ВОССТАНОВЛЕН',en:'THE GENESIS STONE IS RESTORED'},
+  stone_close:{ru:'Принять истину',en:'Accept the truth'},
+  stone_merge_btn:{ru:'✦ ОБЪЕДИНИТЬ ✦',en:'✦ UNITE ✦'},
+  stone_congrats:{ru:'Поздравляю, выживший!<br>Ты нашёл себя.',en:'Congratulations, survivor!<br>You have found yourself.'},
+  stone_paradox:{ru:'Иронично: начало — повесть о конце, а конец — повесть о начале.',en:'How ironic: the beginning is a tale of the end, and the end is a tale of the beginning.'},
+  stone_story:{ru:'Камень Начала был всегда. Его не создали — он возник вместе со Вселенной, и Творец вдохнул в него свою силу. Ту же силу, что живёт в каждом из нас.<br><br>Он мог создавать миры, направлять великую энергию, творить чудеса. Но низшие существа возжелали овладеть им — чтобы разрушать и завоёвывать. И тогда, чтобы спасти всё сущее, Камень разделили на три осколка: Свет, что создаёт; Тень, что освобождает; и Воля, что выбирает.<br><br>Во все времена цивилизации находили это знание. Одни обращали его во благо. Другие — в корысть и зло, и разрушали сами себя. Ибо никакая группа не вправе решать, кому жить, а кому нет. Мы все отроду равны.<br><br>Ты прошёл путь и собрал Камень заново. Но теперь ты знаешь: истинная сила не в том, чтобы владеть. А в том, чтобы не злоупотребить.',
+  en:'The Genesis Stone was always there. It was not created — it arose together with the Universe, and the Creator breathed His power into it. The same power that lives in each of us.<br><br>It could create worlds, channel great energy, work miracles. But lesser beings desired to seize it — to destroy and conquer. And so, to save all that exists, the Stone was split into three shards: Light, that creates; Shadow, that releases; and Will, that chooses.<br><br>In all ages civilizations found this knowledge. Some turned it to good. Others — to greed and evil, and destroyed themselves. For no group has the right to decide who shall live and who shall not. We are all equal from birth.<br><br>You walked the path and made the Stone whole again. But now you know: true power is not in possessing. It is in not abusing it.'},
   runes_title:{ru:'✦ РУНЫ СУДЬБЫ ✦',en:'✦ RUNES OF FATE ✦'},
   runes_sub:{ru:'Три кольца — один выбор',en:'Three rings — one choice'},
   runes_msg:{ru:'Испытай судьбу вселенной',en:'Test the fate of the universe'},
@@ -1664,7 +1672,7 @@ const DEF = {
   taps:0, merges:0, maxWin:0, wagerGames:0,
   registered:false, name:'Выживший', tgId:0,
   shipLevel:1, streakDays:1, lastLogin:'',
-  introSeen:false, oracleUsed:'', runesUsed:'',
+  introSeen:false, oracleUsed:'', runesUsed:'', stoneStorySeen:false, stoneMerged:false,
   achievements:{}, artifacts:[], shards:{},
   milestones:{}, mergeGrid:[], mergeEnergy:50, maxMergeEnergy:50,
   orders:[],
@@ -2203,7 +2211,8 @@ function doTap(e){
     if(S.energy<1){bonusNotif('⚡',t('n_energy_low'),0);return;}
     S.energy=Math.max(0,S.energy-1);
   }
-  var tapBonus=S.shards&&S.shards[1]?10:1; // Осколок 1 = x10 навсегда
+  var tapBonus=(S.shipLevel||1); // Доход растёт с уровнем корабля (1ур=1, 2ур=2...)
+  if(S.shards&&S.shards[1])tapBonus*=10; // Осколок Света = x10 навсегда
   if(S.boostX2Until&&Date.now()<S.boostX2Until)tapBonus*=2; // Линза Квазара
   var coins=tapBonus,xp=0; // XP за тапы отключён — ребаланс v4.1
   comboCount++;
@@ -2861,6 +2870,12 @@ function renderShards(){
       var st=el.querySelector('.sh-status');if(st)st.textContent='✅';
     }
   });
+  // Все 3 собраны и ещё не объединены — показать кнопку Объединить
+  var mb=$('merge-stone-btn');
+  if(mb){
+    var all3=S.shards&&S.shards[1]&&S.shards[2]&&S.shards[3];
+    mb.style.display=(all3&&!S.stoneMerged)?'block':'none';
+  }
 }
 
 window.htab=function(name,el){
@@ -3148,6 +3163,86 @@ document.addEventListener('click',function(e){
 
 
 /* ══ АНИМАЦИЯ ПОЛУЧЕНИЯ ОСКОЛКА ══ */
+window.mergeStone=function(){
+  if(S.stoneMerged)return;
+  var mb=$('merge-stone-btn');if(mb)mb.style.display='none';
+  // Оверлей слияния
+  var ov=document.createElement('div');
+  ov.id='stone-overlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:1000;background:radial-gradient(ellipse at center,#0a0520 0%,#000008 100%);'+
+    'display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s;overflow:hidden;';
+  ov.innerHTML='<canvas id="merge-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>';
+  document.body.appendChild(ov);
+  requestAnimationFrame(function(){ov.style.opacity="1";});
+  if(tg&&tg.HapticFeedback){tg.HapticFeedback.impactOccurred("heavy");}
+
+  var cv=document.getElementById("merge-canvas");
+  var ctx=cv.getContext("2d");
+  var W=cv.width=ov.clientWidth, H=cv.height=ov.clientHeight;
+  var cx=W/2, cy=H/2;
+  var colors=["rgba(255,215,0,","rgba(190,120,255,","rgba(0,229,255,"];
+  // 3 луча с разных сторон (сверху, слева-снизу, справа-снизу)
+  var angles=[-Math.PI/2, Math.PI*0.75, Math.PI*0.25];
+  var R=Math.max(W,H)*0.6;
+  var t0=Date.now();
+  var DUR=2600;
+  function frame(){
+    var el=Date.now()-t0;
+    var p=Math.min(1,el/DUR);
+    ctx.clearRect(0,0,W,H);
+    // фон-вспышка по мере слияния
+    var glow=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    glow.addColorStop(0,"rgba(255,240,200,"+(p*0.5)+")");
+    glow.addColorStop(1,"rgba(0,0,10,0)");
+    ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+    // 3 луча сходятся
+    var ease=p<1?(1-Math.pow(1-p,3)):1;
+    for(var i=0;i<3;i++){
+      var sx=cx+Math.cos(angles[i])*R*(1-ease);
+      var sy=cy+Math.sin(angles[i])*R*(1-ease);
+      var grad=ctx.createLinearGradient(sx,sy,cx,cy);
+      grad.addColorStop(0,colors[i]+"0)");
+      grad.addColorStop(1,colors[i]+(0.9*ease)+")");
+      ctx.strokeStyle=grad;ctx.lineWidth=3+ease*4;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(cx,cy);ctx.stroke();
+      // светящаяся голова луча
+      ctx.fillStyle=colors[i]+(0.9*ease)+")";
+      ctx.beginPath();ctx.arc(sx,sy,4+ease*5,0,Math.PI*2);ctx.fill();
+    }
+    // центральный осколок растёт
+    var coreR=ease*42;
+    var cg=ctx.createRadialGradient(cx,cy,0,cx,cy,coreR+20);
+    cg.addColorStop(0,"rgba(255,255,255,"+ease+")");
+    cg.addColorStop(0.5,"rgba(255,225,150,"+(ease*0.9)+")");
+    cg.addColorStop(1,"rgba(255,215,0,0)");
+    ctx.fillStyle=cg;
+    ctx.beginPath();ctx.arc(cx,cy,coreR+20,0,Math.PI*2);ctx.fill();
+    if(p<1){requestAnimationFrame(frame);}
+    else{showStoneFinale();}
+  }
+  frame();
+};
+
+window.showStoneFinale=function(){
+  S.stoneMerged=true;S.stoneStorySeen=true;save();
+  var ov=document.getElementById("stone-overlay");if(!ov)return;
+  if(tg&&tg.HapticFeedback){tg.HapticFeedback.notificationOccurred("success");}
+  var inner=document.createElement("div");
+  inner.style.cssText="position:relative;z-index:2;text-align:center;max-width:520px;padding:28px;opacity:0;transition:opacity 1.4s;max-height:100%;overflow-y:auto;";
+  inner.innerHTML='<div style="font-size:60px;margin-bottom:14px;filter:drop-shadow(0 0 30px rgba(255,215,0,.9));">\uD83D\uDD2E</div>'+
+    '<div style="font-family:Orbitron,monospace;font-size:16px;font-weight:900;letter-spacing:1px;color:rgba(255,225,150,.98);margin-bottom:10px;line-height:1.5;text-shadow:0 0 20px rgba(255,215,0,.6);">'+t("stone_congrats")+'</div>'+
+    '<div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;letter-spacing:2px;color:rgba(255,215,0,.85);margin-bottom:22px;">'+t("stone_title")+'</div>'+
+    '<div style="font-family:Cinzel,serif;font-size:12.5px;line-height:1.95;color:rgba(230,220,255,.85);text-align:left;margin-bottom:20px;">'+t("stone_story")+'</div>'+
+    '<div style="font-family:Cinzel,serif;font-size:12px;font-style:italic;line-height:1.8;color:rgba(255,215,0,.7);margin-bottom:26px;">'+t("stone_paradox")+'</div>'+
+    '<button onclick="closeStoneStory()" style="padding:13px 40px;border-radius:24px;border:1.5px solid rgba(255,215,0,.45);background:linear-gradient(145deg,#1a1340,#3a2810);color:rgba(255,225,150,.95);font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;">'+t("stone_close")+'</button>';
+  ov.appendChild(inner);
+  requestAnimationFrame(function(){inner.style.opacity="1";});
+};
+
+window.closeStoneStory=function(){
+  var ov=document.getElementById("stone-overlay");
+  if(ov){ov.style.opacity="0";setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},1000);}
+};
 function triggerShardFound(shardNum){
   if(S.shards&&S.shards[shardNum])return; // уже найден
   if(!S.shards)S.shards={};
@@ -3209,6 +3304,11 @@ function triggerShardFound(shardNum){
 
   // Обновляем профиль
   setTimeout(function(){renderShards&&renderShards();},1000);
+
+  // Все 3 осколка собраны — покажем кнопку Объединить в профиле
+  if(S.shards&&S.shards[1]&&S.shards[2]&&S.shards[3]){
+    setTimeout(function(){var mb=$('merge-stone-btn');if(mb&&!S.stoneMerged)mb.style.display='block';},1200);
+  }
 }
 
 // CSS анимация пульса осколка
