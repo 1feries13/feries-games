@@ -1031,7 +1031,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <div>
             <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_shadow">Осколок Тени</div>
             <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_shadow_d">Ур.6 — создать Эссенцию Творца</div>
-            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="codex_bonus_q">Бонус: ???</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="shard_shadow_b">Бонус: ???</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -1039,7 +1039,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <div>
             <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_will">Осколок Воли</div>
             <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_will_d">Ур.9 — финал игры</div>
-            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="codex_bonus_q">Бонус: ???</div>
+            <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="shard_will_b">Бонус: ???</div>
           </div>
         </div>
       </div>
@@ -1477,7 +1477,7 @@ var I18N = {
   beacon_title:{ru:'📡 СИГНАЛ МАЯКА',en:'📡 BEACON SIGNAL'},
   // ── Рейтинг ──
   lb_pilots:{ru:'✦ ПИЛОТОВ ВО ВСЕЛЕННОЙ ✦',en:'✦ PILOTS IN THE UNIVERSE ✦'},
-  lb_top:{ru:'ТОП-10 ПО ОПЫТУ',en:'TOP-10 BY XP'},
+  lb_top:{ru:'ТОП-10 ПО МОНЕТАМ',en:'TOP-10 BY COINS'},
   codex:{ru:'КОДЕКС',en:'CODEX'},
   create_dust:{ru:'✦ Создать Пыль (-5 ⚡)',en:'✦ Create Dust (-5 ⚡)'},
   low_matter:{ru:'Мало энергии материи!',en:'Not enough matter energy!'},
@@ -1514,12 +1514,14 @@ var I18N = {
   codex_sub:{ru:'Инструкция по прохождению',en:'Walkthrough guide'},
   codex_shards:{ru:'🔮 ОСКОЛКИ КАМНЯ НАЧАЛА',en:'🔮 SHARDS OF THE GENESIS STONE'},
   shard_light:{ru:'Осколок Света',en:'Shard of Light'},
-  shard_light_d:{ru:'Ур.3 — найти в игре Астероиды',en:'Lvl.3 — find in the Asteroids game'},
+  shard_light_d:{ru:'Жрецы укрыли его в поясе непроходимых астероидов. Лишь достигший третьего корабля пройдёт сквозь камни.',en:'The priests hid it in a belt of impassable asteroids. Only one who reaches the third ship will pass through the stones.'},
   shard_light_b:{ru:'Бонус: ×10 монет за тап навсегда',en:'Bonus: x10 coins per tap forever'},
+  shard_shadow_b:{ru:'Бонус: энергия не тратится в Астероидах',en:'Bonus: energy is not spent in Asteroids'},
+  shard_will_b:{ru:'Бонус: открывает истину Камня Начала',en:'Bonus: unveils the truth of the Genesis Stone'},
   shard_shadow:{ru:'Осколок Тени',en:'Shard of Shadow'},
-  shard_shadow_d:{ru:'Ур.6 — создать Эссенцию Творца',en:'Lvl.6 — craft the Creator\'s Essence'},
+  shard_shadow_d:{ru:'На краю Вселенной скрыт тайный синтез вещей. Соедини материю верно — и Тень откроется тебе.',en:'At the edge of the Universe hides a secret synthesis of things. Combine matter rightly — and the Shadow will reveal itself.'},
   shard_will:{ru:'Осколок Воли',en:'Shard of Will'},
-  shard_will_d:{ru:'Ур.9 — финал игры',en:'Lvl.9 — the finale'},
+  shard_will_d:{ru:'Его местонахождение неизвестно никому. Он приходит лишь к тому, кто собрал Свет и Тень и не свернул с пути.',en:'Its location is known to none. It comes only to the one who has gathered Light and Shadow and never strayed from the path.'},
   shard_light_lore:{ru:'Спрятан в Туманности Забытых. Хранит память о первом рассвете.',en:'Hidden in the Nebula of the Forgotten. Holds the memory of the first dawn.'},
   shard_shadow_lore:{ru:'Скрыт в Сердце Пустоты. Хранит тайну разрушения.',en:'Concealed in the Heart of the Void. Holds the secret of destruction.'},
   shard_will_lore:{ru:'Местонахождение неизвестно. Только сильнейшие найдут путь.',en:'Location unknown. Only the strongest will find the way.'},
@@ -3324,7 +3326,9 @@ window.showArtifactInfo=function(artId,idx){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:200;background:rgba(0,0,10,.8);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;';
   var rarColor=def.rarity==='legendary'?'#ffd700':def.rarity==='rare'?'#a855f7':'#9aa0b0';
-  var rarName=def.rarity==='legendary'?'ЛЕГЕНДАРНЫЙ':def.rarity==='rare'?'РЕДКИЙ':'ОБЫЧНЫЙ';
+  var _rarMap={common:['ОБЫЧНЫЙ','COMMON'],uncommon:['НЕОБЫЧНЫЙ','UNCOMMON'],rare:['РЕДКИЙ','RARE'],epic:['ЭПИЧЕСКИЙ','EPIC'],legendary:['ЛЕГЕНДАРНЫЙ','LEGENDARY'],legend:['ЛЕГЕНДАРНЫЙ','LEGENDARY']};
+  var _rp=_rarMap[def.rarity]||_rarMap.common;
+  var rarName=(LANG==='en')?_rp[1]:_rp[0];
   var card=document.createElement('div');
   card.style.cssText='background:linear-gradient(160deg,#0c0820,#060414);border:1.5px solid '+rarColor+'55;border-radius:18px;padding:24px;text-align:center;max-width:290px;width:100%;';
   card.innerHTML='<div style="font-size:50px;margin-bottom:10px;">'+def.icon+'</div>'+
@@ -3474,14 +3478,14 @@ function astLoop(){
     if(bvx>3.5)bvx=3.5;if(bvx<-3.5)bvx=-3.5;
     AST.bullets.push({x:AST.px,y:AST.py-26,vx:bvx,vy:-9});
   }
-  var interval=Math.max(520,950-el*0.004);
+  var interval=Math.max(380,820-el*0.006);
   if(now-AST.lastRock>interval){
     AST.lastRock=now;
     var r=12+Math.random()*22;
-    AST.rocks.push({x:30+Math.random()*(W-60),y:-r,r:r,hp:Math.ceil(r/9),vy:1.1+Math.random()*1.6,vx:(Math.random()-.5)*.8,rot:Math.random()*6.28,vr:(Math.random()-.5)*.04});
+    AST.rocks.push({x:30+Math.random()*(W-60),y:-r,r:r,hp:Math.ceil(r/9),vy:1.5+Math.random()*2.0,vx:(Math.random()-.5)*.8,rot:Math.random()*6.28,vr:(Math.random()-.5)*.04});
   }
-  if(!AST.shardSpawned&&el>60000&&(S.shipLevel||1)>=3&&!(S.shards&&S.shards[1])){
-    if(Math.random()<0.003||el>120000){
+  if(!AST.shardSpawned&&el>90000&&(S.shipLevel||1)>=3&&!(S.shards&&S.shards[1])){
+    if(Math.random()<0.003||el>150000){
       AST.shardSpawned=true;
       AST.shard={x:40+Math.random()*(W-80),y:-30,vy:.8,pulse:0};
     }
@@ -3506,7 +3510,7 @@ function astLoop(){
         AST.bullets.splice(k,1);rk.hp--;
         astSpark(bb.x,bb.y,4,'rgba(255,200,80,');
         if(rk.hp<=0){
-          var reward=Math.round(rk.r/3)+1;
+          var reward=Math.round(rk.r)+3;
           AST.coins+=reward;
           astSpark(rk.x,rk.y,10,'rgba(255,160,40,');
           AST.texts.push({x:rk.x,y:rk.y,t:'+'+reward,a:1});
@@ -3662,8 +3666,10 @@ window.astExit=function(){
 };
 window.astCollect=function(){window.astExit();};
 window.astRetry=function(){
-  if(S.energy<30){bonusNotif('⚡',t('n_need30'),0);return;}
-  S.energy-=30;save();updateUI();
+  var _freeAst=S.shards&&S.shards[2]; // Осколок Тени — энергия не тратится в Астероидах
+  if(!_freeAst&&S.energy<30){bonusNotif('⚡',t('n_need30'),0);return;}
+  if(!_freeAst)S.energy-=30;
+  save();updateUI();
   initAsteroids();
 };
 
@@ -4002,7 +4008,7 @@ function loadLeaderboard(){
       var t=$('lb-total');if(t)t.textContent=(d.total||0).toLocaleString('ru-RU');
       var mr=$('lb-myrank');
       if(mr){
-        if(d.myRank)mr.textContent='Твоё место: #'+d.myRank+' · '+(d.myXp||0).toLocaleString('ru-RU')+' ✨';
+        if(d.myRank)mr.textContent=(LANG==='en'?'Your rank: #':'Твоё место: #')+d.myRank+' · '+(d.myXp||0).toLocaleString()+' 🪙';
         else mr.textContent='';
       }
       var list=$('lb-list');if(!list)return;
@@ -4029,7 +4035,7 @@ function loadLeaderboard(){
           '<span style="font-size:14px;min-width:26px;text-align:center;">'+rankBadge+'</span>'+
           '<div><div style="font-size:11px;color:'+(p.me?'var(--aeon2)':'rgba(220,210,255,.85)')+';font-weight:'+(p.me?'700':'400')+';">'+p.name+(p.me?' (ты)':'')+'</div>'+
           '<div style="font-size:8px;color:rgba(168,85,247,.55);">Ур.'+p.level+'</div></div></div>'+
-          '<div style="font-family:Orbitron,monospace;font-size:12px;color:var(--aeon2);">'+(p.xp||0).toLocaleString('ru-RU')+' ✨</div>';
+          '<div style="font-family:Orbitron,monospace;font-size:12px;color:var(--aeon2);">'+(p.xp||0).toLocaleString()+' 🪙</div>';
         list.appendChild(el);
       });
     }).catch(function(){});
