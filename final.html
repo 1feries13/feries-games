@@ -430,10 +430,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   border:2px solid rgba(200,144,26,.5);display:flex;align-items:center;
   justify-content:center;font-size:30px;box-shadow:0 0 20px rgba(200,144,26,.35);
   animation:coinRotate 8s linear infinite;}
-.lb-coin{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;
-  background:radial-gradient(circle at 35% 30%,#fff4c0,#c8901a);
-  border:1px solid rgba(200,144,26,.5);box-shadow:0 0 6px rgba(200,144,26,.4);
-  animation:coinRotate 6s linear infinite;}
+.lb-coin{display:inline-flex;align-items:center;justify-content:center;
+  width:15px;height:15px;border-radius:50%;vertical-align:-3px;position:relative;
+  background:radial-gradient(circle at 35% 28%,#fff6cc,#e8b84b 45%,#a8740f);
+  border:1px solid rgba(255,220,140,.7);
+  box-shadow:0 0 5px rgba(232,184,75,.6),inset 0 -1px 2px rgba(120,80,10,.5),inset 0 1px 1px rgba(255,255,255,.5);
+  font-size:8px;color:rgba(140,90,10,.9);font-weight:900;
+  animation:coinRotate 5s linear infinite;}
+.lb-coin::after{content:'✦';line-height:1;}
 @keyframes coinRotate{0%{box-shadow:0 0 20px rgba(200,144,26,.35),0 0 0 0 rgba(200,144,26,.2)}
   50%{box-shadow:0 0 30px rgba(200,144,26,.5),0 0 20px rgba(200,144,26,.1)}
   100%{box-shadow:0 0 20px rgba(200,144,26,.35),0 0 0 0 rgba(200,144,26,.2)}}
@@ -1918,7 +1922,7 @@ function updateUI(){
   var md=$('mg-en-d'); if(md){
     var _mtxt=S.mergeEnergy+'/'+S.maxMergeEnergy;
     if(S.mergeEnergy<S.maxMergeEnergy){
-      var _sec=Math.max(0,regenPeriod()-_regenAcc);
+      var _sec=Math.max(0,MERGE_REGEN_SEC-_mergeRegenAcc);
       var _mm=Math.floor(_sec/60), _ss=_sec%60;
       _mtxt+=' · +1 '+(LANG==='en'?'in ':'через ')+_mm+':'+(_ss<10?'0':'')+_ss;
     }
@@ -2127,16 +2131,24 @@ function computeMaxEnergy(){
 function computeMaxMergeEnergy(){
   return 50 + 5*((S.shipLevel||1)-1);
 }
+var _mergeRegenAcc=0;
+var MERGE_REGEN_SEC=180; // материя: 1 единица за 3 минуты (медленнее обычной энергии)
 setInterval(function(){
   _regenAcc++;
+  _mergeRegenAcc++;
+  var changed=false;
+  // Обычная энергия (быстрый реген)
   if(_regenAcc>=regenPeriod()){
     _regenAcc=0;
     S.maxEnergy=computeMaxEnergy();
-    var changed=false;
     if(S.energy<S.maxEnergy){S.energy=Math.min(S.maxEnergy,S.energy+1);changed=true;}
-    if(S.mergeEnergy<S.maxMergeEnergy){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+1);changed=true;}
-    if(changed){save();updateUI();}
   }
+  // Энергия материи (медленный отдельный реген, 180 сек)
+  if(_mergeRegenAcc>=MERGE_REGEN_SEC){
+    _mergeRegenAcc=0;
+    if(S.mergeEnergy<S.maxMergeEnergy){S.mergeEnergy=Math.min(S.maxMergeEnergy,S.mergeEnergy+1);changed=true;}
+  }
+  if(changed){save();updateUI();}
   updateEnergyTimer();
 },1000);
 function startEnergyTimer(){}
@@ -2148,7 +2160,7 @@ function updateEnergyTimer(){
     if(md){
       var _mt=S.mergeEnergy+'/'+S.maxMergeEnergy;
       if(S.mergeEnergy<S.maxMergeEnergy){
-        var _s=Math.max(0,regenPeriod()-_regenAcc);
+        var _s=Math.max(0,MERGE_REGEN_SEC-_mergeRegenAcc);
         _mt+=' · +1 '+(LANG==='en'?'in ':'через ')+Math.floor(_s/60)+':'+((_s%60)<10?'0':'')+(_s%60);
       }
       md.textContent=_mt;
@@ -2659,24 +2671,32 @@ function renderMergeGrid(){
           if(hdef)hidHtml='<div class="fog-hidden">'+hdef.icon+'</div>';
         }
         var _cp=cellPrice(idx);
-        cell.innerHTML=hidHtml+'<div class="fog-cloud"></div>'+
-          '<div class="fog-req">'+_cp.toLocaleString()+' 🪙</div>';
-        (function(ci,price){
+        var _isCorner=[0,4,20,24].indexOf(idx)>=0;
+        if(_isCorner){
+          // Угловые — по опыту (как было)
+          cell.innerHTML=hidHtml+'<div class="fog-cloud"></div>'+
+            '<div class="fog-req">'+'5000 ✨</div>';
           cell.addEventListener('click',function(){
             var info=$('mg-info');
-            if(S.bal<price){
-              if(info)info.textContent=(LANG==='en'?'Not enough coins to unlock ('+price.toLocaleString()+')':'Не хватает монет для ячейки ('+price.toLocaleString()+')');
-              bonusNotif('🪙',(LANG==='en'?'Need '+price.toLocaleString()+' coins':'Нужно '+price.toLocaleString()+' монет'),0);
-              return;
-            }
-            S.bal-=price;
-            if(!S.cellsBought)S.cellsBought={};
-            S.cellsBought[ci]=true;
-            save();updateUI();renderMergeGrid();
-            bonusNotif('🔓',(LANG==='en'?'Cell unlocked!':'Ячейка открыта!'),0);
-            if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+            if(info)info.textContent=(LANG==='en'?'Fog clears at 5000 XP (you have '+S.xp+')':'🌫️ Туман рассеется при 5000 ✨ опыта (у тебя '+S.xp+')');
           });
-        })(idx,_cp);
+        }else{
+          // Боковые — покупка за монеты с подтверждением
+          cell.innerHTML=hidHtml+'<div class="fog-cloud"></div>'+
+            '<div class="fog-req">'+_cp.toLocaleString()+' 🪙</div>';
+          (function(ci,price){
+            cell.addEventListener('click',function(){
+              var info=$('mg-info');
+              if(S.bal<price){
+                if(info)info.textContent=(LANG==='en'?'Not enough coins ('+price.toLocaleString()+')':'Не хватает монет ('+price.toLocaleString()+')');
+                bonusNotif('🪙',(LANG==='en'?'Need '+price.toLocaleString()+' coins':'Нужно '+price.toLocaleString()+' монет'),0);
+                return;
+              }
+              // Подтверждение покупки
+              if(typeof confirmBuyCell==='function')confirmBuyCell(ci,price);
+            });
+          })(idx,_cp);
+        }
         grid.appendChild(cell);
         return;
       }
@@ -3918,16 +3938,53 @@ var GRID_TIERS=[
 /* Скрытые предметы под туманом: ячейка -> уровень предмета */
 var HIDDEN_ITEMS={0:5, 4:4, 20:4, 24:6};
 
+window.confirmBuyCell=function(ci,price){
+  if(document.getElementById('buycell-modal'))return;
+  var ov=document.createElement('div');
+  ov.id='buycell-modal';
+  ov.style.cssText='position:fixed;inset:0;z-index:1000;background:rgba(0,0,10,.78);backdrop-filter:blur(6px);'+
+    'display:flex;align-items:center;justify-content:center;padding:28px;opacity:0;transition:opacity .25s;';
+  var msg=(LANG==='en'?'Unlock this cell for':'Открыть ячейку за')+' '+price.toLocaleString()+' 🪙?';
+  var yes=(LANG==='en'?'Unlock':'Открыть');
+  var no=(LANG==='en'?'Cancel':'Отмена');
+  ov.innerHTML='<div style="background:linear-gradient(160deg,#140e2e,#0a0720);border:1.5px solid rgba(168,85,247,.4);'+
+    'border-radius:20px;padding:24px;max-width:300px;text-align:center;">'+
+    '<div style="font-size:34px;margin-bottom:10px;">🔓</div>'+
+    '<div style="font-family:Orbitron,monospace;font-size:12px;color:rgba(220,210,255,.9);line-height:1.6;margin-bottom:18px;">'+msg+'</div>'+
+    '<div style="display:flex;gap:10px;">'+
+    '<button id="bc-no" style="flex:1;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);font-family:Orbitron,monospace;font-size:10px;font-weight:700;cursor:pointer;">'+no+'</button>'+
+    '<button id="bc-yes" style="flex:1;padding:11px;border-radius:14px;border:1.5px solid rgba(168,85,247,.5);background:linear-gradient(145deg,#2a1d50,#3a2870);color:rgba(230,210,255,.95);font-family:Orbitron,monospace;font-size:10px;font-weight:900;cursor:pointer;">'+yes+'</button>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+  requestAnimationFrame(function(){ov.style.opacity='1';});
+  function close(){ov.style.opacity='0';setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},250);}
+  document.getElementById('bc-no').addEventListener('click',close);
+  document.getElementById('bc-yes').addEventListener('click',function(){
+    if(S.bal>=price){
+      S.bal-=price;
+      if(!S.cellsBought)S.cellsBought={};
+      S.cellsBought[ci]=true;
+      save();updateUI();if(typeof renderMergeGrid==='function')renderMergeGrid();
+      bonusNotif('🔓',(LANG==='en'?'Cell unlocked!':'Ячейка открыта!'),0);
+      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+    }
+    close();
+  });
+  ov.addEventListener('click',function(e){if(e.target===ov)close();});
+};
 function cellPrice(idx){
-  // Центр (тир 0) и тир 500 — бесплатно (база). Боковые — 2000 монет, угловые — 5000.
-  if([0,4,20,24].indexOf(idx)>=0)return 5000;        // углы
-  if([5,9,10,14,15,19].indexOf(idx)>=0)return 2000;  // боковые
-  return 0;                                           // центр + ближние бесплатно
+  // Боковые (3 слева + 3 справа) — покупка за 2000 монет. Остальные — не за монеты.
+  if([5,9,10,14,15,19].indexOf(idx)>=0)return 2000;
+  return 0;
 }
 function cellUnlocked(idx){
-  if(cellPrice(idx)===0)return true;                 // бесплатные всегда открыты
-  if(!S.cellsBought)S.cellsBought={};
-  return !!S.cellsBought[idx];                        // куплена ли
+  // Угловые [0,4,20,24] — по опыту (тир 5000 XP, как было). Боковые — покупка за монеты.
+  if([0,4,20,24].indexOf(idx)>=0)return S.xp>=5000;
+  if(cellPrice(idx)>0){
+    if(!S.cellsBought)S.cellsBought={};
+    return !!S.cellsBought[idx];
+  }
+  return true; // центр + ближние бесплатно
 }
 function cellTierXp(idx){
   for(var i=0;i<GRID_TIERS.length;i++){
