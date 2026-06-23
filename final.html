@@ -430,6 +430,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   border:2px solid rgba(200,144,26,.5);display:flex;align-items:center;
   justify-content:center;font-size:30px;box-shadow:0 0 20px rgba(200,144,26,.35);
   animation:coinRotate 8s linear infinite;}
+.lb-coin{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;
+  background:radial-gradient(circle at 35% 30%,#fff4c0,#c8901a);
+  border:1px solid rgba(200,144,26,.5);box-shadow:0 0 6px rgba(200,144,26,.4);
+  animation:coinRotate 6s linear infinite;}
 @keyframes coinRotate{0%{box-shadow:0 0 20px rgba(200,144,26,.35),0 0 0 0 rgba(200,144,26,.2)}
   50%{box-shadow:0 0 30px rgba(200,144,26,.5),0 0 20px rgba(200,144,26,.1)}
   100%{box-shadow:0 0 20px rgba(200,144,26,.35),0 0 0 0 rgba(200,144,26,.2)}}
@@ -2259,16 +2263,10 @@ function initMain(){
 }
 
 function dailyBonusAmount(){
-  // Совпадает с визуальной таблицей наград по дням
+  // 7 дней растёт, после 7-го держится 5000 каждый день (награда за верность)
   var d=S.streakDays||1;
-  if(d>=30)return 1000;
-  if(d>=14)return 500;
-  if(d>=7)return 300;
-  if(d>=5)return 150;
-  if(d>=4)return 125;
-  if(d>=3)return 100;
-  if(d>=2)return 75;
-  return 50;
+  var table={1:250,2:500,3:750,4:1000,5:2000,6:3000,7:5000};
+  return (d>=7)?5000:(table[d]||250);
 }
 function checkStreak(){
   var today=new Date().toDateString();
@@ -2297,7 +2295,13 @@ function updateDailyBtn(){
 window.claimDaily=function(){
   if(S.dailyClaimed){bonusNotif('🔥',(LANG==='en'?'Already claimed today':'Награда уже забрана сегодня'),0);return;}
   var bonus=dailyBonusAmount();
-  S.bal+=bonus; S.dailyClaimed=true; save();
+  S.bal+=bonus; S.dailyClaimed=true;
+  // Скин за 30 дней стрика (эксклюзив, только так)
+  if((S.streakDays||1)>=30 && S.shipAura!=='legend'){
+    S.shipAura='legend';
+    bonusNotif('🛸',(LANG==='en'?'LEGENDARY SKIN unlocked! 30-day streak!':'ЛЕГЕНДАРНЫЙ СКИН открыт! Стрик 30 дней!'),0);
+  }
+  save();
   bonusNotif('🔥',t('n_day')+(S.streakDays||1),bonus);
   spawnCoins(10); updateUI(); updateDailyBtn(); renderDaily();
   if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
@@ -2954,12 +2958,14 @@ function renderDaily(){
   var row=$('daily-row');if(!row)return;
   row.innerHTML='';
   var rewards=[
-    {d:1,r:'🪙 50'},{d:2,r:'🪙 75'},{d:3,r:'💎+🪙100'},{d:4,r:'🪙 125'},
-    {d:5,r:'🪙 150'},{d:7,r:'🪙 300'},{d:14,r:'🪙 500'},{d:30,r:(LANG==='en'?'🛸 skin':'🛸 скин')},
+    {d:1,r:'🪙 250'},{d:2,r:'🪙 500'},{d:3,r:'🪙 750'},{d:4,r:'🪙 1000'},
+    {d:5,r:'🪙 2000'},{d:6,r:'🪙 3000'},{d:7,r:'🪙 5000'},
+    {d:30,r:(LANG==='en'?'🛸 SKIN':'🛸 СКИН')},
   ];
+  var _cyc=Math.min(S.streakDays||1,7); // после 7-го дня держится на Д7
   rewards.forEach(function(item){
-    var done=(S.streakDays||1)>item.d;
-    var today=(S.streakDays||1)===item.d;
+    var done=_cyc>item.d;
+    var today=_cyc===item.d;
     var div=document.createElement('div');
     div.className='day-item'+(done?' done':'')+(today?' today':'');
     div.innerHTML='<div class="di-d">'+(LANG==='en'?'D':'Д')+item.d+'</div><div class="di-r">'+item.r+'</div>';
@@ -3547,7 +3553,8 @@ function buyModule(t){
 /* ══ АУРА КОРАБЛЯ ══ */
 function applyAura(){
   var sw=$('ship-w');if(!sw)return;
-  if(S.shipAura==='golden')sw.style.filter='drop-shadow(0 0 20px rgba(255,215,0,.8)) drop-shadow(0 0 40px rgba(255,180,0,.4))';
+  if(S.shipAura==='legend')sw.style.filter='drop-shadow(0 0 22px rgba(190,130,255,.9)) drop-shadow(0 0 44px rgba(255,215,0,.6)) drop-shadow(0 0 60px rgba(0,229,255,.4))';
+  else if(S.shipAura==='golden')sw.style.filter='drop-shadow(0 0 20px rgba(255,215,0,.8)) drop-shadow(0 0 40px rgba(255,180,0,.4))';
   else if(S.shipAura==='silver')sw.style.filter='drop-shadow(0 0 18px rgba(210,225,255,.8)) drop-shadow(0 0 38px rgba(170,195,255,.4))';
   else sw.style.filter='';
 }
@@ -4201,7 +4208,7 @@ function loadLeaderboard(){
       var t=$('lb-total');if(t)t.textContent=(d.total||0).toLocaleString('ru-RU');
       var mr=$('lb-myrank');
       if(mr){
-        if(d.myRank)mr.textContent=(LANG==='en'?'Your rank: #':'Твоё место: #')+d.myRank+' · '+(d.myXp||0).toLocaleString()+' 🪙';
+        if(d.myRank)mr.innerHTML=(LANG==='en'?'Your rank: #':'Твоё место: #')+d.myRank+' · '+(d.myXp||0).toLocaleString()+' <span class="lb-coin"></span>';
         else mr.textContent='';
       }
       var list=$('lb-list');if(!list)return;
@@ -4228,7 +4235,7 @@ function loadLeaderboard(){
           '<span style="font-size:14px;min-width:26px;text-align:center;">'+rankBadge+'</span>'+
           '<div><div style="font-size:11px;color:'+(p.me?'var(--aeon2)':'rgba(220,210,255,.85)')+';font-weight:'+(p.me?'700':'400')+';">'+p.name+(p.me?' (ты)':'')+'</div>'+
           '<div style="font-size:8px;color:rgba(168,85,247,.55);">Ур.'+p.level+'</div></div></div>'+
-          '<div style="font-family:Orbitron,monospace;font-size:12px;color:var(--aeon2);">'+(p.xp||0).toLocaleString()+' 🪙</div>';
+          '<div style="font-family:Orbitron,monospace;font-size:12px;color:var(--aeon2);">'+(p.xp||0).toLocaleString()+' <span class="lb-coin"></span></div>';
         list.appendChild(el);
       });
     }).catch(function(){});
