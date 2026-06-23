@@ -2295,7 +2295,7 @@ function updateDailyBtn(){
   }
 }
 window.claimDaily=function(){
-  if(S.dailyClaimed)return;
+  if(S.dailyClaimed){bonusNotif('🔥',(LANG==='en'?'Already claimed today':'Награда уже забрана сегодня'),0);return;}
   var bonus=dailyBonusAmount();
   S.bal+=bonus; S.dailyClaimed=true; save();
   bonusNotif('🔥',t('n_day')+(S.streakDays||1),bonus);
@@ -2891,21 +2891,25 @@ function initOracle(){
   var text=$('oracle-text'),boost=$('oracle-boost');
   if(used){
     if(hint)hint.style.display='none';
-    if(ousedEl){ousedEl.style.display='block';ousedEl.textContent='Оракул говорил сегодня. Вернись завтра.';}
+    if(ousedEl){ousedEl.style.display='block';ousedEl.textContent=(LANG==='en'?'The Oracle has spoken today. Come back tomorrow.':'Оракул говорил сегодня. Вернись завтра.');}
     if(ball)ball.style.opacity='.5';
-    if(text)text.textContent='«Услышанное однажды живёт вечно в сердце.»';
+    if(text)text.textContent=(LANG==='en'?'\u00abWhat is heard once lives forever in the heart.\u00bb':'\u00abУслышанное однажды живёт вечно в сердце.\u00bb');
   }else{
     if(hint)hint.style.display='block';
     if(ousedEl)ousedEl.style.display='none';
     if(ball)ball.style.opacity='1';
-    if(text)text.textContent='Коснись туманности — она шепнёт твоё предназначение';
+    if(text)text.textContent=(LANG==='en'?'Touch the nebula — it will whisper your destiny':'Коснись туманности — она шепнёт твоё предназначение');
     if(boost)boost.textContent='';
   }
 }
 
 window.tapOracle=function(){
   var today=new Date().toDateString();
-  if(S.oracleUsed===today)return;
+  if(S.oracleUsed===today){
+    var ou=$('oracle-used');if(ou){ou.style.display='block';ou.textContent=(LANG==='en'?'The Oracle has spoken today. Come back tomorrow.':'Оракул говорил сегодня. Вернись завтра.');}
+    var oh=$('oracle-hint');if(oh)oh.style.display='none';
+    return;
+  }
   S.oracleUsed=today;save();
   var ball=$('oracle-ball');
   if(ball){ball.classList.add('tapped');setTimeout(function(){ball.classList.remove('tapped');},500);}
@@ -2927,6 +2931,8 @@ window.goHome=function(){
   checkStreak();
   showScreen('home-screen');setNav('bn-home');
   renderProfile();if(typeof renderAchs==='function')renderAchs();
+  if(typeof renderDaily==='function')renderDaily();
+  if(typeof updateDailyBtn==='function')updateDailyBtn();
   applyTranslations();
 };
 
@@ -2959,6 +2965,7 @@ function renderDaily(){
     div.innerHTML='<div class="di-d">'+(LANG==='en'?'D':'Д')+item.d+'</div><div class="di-r">'+item.r+'</div>';
     row.appendChild(div);
   });
+  if(typeof updateDailyBtn==="function")updateDailyBtn();
 }
 
 function renderAchs(){
@@ -3788,10 +3795,22 @@ function astDraw(now,el){
     ctx.fillText(tx.t,tx.x,tx.y);
   }
   ctx.globalAlpha=1;
-  ctx.font='bold 13px Orbitron,monospace';ctx.textAlign='left';
-  ctx.fillStyle='#e8b84b';ctx.fillText('🪙 '+AST.coins,14,96);
-  ctx.fillStyle='#00e5ff';ctx.fillText('⚡ '+S.energy,14,116);
-  ctx.fillStyle='rgba(255,255,255,.4)';ctx.fillText(Math.floor(el/1000)+'с',14,136);
+  // ── HUD: красивая плашка справа, ниже системной кнопки «Закрыть» ──
+  var hudTop=(typeof AST.hudTop==='number')?AST.hudTop:78;
+  var hudX=W-150, hudY=hudTop, hudW=136, hudH=72;
+  ctx.save();
+  ctx.fillStyle='rgba(8,6,22,0.62)';
+  if(ctx.roundRect){ctx.beginPath();ctx.roundRect(hudX,hudY,hudW,hudH,14);ctx.fill();}
+  else ctx.fillRect(hudX,hudY,hudW,hudH);
+  ctx.strokeStyle='rgba(150,120,220,0.25)';ctx.lineWidth=1;
+  if(ctx.roundRect){ctx.beginPath();ctx.roundRect(hudX,hudY,hudW,hudH,14);ctx.stroke();}
+  ctx.font='bold 13px Orbitron,monospace';ctx.textAlign='left';ctx.textBaseline='middle';
+  ctx.fillStyle='#e8b84b';ctx.fillText('🪙 '+AST.coins,hudX+14,hudY+18);
+  ctx.fillStyle='#00e5ff';ctx.fillText('⚡ '+S.energy,hudX+14,hudY+38);
+  ctx.fillStyle='rgba(255,255,255,.45)';ctx.font='bold 11px Orbitron,monospace';
+  ctx.fillText('⏱ '+Math.floor(el/1000)+(LANG==='en'?'s':'с'),hudX+14,hudY+57);
+  ctx.restore();
+  ctx.textBaseline='alphabetic';
   if(AST.shardSpawned&&AST.shard){
     ctx.fillStyle='rgba(255,215,0,.6)';ctx.font='9px Orbitron,monospace';
     ctx.fillText('💠 ОСКОЛОК В ПОЛЕ! ЛОВИ ЕГО!',14,154);
