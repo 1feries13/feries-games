@@ -250,7 +250,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 #merge-screen{background:var(--bg);z-index:20;overflow:hidden;}
 #merge-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
 .merge-ui{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
-  padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 0 0;overflow:hidden;}
+  padding:calc(var(--sat) + var(--tg-top,0px) + 46px) 0 0;overflow:hidden;}
 .merge-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:6px 14px 8px;flex-shrink:0;}
 .mg-back{background:rgba(255,255,255,.05);border:.5px solid rgba(200,169,110,.2);
@@ -1678,7 +1678,7 @@ const DEF = {
   taps:0, merges:0, maxWin:0, wagerGames:0,
   registered:false, name:'Выживший', tgId:0,
   shipLevel:1, streakDays:1, lastLogin:'',
-  introSeen:false, oracleUsed:'', runesUsed:'', stoneStorySeen:false, stoneMerged:false,
+  introSeen:false, oracleUsed:'', runesUsed:'', stoneStorySeen:false, stoneMerged:false, cellsBought:{},
   achievements:{}, artifacts:[], shards:{},
   milestones:{}, mergeGrid:[], mergeEnergy:50, maxMergeEnergy:50,
   orders:[],
@@ -1915,7 +1915,15 @@ function updateUI(){
   // Merge energy
   var mPct=Math.min(100,(S.mergeEnergy/S.maxMergeEnergy)*100);
   var mf=$('mg-en-f'); if(mf)mf.style.width=mPct+'%';
-  var md=$('mg-en-d'); if(md)md.textContent=S.mergeEnergy+'/'+S.maxMergeEnergy;
+  var md=$('mg-en-d'); if(md){
+    var _mtxt=S.mergeEnergy+'/'+S.maxMergeEnergy;
+    if(S.mergeEnergy<S.maxMergeEnergy){
+      var _sec=Math.max(0,regenPeriod()-_regenAcc);
+      var _mm=Math.floor(_sec/60), _ss=_sec%60;
+      _mtxt+=' · +1 '+(LANG==='en'?'in ':'через ')+_mm+':'+(_ss<10?'0':'')+_ss;
+    }
+    md.textContent=_mtxt;
+  }
   var mn=$('mg-en'); if(mn)mn.textContent=S.mergeEnergy;
 }
 function bonusNotif(sym,type,amount){
@@ -2133,6 +2141,19 @@ setInterval(function(){
 },1000);
 function startEnergyTimer(){}
 function updateEnergyTimer(){
+  // Таймер энергии материи в Ангаре (тикает каждую секунду)
+  var ms=$('merge-screen');
+  if(ms&&ms.classList.contains('active')){
+    var md=$('mg-en-d');
+    if(md){
+      var _mt=S.mergeEnergy+'/'+S.maxMergeEnergy;
+      if(S.mergeEnergy<S.maxMergeEnergy){
+        var _s=Math.max(0,regenPeriod()-_regenAcc);
+        _mt+=' · +1 '+(LANG==='en'?'in ':'через ')+Math.floor(_s/60)+':'+((_s%60)<10?'0':'')+(_s%60);
+      }
+      md.textContent=_mt;
+    }
+  }
   var ed=$('en-d');if(!ed)return;
   if(S.boostNoEnergyUntil&&Date.now()<S.boostNoEnergyUntil){
     ed.textContent=(LANG==='en'?'∞ ':'∞ ')+Math.ceil((S.boostNoEnergyUntil-Date.now())/1000)+(LANG==='en'?'s':'с');return;
@@ -2637,12 +2658,25 @@ function renderMergeGrid(){
           var hdef=MITEMS.find(function(m){return m.id===hid;});
           if(hdef)hidHtml='<div class="fog-hidden">'+hdef.icon+'</div>';
         }
+        var _cp=cellPrice(idx);
         cell.innerHTML=hidHtml+'<div class="fog-cloud"></div>'+
-          '<div class="fog-req">'+cellTierXp(idx)+' ✨</div>';
-        cell.addEventListener('click',function(){
-          var info=$('mg-info');
-          if(info)info.textContent='🌫️ Туман рассеется при '+cellTierXp(idx)+' ✨ опыта (у тебя '+S.xp+')';
-        });
+          '<div class="fog-req">'+_cp.toLocaleString()+' 🪙</div>';
+        (function(ci,price){
+          cell.addEventListener('click',function(){
+            var info=$('mg-info');
+            if(S.bal<price){
+              if(info)info.textContent=(LANG==='en'?'Not enough coins to unlock ('+price.toLocaleString()+')':'Не хватает монет для ячейки ('+price.toLocaleString()+')');
+              bonusNotif('🪙',(LANG==='en'?'Need '+price.toLocaleString()+' coins':'Нужно '+price.toLocaleString()+' монет'),0);
+              return;
+            }
+            S.bal-=price;
+            if(!S.cellsBought)S.cellsBought={};
+            S.cellsBought[ci]=true;
+            save();updateUI();renderMergeGrid();
+            bonusNotif('🔓',(LANG==='en'?'Cell unlocked!':'Ячейка открыта!'),0);
+            if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+          });
+        })(idx,_cp);
         grid.appendChild(cell);
         return;
       }
@@ -3884,11 +3918,16 @@ var GRID_TIERS=[
 /* Скрытые предметы под туманом: ячейка -> уровень предмета */
 var HIDDEN_ITEMS={0:5, 4:4, 20:4, 24:6};
 
+function cellPrice(idx){
+  // Центр (тир 0) и тир 500 — бесплатно (база). Боковые — 2000 монет, угловые — 5000.
+  if([0,4,20,24].indexOf(idx)>=0)return 5000;        // углы
+  if([5,9,10,14,15,19].indexOf(idx)>=0)return 2000;  // боковые
+  return 0;                                           // центр + ближние бесплатно
+}
 function cellUnlocked(idx){
-  for(var i=0;i<GRID_TIERS.length;i++){
-    if(GRID_TIERS[i].cells.indexOf(idx)>=0)return S.xp>=GRID_TIERS[i].xp;
-  }
-  return true;
+  if(cellPrice(idx)===0)return true;                 // бесплатные всегда открыты
+  if(!S.cellsBought)S.cellsBought={};
+  return !!S.cellsBought[idx];                        // куплена ли
 }
 function cellTierXp(idx){
   for(var i=0;i<GRID_TIERS.length;i++){
