@@ -2294,6 +2294,7 @@ function initMain(){
   if(sl)sl.textContent=S.shipLevel||1;
   S.maxEnergy=computeMaxEnergy();
   applyAura();
+  restoreOfflineEnergy();
   claimOffline();
   applyTranslations();
 }
@@ -2681,7 +2682,7 @@ function renderMergeGrid(){
           if(hdef)hidHtml='<div class="fog-hidden">'+hdef.icon+'</div>';
         }
         var _cp=cellPrice(idx);
-        var _isCorner=[0,4,20,24].indexOf(idx)>=0;
+        var _isCorner=CORNER_CELLS.indexOf(idx)>=0;
         if(_isCorner){
           // Угловые — по опыту (как было)
           cell.innerHTML=hidHtml+'<div class="fog-cloud"></div>'+
@@ -2862,8 +2863,10 @@ function initRunes(){
     if(!btn._bound){ btn._bound=true; btn.addEventListener('click',function(){ if(typeof spinRunes==='function')spinRunes(); }); }
   }
   if(free)free.textContent=used?t('runes_next'):t('runes_free');
-  if(msg)msg.textContent=t('runes_msg');
-  if(msg)msg.className='runes-msg';
+  if(msg){
+    if(used){ msg.textContent=t('runes_next'); msg.className='runes-msg lose'; }
+    else { msg.textContent=t('runes_msg'); msg.className='runes-msg'; }
+  }
 }
 
 function buildRuneRings(){
@@ -3625,6 +3628,23 @@ function applyAura(){
 
 /* ══ ОФЛАЙН ДОХОД (СКАНЕР) ══ */
 var _offlineClaimed=false;
+function restoreOfflineEnergy(){
+  if(!_offlineGapMs||_offlineGapMs<1000)return;
+  var secs=Math.floor(_offlineGapMs/1000);
+  // Обычная энергия: 1 за regenPeriod() секунд
+  S.maxEnergy=computeMaxEnergy();
+  if((S.energy||0)<S.maxEnergy){
+    var gain=Math.floor(secs/regenPeriod());
+    if(gain>0)S.energy=Math.min(S.maxEnergy,(S.energy||0)+gain);
+  }
+  // Энергия материи: 1 за 180 секунд (медленный реген)
+  S.maxMergeEnergy=computeMaxMergeEnergy();
+  if((S.mergeEnergy||0)<S.maxMergeEnergy){
+    var mgain=Math.floor(secs/180);
+    if(mgain>0)S.mergeEnergy=Math.min(S.maxMergeEnergy,(S.mergeEnergy||0)+mgain);
+  }
+  save();
+}
 function claimOffline(){
   if(_offlineClaimed)return;
   _offlineClaimed=true;
@@ -3982,19 +4002,20 @@ window.confirmBuyCell=function(ci,price){
   });
   ov.addEventListener('click',function(e){if(e.target===ov)close();});
 };
+// Сетка 5x5. Центр 3x3 [6,7,8,11,12,13,16,17,18] открыт бесплатно.
+// Углы [0,4,20,24] — за опыт (5000 XP). Остальной периметр — за 2000 монет.
+var CENTER_CELLS=[6,7,8,11,12,13,16,17,18];
+var CORNER_CELLS=[0,4,20,24];
 function cellPrice(idx){
-  // Боковые (3 слева + 3 справа) — покупка за 2000 монет. Остальные — не за монеты.
-  if([5,9,10,14,15,19].indexOf(idx)>=0)return 2000;
-  return 0;
+  if(CENTER_CELLS.indexOf(idx)>=0)return 0;   // центр бесплатно
+  if(CORNER_CELLS.indexOf(idx)>=0)return 0;   // углы за опыт (не монеты)
+  return 2000;                                 // остальной периметр — 2000 монет
 }
 function cellUnlocked(idx){
-  // Угловые [0,4,20,24] — по опыту (тир 5000 XP, как было). Боковые — покупка за монеты.
-  if([0,4,20,24].indexOf(idx)>=0)return S.xp>=5000;
-  if(cellPrice(idx)>0){
-    if(!S.cellsBought)S.cellsBought={};
-    return !!S.cellsBought[idx];
-  }
-  return true; // центр + ближние бесплатно
+  if(CENTER_CELLS.indexOf(idx)>=0)return true;        // центр всегда открыт
+  if(CORNER_CELLS.indexOf(idx)>=0)return S.xp>=5000;  // углы за опыт
+  if(!S.cellsBought)S.cellsBought={};
+  return !!S.cellsBought[idx];                         // периметр — покупка за монеты
 }
 function cellTierXp(idx){
   for(var i=0;i<GRID_TIERS.length;i++){
