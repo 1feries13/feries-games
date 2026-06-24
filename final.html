@@ -3016,7 +3016,7 @@ function renderProfile(){
    ['p-xp-l',(S.xp||0)+(nxt?'/'+nxt.min:'')],['p-bal',S.bal],['home-bal',S.bal],
   ].forEach(function(pair){var e=$(pair[0]);if(e)e.textContent=pair[1];});
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
-  var refId=uid.replace('#','');
+  var refId=myRealId()||uid.replace('#','');
   var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot/play?startapp=REF'+refId;
   renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();loadReferrals();renderUpgradeBlock();
 }
@@ -3121,7 +3121,7 @@ window.copyRef=function(){
 };
 window.shareRef=function(){
   var uid=($('p-uid')||{textContent:''}).textContent;
-  var refId=uid.replace('#','');
+  var refId=myRealId()||uid.replace('#','');
   var link='https://t.me/aeon_game_Bot/play?startapp=REF'+refId;
   var en=(LANG==='en');
   var txt=en
@@ -4078,6 +4078,12 @@ function getInitData(){
   return (tg && tg.initData) ? tg.initData : '';
 }
 
+function myRealId(){
+  // Настоящий Telegram ID (не обрезанный UID для показа)
+  if(tgU&&tgU.id)return tgU.id;
+  if(S.tgId)return S.tgId;
+  return 0;
+}
 function refByFromStart(){
   // start_param приходит от ссылки t.me/aeon_game_Bot/play?startapp=REF12345
   var sp = tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
