@@ -1643,6 +1643,9 @@ window.setLang = function(l){
   try{ if(typeof renderDaily==='function')renderDaily(); }catch(e){}
   try{ var cs2=document.getElementById('cosmos-screen'); if(cs2&&cs2.classList.contains('active')&&typeof renderMap==='function')renderMap(); }catch(e){}
   try{ var co=document.getElementById('codex-ov'); if(co&&co.style.display!=='none'&&co.offsetParent!==null&&typeof renderCodexLevels==='function')renderCodexLevels(); }catch(e){}
+  try{ var os=document.getElementById('oracle-screen'); if(os&&os.classList.contains('active')&&typeof initOracle==='function')initOracle(); }catch(e){}
+  try{ var rs=document.getElementById('runes-screen'); if(rs&&rs.classList.contains('active')&&typeof initRunes==='function')initRunes(); }catch(e){}
+  try{ var mgs=document.getElementById('merge-screen'); if(mgs&&mgs.classList.contains('active')&&typeof renderMergeGrid==='function'){renderMergeGrid();if(typeof renderOrders==='function')renderOrders();} }catch(e){}
 };
 window.toggleLang = function(){ setLang(LANG==='ru'?'en':'ru'); };
 
@@ -2627,15 +2630,22 @@ function initMerge(){
 }
 
 var ORDER_POOL=[
-  {req:2,count:2,reward:150,desc:'2 Обломка',npc:'👾',npcName:'Зорг'},
-  {req:2,count:3,reward:240,desc:'3 Обломка',npc:'👾',npcName:'Зорг'},
-  {req:3,count:1,reward:300,desc:'1 Кристалл',npc:'🐙',npcName:'Ктулла'},
-  {req:3,count:2,reward:650,desc:'2 Кристалла',npc:'🐙',npcName:'Ктулла'},
-  {req:4,count:1,reward:600,desc:'1 Энерго-ячейка',npc:'🤖',npcName:'Вольт-9'},
-  {req:4,count:2,reward:1300,desc:'2 Энерго-ячейки',npc:'🤖',npcName:'Вольт-9'},
-  {req:5,count:1,reward:2500,desc:'1 Антиматерия',npc:'👽',npcName:'Жрец Эона'},
-  {req:6,count:1,reward:6000,desc:'1 Эссенция Творца',npc:'🌚',npcName:'Древний'}
+  {req:2,count:2,reward:150,npc:'👾',npcName:'Зорг',npcName_en:'Zorg'},
+  {req:2,count:3,reward:240,npc:'👾',npcName:'Зорг',npcName_en:'Zorg'},
+  {req:3,count:1,reward:300,npc:'🐙',npcName:'Ктулла',npcName_en:'Cthulla'},
+  {req:3,count:2,reward:650,npc:'🐙',npcName:'Ктулла',npcName_en:'Cthulla'},
+  {req:4,count:1,reward:600,npc:'🤖',npcName:'Вольт-9',npcName_en:'Volt-9'},
+  {req:4,count:2,reward:1300,npc:'🤖',npcName:'Вольт-9',npcName_en:'Volt-9'},
+  {req:5,count:1,reward:2500,npc:'👽',npcName:'Жрец Эона',npcName_en:'Priest of Eon'},
+  {req:6,count:1,reward:6000,npc:'🌚',npcName:'Древний',npcName_en:'The Ancient'}
 ];
+function orderNpcName(o){return (LANG==='en'&&o.npcName_en)?o.npcName_en:o.npcName;}
+function orderDesc(o){
+  // Собираем "count × название предмета" на нужном языке
+  var def=MITEMS.find(function(m){return m.id===o.req;});
+  var nm=def?mitemName(def):('lvl.'+o.req);
+  return o.count+' × '+nm;
+}
 function newRandomOrder(){
   var o=ORDER_POOL[Math.floor(Math.random()*ORDER_POOL.length)];
   return {req:o.req,count:o.count,reward:o.reward,desc:o.desc,npc:o.npc,npcName:o.npcName};
@@ -2803,12 +2813,12 @@ function renderOrders(){
     for(var j=0;j<25;j++){if(S.mergeGrid[j]===order.req)have++;}
     var can=have>=order.count;
     var el=document.createElement('div');el.className='mo-item';
-    el.innerHTML='<div class="mo-npc"><div class="mo-npc-face">'+who.npc+'</div><div class="mo-npc-name">'+who.npcName+'</div></div>'+
+    el.innerHTML='<div class="mo-npc"><div class="mo-npc-face">'+who.npc+'</div><div class="mo-npc-name">'+(order.npc?orderNpcName(order):who.npcName)+'</div></div>'+
       '<div class="mo-info"><div class="mo-reward">+'+order.reward+' 🪙</div>'+
-      '<div class="mo-desc">'+def.icon+' '+order.desc+' · есть '+have+'/'+order.count+'</div></div>';
+      '<div class="mo-desc">'+def.icon+' '+orderDesc(order)+' · '+(LANG==='en'?'have ':'есть ')+have+'/'+order.count+'</div></div>';
     var btn=document.createElement('button');
     btn.className='mo-btn';
-    btn.textContent=can?'Сдать':'Мало';
+    btn.textContent=can?(LANG==='en'?'Submit':'Сдать'):(LANG==='en'?'Need more':'Мало');
     if(!can)btn.style.opacity='.4';
     btn.addEventListener('click',function(){submitOrder(idx);});
     el.appendChild(btn);
@@ -3004,7 +3014,7 @@ function renderProfile(){
   ].forEach(function(pair){var e=$(pair[0]);if(e)e.textContent=pair[1];});
   var xf=$('p-xp-f');if(xf)xf.style.width=xPct.toFixed(1)+'%';
   var refId=uid.replace('#','');
-  var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot?start=REF'+refId;
+  var rl=$('p-ref');if(rl)rl.textContent='https://t.me/aeon_game_Bot/play?startapp=REF'+refId;
   renderDaily();updateDailyBtn();renderAchs();renderBackpack();renderShards();loadReferrals();renderUpgradeBlock();
 }
 
@@ -3109,21 +3119,21 @@ window.copyRef=function(){
 window.shareRef=function(){
   var uid=($('p-uid')||{textContent:''}).textContent;
   var refId=uid.replace('#','');
-  var link='https://t.me/aeon_game_Bot?start=REF'+refId;
-  var txt='🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня\nи стань легендой галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n«Путь домой начинается внутри.»\n\n⚡ '+link;
-  // Telegram-специфичный способ — передаёт текст напрямую
-  if(tg&&tg.switchInlineQuery){
-    // Это открывает inline поиск с текстом
-  }
-  // Лучший способ для Telegram Mini App
+  var link='https://t.me/aeon_game_Bot/play?startapp=REF'+refId;
+  var en=(LANG==='en');
+  var txt=en
+    ? '🌌 Enter the cosmic world of AEON Universe!\n\n🎁 Join now — get 500 coins to start!\nCollect the three lost Shards of the Stone\nand become a legend of the galaxy!\n\n🧪 Synthesis Hangar — alchemy of the future\n🔯 Runes of Fate — challenge the universe\n🔮 Oracle — a prophecy every day\n\n\u00abThe way home begins within.\u00bb\n\n⚡ '+link
+    : '🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка Камня Начала\nи стань легендой галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n\u00abПуть домой начинается внутри.\u00bb\n\n⚡ '+link;
+  var shareText=en
+    ? '🌌 Enter the cosmic world of AEON Universe!\n\n🎁 Join now — get 500 coins to start!\nCollect the three lost Shards of the Stone and become a legend of the galaxy!\n\n\u00abThe way home begins within.\u00bb'
+    : '🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка Камня Начала и стань легендой галактики!\n\n\u00abПуть домой начинается внутри.\u00bb';
   if(tg&&tg.openTelegramLink){
-    var encodedText=encodeURIComponent(txt);
-    tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка философского камня и стань легендой галактики!\n\n«Путь домой начинается внутри.»'));
+    tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(shareText));
   } else if(navigator.share){
-    navigator.share({title:'AEON Universe — Космическая Игра',text:txt,url:link});
+    navigator.share({title:'AEON Universe',text:txt,url:link});
   } else {
     try{navigator.clipboard.writeText(txt);}catch(e){}
-    alert('Текст с ссылкой скопирован!');
+    alert(en?'Link copied!':'Текст с ссылкой скопирован!');
   }
 };
 window.depositTON=function(){
@@ -4027,11 +4037,12 @@ function migrateLockedCells(){
   if(moved)save();
 }
 function getNpcForReq(req){
-  if(req<=2)return{npc:'👾',npcName:'Зорг'};
-  if(req===3)return{npc:'🐙',npcName:'Ктулла'};
-  if(req===4)return{npc:'🤖',npcName:'Вольт-9'};
-  if(req===5)return{npc:'👽',npcName:'Жрец Эона'};
-  return{npc:'🌚',npcName:'Древний'};
+  var en=(LANG==='en');
+  if(req<=2)return{npc:'👾',npcName:en?'Zorg':'Зорг'};
+  if(req===3)return{npc:'🐙',npcName:en?'Cthulla':'Ктулла'};
+  if(req===4)return{npc:'🤖',npcName:en?'Volt-9':'Вольт-9'};
+  if(req===5)return{npc:'👽',npcName:en?'Priest of Eon':'Жрец Эона'};
+  return{npc:'🌚',npcName:en?'The Ancient':'Древний'};
 }
 window.dailyCodeInfo=function(){
   var info=$('mg-info');
@@ -4047,7 +4058,7 @@ function getInitData(){
 }
 
 function refByFromStart(){
-  // start_param приходит от ссылки t.me/aeon_game_Bot?start=REF12345
+  // start_param приходит от ссылки t.me/aeon_game_Bot/play?startapp=REF12345
   var sp = tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
   if(sp && sp.indexOf('REF')===0){
     var n=parseInt(sp.slice(3),10);
