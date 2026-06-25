@@ -3136,7 +3136,7 @@ window.shareRef=function(){
     navigator.share({title:'AEON Universe',text:txt,url:link});
   } else {
     try{navigator.clipboard.writeText(txt);}catch(e){}
-    alert(en?'Link copied!':'Текст с ссылкой скопирован!');
+    bonusNotif('📋',(en?'Link copied!':'Ссылка скопирована!'),0);
   }
 };
 window.depositTON=function(){
@@ -3214,10 +3214,6 @@ function tryShipUpgrade(){
   if(!result)return;
   if(!result.canUpgrade){
     bonusNotif('🚫',t('n_not_enough'),0);
-    setTimeout(function(){
-      var info=result.errors.join('\n');
-      alert('Для перехода на уровень '+(S.shipLevel+1)+':\n'+info);
-    },400);
     return;
   }
   // Апгрейд!
