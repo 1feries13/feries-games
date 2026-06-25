@@ -1713,48 +1713,72 @@ function getNextLv(){ return LEVELS.find(function(l){return l.min>S.xp;})||null;
 /* ── PHRASES ── */
 var PHRASES_RU = [
   '«Ты не ищешь камень. Ты ищешь себя.»',
+  '«Познай самого себя.» — Сократ',
+  '«Всё течёт, всё меняется.» — Гераклит',
+  '«Нельзя дважды войти в одну реку.» — Гераклит',
+  '«Я знаю, что ничего не знаю.» — Сократ',
+  '«Дао, выраженное словами, не есть истинное Дао.» — Лао-цзы',
+  '«Тот, кто знает других, мудр. Кто знает себя — просветлён.» — Лао-цзы',
+  '«Препятствие на пути становится путём.» — Марк Аврелий',
+  '«Ты имеешь власть над своим умом, а не над событиями.» — Марк Аврелий',
+  '«Вселенная — это изменение, наша жизнь — то, что мы думаем.» — Марк Аврелий',
+  '«Ты не капля в океане. Ты океан в капле.» — Руми',
+  '«То, что ты ищешь, ищет тебя.» — Руми',
+  '«Рана — это место, куда входит Свет.» — Руми',
+  '«Тишина — язык Бога, всё остальное — плохой перевод.» — Руми',
+  '«Мы то, о чём мы думаем.» — Будда',
+  '«Ум — это всё. Ты становишься тем, о чём думаешь.» — Будда',
+  '«Капля растворяется в океане. Океан — в капле.»',
+  '«Кто смотрит наружу — спит. Кто смотрит внутрь — пробуждается.» — Юнг',
   '«Энергия следует за вниманием.»',
-  '«Каждый удар сердца — это выбор.»',
   '«Тьма не исчезает. Она становится светом.»',
   '«Вселенная говорит через тишину.»',
   '«Страх — это забытая любовь.»',
-  '«Ты уже там куда идёшь.»',
+  '«Ты уже там, куда идёшь.»',
   '«Разрушение предшествует созданию.»',
-  '«Камень разбился чтобы стать многим.»',
-  '«Путь домой начинается внутри.»',
-  '«Всё что ищешь — уже в тебе.»',
-  '«Каждый момент — это новое начало.»',
+  '«Камень разбился, чтобы стать многим.»',
+  '«Всё, что ищешь, — уже в тебе.»',
   '«Наблюдатель и наблюдаемое — одно.»',
-  '«Время — это иллюзия, которую ты создаёшь сам.»',
-  '«Ты не капля в океане. Ты океан в капле.»',
-  '«Материя — это застывший свет сознания.»',
+  '«Ты — способ, которым космос познаёт себя.» — Саган',
   '«Между мыслью и вселенной нет границы.»',
   '«Пустота полна. Тишина звучит.»',
-  '«Ты — способ, которым космос познаёт себя.»',
-  '«Звёзды внутри тебя горят дольше тех, что снаружи.»',
+  '«Всё уже случилось. Ты лишь вспоминаешь.»',
+  '«Свет не борется с тьмой. Он просто есть.»',
   '«Смысл не находят. Смысл рождают.»',
 ];
 var PHRASES_EN = [
   '"You do not seek the stone. You seek yourself."',
-  '"Energy flows where attention goes."',
-  '"Every heartbeat is a choice."',
+  '"Know thyself." — Socrates',
+  '"Everything flows, everything changes." — Heraclitus',
+  '"No man steps in the same river twice." — Heraclitus',
+  '"I know that I know nothing." — Socrates',
+  '"The Tao that can be spoken is not the eternal Tao." — Lao Tzu',
+  '"Knowing others is wisdom. Knowing yourself is enlightenment." — Lao Tzu',
+  '"The obstacle on the path becomes the path." — Marcus Aurelius',
+  '"You have power over your mind, not outside events." — Marcus Aurelius',
+  '"The universe is change; our life is what our thoughts make it." — Marcus Aurelius',
+  '"You are not a drop in the ocean. You are the ocean in a drop." — Rumi',
+  '"What you seek is seeking you." — Rumi',
+  '"The wound is the place where the Light enters you." — Rumi',
+  '"Silence is the language of God; all else is poor translation." — Rumi',
+  '"We are what we think." — Buddha',
+  '"The mind is everything. What you think you become." — Buddha',
+  '"The drop dissolves into the ocean. The ocean into the drop."',
+  '"Who looks outside dreams. Who looks inside awakens." — Jung',
+  '"Energy follows attention."',
   '"Darkness does not vanish. It becomes light."',
   '"The universe speaks through silence."',
-  '"Fear is love that forgot itself."',
+  '"Fear is forgotten love."',
   '"You are already where you are going."',
   '"Destruction precedes creation."',
-  '"The stone shattered to become many."',
-  '"The way home begins within."',
-  '"All you seek is already within you."',
-  '"Every moment is a new beginning."',
+  '"The stone broke so it could become many."',
+  '"All that you seek is already within you."',
   '"The observer and the observed are one."',
-  '"Time is an illusion you create yourself."',
-  '"You are not a drop in the ocean. You are the ocean in a drop."',
-  '"Matter is the frozen light of consciousness."',
+  '"You are the way the cosmos knows itself." — Sagan',
   '"Between thought and universe there is no border."',
-  '"The void is full. The silence sings."',
-  '"You are the way the cosmos knows itself."',
-  '"The stars within you burn longer than those without."',
+  '"The void is full. The silence sounds."',
+  '"It has all happened. You are only remembering."',
+  '"Light does not fight the dark. It simply is."',
   '"Meaning is not found. Meaning is born."',
 ];
 var COMBO_PHRASES_RU = [
@@ -3139,11 +3163,11 @@ window.shareRef=function(){
   var link='https://t.me/aeon_game_Bot/play?startapp=REF'+refId;
   var en=(LANG==='en');
   var txt=en
-    ? '🌌 Enter the cosmic world of AEON Universe!\n\n🎁 Join now — get 500 coins to start!\nCollect the three lost Shards of the Stone\nand become a legend of the galaxy!\n\n🧪 Synthesis Hangar — alchemy of the future\n🔯 Runes of Fate — challenge the universe\n🔮 Oracle — a prophecy every day\n\n\u00abThe way home begins within.\u00bb\n\n⚡ '+link
-    : '🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка Камня Начала\nи стань легендой галактики!\n\n🧪 Ангар Синтеза — алхимия будущего\n🔯 Руны Судьбы — испытай вселенную\n🔮 Оракул — пророчество каждый день\n\n\u00abПуть домой начинается внутри.\u00bb\n\n⚡ '+link;
+    ? '🌌 AEON Universe\n\nBefore time had a name, there was the Stone of the Beginning. It could create worlds. When those who hungered for power reached for it, the keepers broke the Stone into three Shards — Light, Shadow, and Will — and scattered them across the dark.\n\nThe time has come to gather them. You are the center of this story. Become the source.\n\n🎁 Step in from the start — receive 500 coins.\n🧪 Synthesis Hangar — turn dust into matter\n🔮 The Oracle — a prophecy with each dawn\n🔯 Runes of Fate — let the universe answer\n✦ Find the three Shards — and what they truly guard\n\nYou will think you are exploring the cosmos. But the deeper you go, the more familiar it becomes.\n\n\u00abYou are not going there. You are returning.\u00bb\n\n⚡ Begin → '+link
+    : '🌌 AEON Universe\n\nЕщё до того, как у времени появилось имя, был Камень Начала. Он мог творить миры. Когда жаждущие власти потянулись к нему, хранители разделили Камень на три Осколка — Свет, Тень и Волю — и рассеяли их во тьме.\n\nПришло время собрать их. Ты — центр этой истории. Стань первоисточником.\n\n🎁 Войди со старта — прими 500 монет.\n🧪 Ангар Синтеза — обрати пыль в материю\n🔮 Оракул — пророчество с каждым рассветом\n🔯 Руны Судьбы — позволь вселенной ответить\n✦ Найди три Осколка — и то, что они хранят на самом деле\n\nТебе будет казаться, что ты исследуешь космос. Но чем глубже идёшь, тем роднее он становится.\n\n\u00abТы не идёшь туда. Ты возвращаешься.\u00bb\n\n⚡ Начни → '+link;
   var shareText=en
-    ? '🌌 Enter the cosmic world of AEON Universe!\n\n🎁 Join now — get 500 coins to start!\nCollect the three lost Shards of the Stone and become a legend of the galaxy!\n\n\u00abThe way home begins within.\u00bb'
-    : '🌌 Зайди в космический мир AEON Universe!\n\n🎁 Залетай со старта — получи 500 монет!\nСобери 3 утерянных осколка Камня Начала и стань легендой галактики!\n\n\u00abПуть домой начинается внутри.\u00bb';
+    ? '🌌 AEON Universe — the time has come to gather the three Shards.\n\nYou are the center of this story. Become the source.\n\n🎁 Step in from the start — 500 coins.\n\n\u00abYou are not going there. You are returning.\u00bb'
+    : '🌌 AEON Universe — пришло время собрать три Осколка.\n\nТы — центр этой истории. Стань первоисточником.\n\n🎁 Войди со старта — 500 монет.\n\n\u00abТы не идёшь туда. Ты возвращаешься.\u00bb';
   if(tg&&tg.openTelegramLink){
     tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(shareText));
   } else if(navigator.share){
