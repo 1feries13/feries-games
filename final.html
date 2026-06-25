@@ -1247,7 +1247,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
           <div><div class="pilot-name" id="p-name" data-i18n="p_survivor">Выживший</div><div class="pilot-uid" id="p-uid">#000000</div><div class="pilot-rank" id="p-rank">🌱 Новичок</div></div>
         </div>
         <div class="xp-row">
-          <div class="xp-hdr"><span data-i18n="m_exp">ОПЫТ</span><span id="p-xp-l">0/500</span></div>
+          <div class="xp-hdr"><span data-i18n="m_exp">ОПЫТ (РАНГ)</span><span id="p-xp-l">0/500</span></div>
           <div class="xp-tr"><div class="xp-fi" id="p-xp-f" style="width:0%"></div></div>
         </div>
         <div class="stats-g">
@@ -1605,7 +1605,7 @@ var I18N = {
   claim_day:{ru:' (день ',en:' (day '},
   claim_reward:{ru:'🎁 Забрать награду',en:'🎁 Claim reward'},
   m_upgrade:{ru:'⬆️ УЛУЧШИТЬ КОРАБЛЬ',en:'⬆️ UPGRADE SHIP'},
-  m_exp:{ru:'ОПЫТ',en:'XP'},
+  m_exp:{ru:'ОПЫТ (РАНГ)',en:'XP (RANK)'},
   m_energy:{ru:'ЭНЕРГИЯ',en:'ENERGY'},
   m_combo:{ru:'КОМБО',en:'COMBO'},
   m_hold:{ru:'удерживай для входа',en:'hold to enter'},
@@ -2647,9 +2647,23 @@ function orderDesc(o){
   var nm=def?mitemName(def):('lvl.'+o.req);
   return o.count+' × '+nm;
 }
+function maxOrderReq(){
+  // Максимальный уровень предмета в заказе зависит от уровня корабля игрока
+  // 1 ур → только req 2; 2 ур → до 3; 3 ур → до 4; 4 ур → до 5; 5+ ур → до 6
+  var lv=S.shipLevel||1;
+  if(lv<=1)return 2;
+  if(lv===2)return 3;
+  if(lv===3)return 4;
+  if(lv===4)return 5;
+  return 6;
+}
 function newRandomOrder(){
-  var o=ORDER_POOL[Math.floor(Math.random()*ORDER_POOL.length)];
-  return {req:o.req,count:o.count,reward:o.reward,desc:o.desc,npc:o.npc,npcName:o.npcName};
+  var cap=maxOrderReq();
+  // Берём только заказы не выше доступного уровня
+  var pool=ORDER_POOL.filter(function(o){return o.req<=cap;});
+  if(pool.length===0)pool=ORDER_POOL.filter(function(o){return o.req<=2;});
+  var o=pool[Math.floor(Math.random()*pool.length)];
+  return {req:o.req,count:o.count,reward:o.reward,npc:o.npc,npcName:o.npcName,npcName_en:o.npcName_en};
 }
 function genOrders(){
   S.orders=[];
@@ -3011,7 +3025,7 @@ function renderProfile(){
   var lv=getLv(),nxt=getNextLv();
   var xPct=nxt?Math.min(100,((S.xp-(lv.min||0))/((nxt.min||500)-(lv.min||0)))*100):100;
   var uid=tgU?'#'+String(tgU.id).slice(-6):'#'+Math.abs((S.name||'X').split('').reduce(function(a,c){return a*31+c.charCodeAt(0)|0;},0)%900000+100000);
-  [['p-name',S.name||t('p_survivor')],['p-uid',uid],['p-rank',lv.icon+' '+levelName(lv)],
+  [['p-name',S.name||t('p_survivor')],['p-uid',uid],['p-rank',(LANG==='en'?'Rank: ':'Ранг: ')+lv.icon+' '+levelName(lv)+'  ·  '+(LANG==='en'?'Ship Lvl.':'Корабль Ур.')+(S.shipLevel||1)],
    ['p-taps',S.taps||0],['p-merges',S.merges||0],['p-max',S.maxWin||0],
    ['p-xp-l',(S.xp||0)+(nxt?'/'+nxt.min:'')],['p-bal',S.bal],['home-bal',S.bal],
   ].forEach(function(pair){var e=$(pair[0]);if(e)e.textContent=pair[1];});
@@ -3220,6 +3234,11 @@ function tryShipUpgrade(){
   var next=result.next;
   S.bal-=next.cost;
   S.shipLevel=(S.shipLevel||1)+1;
+  // Обновляем заказы под новый уровень (один свежий заказ)
+  if(S.orders&&S.orders.length>0){
+    var _newReq=newRandomOrder();
+    S.orders[Math.floor(Math.random()*S.orders.length)]=_newReq;
+  }
   save();
   // Уровень 3 — открываем Астероиды (осколок там)
   if(S.shipLevel===3){
