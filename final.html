@@ -78,7 +78,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   letter-spacing:2px;cursor:pointer;transition:all .2s;backdrop-filter:blur(10px);}
 .intro-btn:active{transform:scale(.95);}
 .intro-skip{position:absolute;top:calc(var(--sat) + var(--tg-top,0px) + 14px);right:16px;z-index:10;
-  font-size:9px;color:rgba(255,255,255,.28);cursor:pointer;letter-spacing:1px;
+  font-size:9px;color:rgba(255,255,255,0.63);cursor:pointer;letter-spacing:1px;
   padding:6px 10px;border:none;background:none;}
 
 /* Гиперпрыжок-приветствие */
@@ -102,7 +102,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .main-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 16px 8px;}
 .main-logo{font-size:13px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
-.main-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
+.main-logo span{display:block;font-size:7px;color:rgba(200,169,110,0.73);font-weight:400;letter-spacing:2px;}
 .streak-badge{display:flex;align-items:center;gap:4px;background:rgba(255,100,0,.1);
   border:.5px solid rgba(255,100,0,.28);border-radius:12px;padding:3px 10px;
   font-size:9px;color:#ff8c00;font-weight:700;}
@@ -134,7 +134,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 @keyframes shipFloat{0%,100%{transform:translateY(0) rotate(-.4deg)}
   50%{transform:translateY(-16px) rotate(.4deg)}}
 .ship-hint{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);
-  font-size:7.5px;color:rgba(255,255,255,.2);letter-spacing:2px;white-space:nowrap;
+  font-size:7.5px;color:rgba(255,255,255,0.55);letter-spacing:2px;white-space:nowrap;
   opacity:0;transition:opacity .5s;}
 .ship-hint.show{opacity:1;}
 .coin-pop{position:absolute;pointer-events:none;z-index:50;
@@ -149,7 +149,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .res-bars{display:flex;gap:8px;margin-bottom:8px;}
 .res-bar{flex:1;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 10px;}
 .res-bar-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
-.res-bar-lbl{font-size:6.5px;color:rgba(255,255,255,.3);letter-spacing:1.5px;}
+.res-bar-lbl{font-size:6.5px;color:rgba(255,255,255,0.65);letter-spacing:1.5px;}
 .res-bar-val{font-size:10px;font-weight:700;}
 .res-bar-track{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
 .res-bar-fill{height:100%;border-radius:2px;transition:width .35s;}
@@ -160,7 +160,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   border:.5px solid rgba(200,169,110,.15);border-radius:12px;}
 .c-disp{display:flex;align-items:center;gap:5px;}
 .c-ico{font-size:15px;}.c-val{font-size:16px;font-weight:700;color:var(--aeon2);}
-.c-lbl{font-size:6.5px;color:rgba(200,169,110,.38);letter-spacing:1px;}
+.c-lbl{font-size:6.5px;color:rgba(200,169,110,0.73);letter-spacing:1px;}
 .sep{width:1px;height:18px;background:rgba(255,255,255,.08);}
 
 /* ══ BOTTOM NAV ══ */
@@ -184,7 +184,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .cosmos-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:calc(var(--sat) + var(--tg-top,0px) + 8px) 16px 8px;}
 .cosmos-logo{font-size:12px;font-weight:900;color:var(--aeon2);letter-spacing:2px;}
-.cosmos-logo span{display:block;font-size:7px;color:rgba(200,169,110,.38);font-weight:400;letter-spacing:2px;}
+.cosmos-logo span{display:block;font-size:7px;color:rgba(200,169,110,0.73);font-weight:400;letter-spacing:2px;}
 .cosmos-bal{display:flex;align-items:center;gap:5px;background:rgba(200,169,110,.09);
   border:.5px solid rgba(200,169,110,.28);border-radius:18px;padding:5px 12px;}
 .cosmos-bal-val{font-size:13px;font-weight:700;color:var(--aeon2);}
@@ -224,7 +224,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   background:linear-gradient(90deg,transparent,var(--gc,var(--aeon2)),transparent);}
 #gc-ov.open #gc{transform:translateY(0);}
 .gc-x{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;
-  background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.42);
+  background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,0.77);
   font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .gc-ico{font-size:42px;margin-bottom:8px;}
 .gc-nm{font-size:17px;font-weight:900;color:var(--gc,var(--aeon2));letter-spacing:2px;margin-bottom:5px;}
@@ -262,7 +262,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* Энергия материи */
 .merge-energy-bar{margin:0 14px 8px;flex-shrink:0;}
 .meb-hdr{display:flex;justify-content:space-between;margin-bottom:4px;
-  font-size:7px;color:rgba(168,85,247,.42);letter-spacing:1.5px;}
+  font-size:7px;color:rgba(168,85,247,0.77);letter-spacing:1.5px;}
 .meb-track{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
 .meb-fill{height:100%;background:linear-gradient(90deg,#4010a0,var(--purple));
   border-radius:3px;transition:width .35s;}
@@ -297,14 +297,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   background:rgba(255,215,0,.06);border-radius:8px;transition:all .3s;}
 /* Заказы */
 .merge-orders{margin:0 14px 6px;flex-shrink:0;}
-.mo-title{font-size:7.5px;color:rgba(200,169,110,.4);letter-spacing:2px;margin-bottom:6px;}
+.mo-title{font-size:7.5px;color:rgba(200,169,110,0.75);letter-spacing:2px;margin-bottom:6px;}
 .mo-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;}
 .mo-item{flex-shrink:0;background:rgba(200,169,110,.06);border:.5px solid rgba(200,169,110,.18);
   border-radius:10px;padding:6px 8px;display:flex;align-items:center;gap:7px;}
 .mo-req{font-size:18px;}
 .mo-info{}
 .mo-reward{font-size:8px;font-weight:700;color:var(--aeon2);}
-.mo-desc{font-size:7px;color:rgba(200,169,110,.38);}
+.mo-desc{font-size:7px;color:rgba(200,169,110,0.73);}
 .mo-btn{padding:9px 18px;border-radius:12px;border:none;cursor:pointer;
   background:linear-gradient(135deg,var(--aeon),var(--aeon2));
   color:#07071a;font-size:11px;font-weight:800;}
@@ -318,7 +318,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   font-size:11px;font-weight:800;cursor:pointer;}
 .runes-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);
   text-shadow:0 0 20px rgba(255,215,0,.55);text-align:center;letter-spacing:3px;margin-bottom:6px;}
-.runes-sub{font-size:8px;color:rgba(200,169,110,.38);letter-spacing:3px;text-align:center;margin-bottom:30px;}
+.runes-sub{font-size:8px;color:rgba(200,169,110,0.73);letter-spacing:3px;text-align:center;margin-bottom:30px;}
 .runes-rings{display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:28px;}
 .ring-wrap{position:relative;width:200px;height:52px;display:flex;align-items:center;justify-content:center;}
 .ring-track{position:absolute;inset:0;border-radius:26px;
@@ -335,7 +335,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .runes-msg{min-height:36px;text-align:center;font-family:'Cinzel',serif;font-size:12px;
   font-weight:700;color:rgba(168,85,247,.5);letter-spacing:1px;margin-bottom:16px;transition:all .3s;}
 .runes-msg.win{color:var(--gold);}
-.runes-msg.lose{color:rgba(200,200,255,.4);}
+.runes-msg.lose{color:rgba(200,200,255,0.75);}
 .runes-go-btn{padding:18px 52px;border-radius:30px;border:2px solid rgba(168,85,247,.55);
   background:linear-gradient(145deg,#22095c,#3d14c4);color:#fff;
   font-family:'Orbitron',monospace;font-size:15px;font-weight:900;letter-spacing:2px;cursor:pointer;}
@@ -367,8 +367,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .oracle-p-text{font-family:'Cinzel',serif;font-size:12px;color:rgba(200,160,255,.7);
   line-height:1.7;margin-bottom:8px;}
 .oracle-p-boost{font-size:9px;color:var(--green);font-family:'Orbitron',monospace;}
-.oracle-tap-hint{font-size:9px;color:rgba(200,160,255,.3);letter-spacing:2px;}
-.oracle-used{font-size:9px;color:rgba(200,160,255,.28);font-family:'Orbitron',monospace;
+.oracle-tap-hint{font-size:9px;color:rgba(200,160,255,0.65);letter-spacing:2px;}
+.oracle-used{font-size:9px;color:rgba(200,160,255,0.63);font-family:'Orbitron',monospace;
   letter-spacing:1px;text-align:center;}
 
 /* ══ HOME SCREEN ══ */
@@ -386,8 +386,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   border:.5px solid rgba(200,169,110,.2);border-radius:14px;padding:3px 9px;
   font-size:10px;font-weight:700;color:var(--aeon2);flex-shrink:0;}
 .htabs{flex-shrink:0;display:flex;border-bottom:.5px solid rgba(120,60,240,.16);}
-.htab{flex:1;padding:11px 4px;text-align:center;font-size:7px;
-  color:rgba(160,130,220,.32);letter-spacing:.5px;cursor:pointer;transition:all .22s;
+.htab{flex:1;padding:12px 4px;text-align:center;font-size:10px;font-weight:700;
+  color:rgba(200,190,230,.65);letter-spacing:.5px;cursor:pointer;transition:all .22s;
   border-bottom:2px solid transparent;}
 .htab.active{color:rgba(200,160,255,.88);border-bottom-color:rgba(160,80,255,.65);
   background:rgba(120,60,240,.06);}
@@ -401,27 +401,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .pilot-av{width:64px;height:64px;border-radius:50%;flex-shrink:0;overflow:hidden;
   border:2px solid rgba(160,80,255,.38);box-shadow:0 0 18px rgba(120,60,255,.2);}
 .pilot-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
-.pilot-uid{font-size:8px;color:rgba(160,80,255,.42);margin-bottom:4px;}
+.pilot-uid{font-size:8px;color:rgba(160,80,255,0.77);margin-bottom:4px;}
 .pilot-rank{display:inline-flex;align-items:center;gap:3px;background:rgba(200,169,110,.07);
   border:.5px solid rgba(200,169,110,.18);border-radius:9px;padding:2px 8px;
   font-size:8px;color:var(--aeon2);}
 .xp-row{margin-top:9px;}
 .xp-hdr{display:flex;justify-content:space-between;margin-bottom:4px;
-  font-size:7.5px;color:rgba(160,80,255,.4);}
+  font-size:7.5px;color:rgba(160,80,255,0.75);}
 .xp-tr{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
 .xp-fi{height:100%;background:linear-gradient(90deg,#3010c0,#a040ff);border-radius:3px;transition:width .6s;}
 .stats-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px;}
 .stb{background:rgba(255,255,255,.03);border:.5px solid rgba(120,60,240,.12);
   border-radius:9px;padding:9px 6px;text-align:center;}
 .stv{font-size:17px;font-weight:900;color:rgba(200,160,255,.88);margin-bottom:2px;}
-.stl{font-size:6.5px;color:rgba(120,60,240,.38);letter-spacing:1.5px;}
+.stl{font-size:6.5px;color:rgba(120,60,240,0.73);letter-spacing:1.5px;}
 /* Ежедневный бонус */
 .daily-row{display:flex;gap:5px;flex-wrap:wrap;}
 .day-item{flex:1;min-width:48px;background:rgba(255,255,255,.03);
   border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:7px 4px;text-align:center;}
 .day-item.done{background:rgba(255,215,0,.07);border-color:rgba(255,215,0,.22);}
 .day-item.today{background:rgba(0,255,159,.07);border-color:rgba(0,255,159,.25);}
-.di-d{font-size:8px;font-weight:700;color:rgba(255,255,255,.35);}
+.di-d{font-size:8px;font-weight:700;color:rgba(255,255,255,0.7);}
 .day-item.done .di-d,.day-item.today .di-d{color:var(--gold);}
 .di-r{font-size:9px;margin-top:2px;}
 /* AEON монета */
@@ -452,7 +452,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .ac-stat{background:rgba(200,169,110,.07);border:.5px solid rgba(200,169,110,.18);
   border-radius:8px;padding:8px 6px;text-align:center;}
 .ac-val{font-size:15px;font-weight:900;color:var(--aeon2);margin-bottom:2px;}
-.ac-lbl{font-size:6.5px;color:rgba(200,169,110,.38);letter-spacing:1px;}
+.ac-lbl{font-size:6.5px;color:rgba(200,169,110,0.73);letter-spacing:1px;}
 .aeon-roadmap{margin-top:12px;}
 .arm-title{font-size:8px;color:rgba(200,169,110,.45);letter-spacing:2px;margin-bottom:8px;}
 .arm-item{display:flex;align-items:center;gap:8px;padding:6px 0;
@@ -467,7 +467,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .ach-item.done{background:rgba(255,215,0,.05);border-color:rgba(255,215,0,.18);}
 .ai-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0;}
 .ai-info{flex:1;}
-.ai-name{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.4);}
+.ai-name{font-size:9.5px;font-weight:700;color:rgba(255,255,255,0.75);}
 .ach-item.done .ai-name{color:var(--gold);}
 .ai-desc{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:2px;line-height:1.4;}
 .ai-diff{font-size:7px;padding:1px 6px;border-radius:4px;margin-top:3px;display:inline-block;}
@@ -483,7 +483,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
   background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);}
 .bp-slot.has{background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);}
 .bp-slot.has.rare{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.28);}
-.bp-icon{font-size:22px;}.bp-name{font-size:6px;color:rgba(255,255,255,.3);text-align:center;}
+.bp-icon{font-size:22px;}.bp-name{font-size:6px;color:rgba(255,255,255,0.65);text-align:center;}
 .bp-slot.has .bp-name{color:rgba(200,169,110,.55);}
 .bp-empty{font-size:18px;opacity:.12;}
 /* Осколки */
@@ -500,7 +500,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 /* Кошелёк */
 .wal-bal{background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(200,169,110,.04));
   border:.5px solid rgba(200,169,110,.22);border-radius:13px;padding:16px;text-align:center;}
-.wb-lbl{font-size:7.5px;color:rgba(200,169,110,.42);letter-spacing:2px;margin-bottom:5px;}
+.wb-lbl{font-size:7.5px;color:rgba(200,169,110,0.77);letter-spacing:2px;margin-bottom:5px;}
 .wb-amt{font-size:36px;font-weight:900;color:var(--aeon2);}
 .wal-info{background:rgba(255,255,255,.025);border:.5px solid rgba(255,255,255,.06);
   border-radius:11px;padding:11px;}
@@ -581,10 +581,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 
 
 /* ══ ORACLE v2 ══ */
-.oracle-sub{font-family:'Cinzel',serif;font-size:9px;color:rgba(200,160,255,.4);
+.oracle-sub{font-family:'Cinzel',serif;font-size:9px;color:rgba(200,160,255,0.75);
   letter-spacing:3px;text-align:center;margin-bottom:28px;z-index:2;position:relative;}
 .oracle-runes-bg{position:absolute;inset:0;pointer-events:none;z-index:1;}
-.oracle-runes-bg span{position:absolute;font-size:26px;color:rgba(168,85,247,.15);
+.oracle-runes-bg span{position:absolute;font-size:26px;color:rgba(168,85,247,0.5);
   animation:oracleRuneFloat 6s ease-in-out infinite;text-shadow:0 0 16px rgba(168,85,247,.3);}
 @keyframes oracleRuneFloat{0%,100%{transform:translateY(0) rotate(-5deg);opacity:.45}
   50%{transform:translateY(-18px) rotate(5deg);opacity:1}}
@@ -670,11 +670,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
 .dc-slots{display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
 .dc-slot{width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);
   border:1px dashed rgba(255,215,0,.3);display:flex;align-items:center;justify-content:center;
-  font-size:16px;color:rgba(255,215,0,.4);font-family:'Cinzel',serif;animation:dcPulse 3s ease-in-out infinite;}
+  font-size:16px;color:rgba(255,215,0,0.75);font-family:'Cinzel',serif;animation:dcPulse 3s ease-in-out infinite;}
 .dc-slot:nth-child(2){animation-delay:.5s;}
 .dc-slot:nth-child(3){animation-delay:1s;}
 @keyframes dcPulse{0%,100%{border-color:rgba(255,215,0,.25)}50%{border-color:rgba(255,215,0,.55)}}
-.dc-eq{font-size:14px;color:rgba(255,215,0,.4);}
+.dc-eq{font-size:14px;color:rgba(255,215,0,0.75);}
 .dc-prize{width:38px;height:38px;border-radius:9px;background:rgba(255,215,0,.08);
   border:1px solid rgba(255,215,0,.3);display:flex;align-items:center;justify-content:center;font-size:17px;}
 /* ══ НПС-СУЩЕСТВА ЗАКАЗОВ ══ */
@@ -1038,16 +1038,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:18px;">🌑</span>
           <div>
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_shadow">Осколок Тени</div>
-            <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_shadow_d">Ур.6 — создать Эссенцию Творца</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.75);" data-i18n="shard_shadow">Осколок Тени</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,0.7);" data-i18n="shard_shadow_d">Ур.6 — создать Эссенцию Творца</div>
             <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="shard_shadow_b">Бонус: ???</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:18px;">⚡</span>
           <div>
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);" data-i18n="shard_will">Осколок Воли</div>
-            <div style="font-size:8.5px;color:rgba(200,144,26,.35);" data-i18n="shard_will_d">Ур.9 — финал игры</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.75);" data-i18n="shard_will">Осколок Воли</div>
+            <div style="font-size:8.5px;color:rgba(200,144,26,0.7);" data-i18n="shard_will_d">Ур.9 — финал игры</div>
             <div style="font-size:8px;color:rgba(0,255,159,.5);" data-i18n="shard_will_b">Бонус: ???</div>
           </div>
         </div>
@@ -1060,7 +1060,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
     <div style="margin-top:14px;background:rgba(168,85,247,.06);border:.5px solid rgba(168,85,247,.18);
       border-radius:12px;padding:12px;">
       <div style="font-size:9px;color:rgba(168,85,247,.6);letter-spacing:2px;margin-bottom:8px;" data-i18n="p_energy_synth">⚡ ЭНЕРГИЯ И СИНТЕЗ</div>
-      <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(255,255,255,.35);line-height:1.7;" data-i18n="rules_block">
+      <div style="font-family:Cinzel,serif;font-size:9.5px;color:rgba(255,255,255,0.7);line-height:1.7;" data-i18n="rules_block">
         1 тап = -1 энергия + 1 монета<br>
         Комбо (10 тапов) = ×2 монеты пока не остановишься<br>
         Энергия +1 в минуту (Квантовый Двигатель ускоряет)<br>
@@ -1294,7 +1294,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
       <!-- Артефакты инфо -->
       <div class="hc" style="border-color:rgba(168,85,247,.15);">
         <div class="hc-t" style="color:rgba(168,85,247,.6);" data-i18n="bp_how_t">📖 КАК ПОЛУЧИТЬ АРТЕФАКТЫ</div>
-        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(255,255,255,.3);line-height:1.7;" data-i18n="bp_how_d">
+        <div style="font-family:Cinzel,serif;font-size:10px;color:rgba(255,255,255,0.65);line-height:1.7;" data-i18n="bp_how_d">
           Артефакты выпадают при синтезе высших уровней,
           за достижения и особые события вселенной.
           Каждый хранит частицу истории.
@@ -1310,23 +1310,23 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff
         <div class="hc-t" style="color:rgba(100,180,255,.7);" data-i18n="w_packages">💎 ПАКЕТЫ TON</div>
         <div style="display:flex;flex-direction:column;gap:7px;" id="ton-packages">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.06);border:.5px solid rgba(0,100,255,.18);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.8);" data-i18n="w_starter">Стартер</div><div style="font-size:9px;color:rgba(255,255,255,.3);">1 TON = 1,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.8);" data-i18n="w_starter">Стартер</div><div style="font-size:9px;color:rgba(255,255,255,0.65);">1 TON = 1,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(1,1000)">1 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.07);border:.5px solid rgba(0,100,255,.22);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.9);" data-i18n="w_pilot">Пилот</div><div style="display:none"><span style="font-size:8px;color:var(--green);">+20%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">5 TON = 6,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(100,180,255,.9);" data-i18n="w_pilot">Пилот</div><div style="display:none"><span style="font-size:8px;color:var(--green);">+20%</span></div><div style="font-size:9px;color:rgba(255,255,255,0.65);">5 TON = 6,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(5,6000)">5 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(0,100,255,.08);border:.5px solid rgba(0,150,255,.28);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:rgba(150,200,255,.9);"><span data-i18n="w_captain">Капитан</span> <span style="font-size:8px;color:var(--green);">+50%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">10 TON = 15,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:rgba(150,200,255,.9);"><span data-i18n="w_captain">Капитан</span> <span style="font-size:8px;color:var(--green);">+50%</span></div><div style="font-size:9px;color:rgba(255,255,255,0.65);">10 TON = 15,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(10,15000)">10 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(200,169,110,.07);border:.5px solid rgba(200,169,110,.25);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:var(--aeon2);"><span data-i18n="w_admiral">Адмирал</span> <span style="font-size:8px;color:var(--green);">+100%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">25 TON = 50,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--aeon2);"><span data-i18n="w_admiral">Адмирал</span> <span style="font-size:8px;color:var(--green);">+100%</span></div><div style="font-size:9px;color:rgba(255,255,255,0.65);">25 TON = 50,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(25,50000)">25 TON</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:linear-gradient(135deg,rgba(200,169,110,.1),rgba(168,85,247,.08));border:.5px solid rgba(200,169,110,.35);border-radius:10px;">
-            <div><div style="font-size:11px;font-weight:700;color:var(--gold);">Легенда <span style="font-size:8px;color:var(--green);">+140%</span></div><div style="font-size:9px;color:rgba(255,255,255,.3);">50 TON = 120,000 AEON</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--gold);">Легенда <span style="font-size:8px;color:var(--green);">+140%</span></div><div style="font-size:9px;color:rgba(255,255,255,0.65);">50 TON = 120,000 AEON</div></div>
             <button class="si-btn" onclick="buyTON(50,120000)">50 TON</button>
           </div>
         </div>
@@ -3313,10 +3313,10 @@ function renderAEONWallet(){
     '<div style="font-family:Cinzel,serif;font-size:10.5px;color:rgba(200,169,110,.52);line-height:1.75;margin-bottom:12px;text-align:center;">'+
     (LANG==='en'?
       'Born from the collision of the first galaxies.<br>The first currency forged not from code, but from meaning.<br>'+
-      '<span style="color:rgba(200,144,26,.35);font-size:9px;">Within it sleeps the memory of the first instant of existence — when the void first dreamed of light.</span>'
+      '<span style="color:rgba(200,144,26,0.7);font-size:9px;">Within it sleeps the memory of the first instant of existence — when the void first dreamed of light.</span>'
      :
       'Рождённая из столкновения первых галактик.<br>Первая валюта, рождённая не из кода, а из смысла.<br>'+
-      '<span style="color:rgba(200,144,26,.35);font-size:9px;">В ней дремлет память о первом мгновении бытия — когда пустота впервые помыслила о свете.</span>'
+      '<span style="color:rgba(200,144,26,0.7);font-size:9px;">В ней дремлет память о первом мгновении бытия — когда пустота впервые помыслила о свете.</span>'
     )+'</div>'+
     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;">'+
     '<div class="ac-stat"><div class="ac-val">∞</div><div class="ac-lbl">'+(LANG==='en'?'EMISSION':'ЭМИССИЯ')+'</div></div>'+
@@ -3391,7 +3391,7 @@ function renderCodexLevels(){
       (isCurrent?'<span style="font-size:7px;background:rgba(200,144,26,.2);border-radius:6px;padding:1px 6px;color:var(--aeon2);">'+(LANG==='en'?'NOW':'СЕЙЧАС')+'</span>':'')+
       '</div>'+
       '<div style="display:flex;flex-direction:column;gap:3px;padding-left:22px;">';
-    html+='<div style="font-size:8.5px;color:rgba(255,255,255,.4);">🪙 '+row.cost+' AEON</div>';
+    html+='<div style="font-size:8.5px;color:rgba(255,255,255,0.75);">🪙 '+row.cost+' AEON</div>';
     var _mr=(LANG==='en'&&row.mergeReq_en!==undefined)?row.mergeReq_en:row.mergeReq;
     if(_mr)html+='<div style="font-size:8.5px;color:rgba(168,85,247,.6);">🧪 '+_mr+'</div>';
     if(row.streak)html+='<div style="font-size:8.5px;color:rgba(255,140,0,.6);">🔥 '+row.streak+(LANG==='en'?' days streak':' дней подряд')+'</div>';
@@ -4276,7 +4276,7 @@ function loadReferrals(){
     var box=$('ref-friends');if(!box)return;
     box.innerHTML='';
     if(!d.friends||d.friends.length===0){
-      box.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(168,85,247,.35);padding:8px;font-family:Cinzel,serif;">'+(LANG==='en'?'No one yet. Invite your first pilot!':'Пока никого. Позови первого пилота!')+'</div>';
+      box.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(168,85,247,0.7);padding:8px;font-family:Cinzel,serif;">'+(LANG==='en'?'No one yet. Invite your first pilot!':'Пока никого. Позови первого пилота!')+'</div>';
       return;
     }
     d.friends.forEach(function(f){
@@ -4368,7 +4368,7 @@ window.openLeaderboard=function(){
   // Мгновенный плейсхолдер пока грузится
   var t=$('lb-total');if(t)t.textContent='···';
   var list=$('lb-list');
-  if(list)list.innerHTML='<div style="text-align:center;font-size:10px;color:rgba(200,169,110,.4);padding:20px;font-family:Cinzel,serif;">Сканируем галактику…</div>';
+  if(list)list.innerHTML='<div style="text-align:center;font-size:10px;color:rgba(200,169,110,0.75);padding:20px;font-family:Cinzel,serif;">Сканируем галактику…</div>';
   loadLeaderboard();
 };
 function loadLeaderboard(){
@@ -4388,7 +4388,7 @@ function loadLeaderboard(){
       var list=$('lb-list');if(!list)return;
       list.innerHTML='';
       if(!d.top||d.top.length===0){
-        list.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(200,169,110,.35);padding:14px;font-family:Cinzel,serif;">Будь первым в рейтинге!</div>';
+        list.innerHTML='<div style="text-align:center;font-size:9px;color:rgba(200,169,110,0.7);padding:14px;font-family:Cinzel,serif;">Будь первым в рейтинге!</div>';
         return;
       }
       var medals={1:'🥇',2:'🥈',3:'🥉'};
